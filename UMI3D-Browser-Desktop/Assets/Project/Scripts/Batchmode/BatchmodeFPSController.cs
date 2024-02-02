@@ -68,7 +68,7 @@ namespace BrowserDesktop
             if (!Application.isBatchMode)
                 return;
 
-            Debug.Assert(fpsController != null);
+            Debug.Assert(this.fpsController != null);
         }
 
         private void OnEnable()
@@ -91,60 +91,60 @@ namespace BrowserDesktop
 
         private void OnEnvironmentLoaded()
         {
-            fpsController.Disable();
+            this.fpsController.Disable();
 
             BakeNavmesh();
 
             BakeInteraction();
 
-            agent = gameObject.AddComponent<NavMeshAgent>();
-            agent.speed = 2f;
+            this.agent = this.gameObject.AddComponent<NavMeshAgent>();
+            this.agent.speed = 2f;
 
-            movementCoroutine = StartCoroutine(UpdateCoroutine());
+            this.movementCoroutine = StartCoroutine(UpdateCoroutine());
 
             CollaborationSkeletonsManager.Instance.navigation = this;
         }
 
         private void OnLeave()
         {
-            StopCoroutine(movementCoroutine);
+            StopCoroutine(this.movementCoroutine);
         }
 
         private void BakeNavmesh()
         {
             GameObject[] sceneObjects = FindObjectsOfType<GameObject>();
 
-            int layer = ToLayer(navmeshLayer);
-            int obstacle = ToLayer(obstacleLayer);
+            int layer = ToLayer(this.navmeshLayer);
+            int obstacle = ToLayer(this.obstacleLayer);
 
-            foreach (var obj in sceneObjects)
+            foreach (GameObject obj in sceneObjects)
             {
                 if (obj.isStatic)
                     continue;
 
                 if (obj.layer == layer)
                 {
-                    var navmeshModifier = obj.AddComponent<NavMeshModifier>();
+                    NavMeshModifier navmeshModifier = obj.AddComponent<NavMeshModifier>();
                     navmeshModifier.overrideArea = true;
                     navmeshModifier.area = 0;
                 } else if (obj.layer == obstacle)
                 {
-                    var navmeshModifier = obj.AddComponent<NavMeshModifier>();
+                    NavMeshModifier navmeshModifier = obj.AddComponent<NavMeshModifier>();
                     navmeshModifier.overrideArea = true;
                     navmeshModifier.area = 1;
                 }
             }
 
-            GameObject navmeshSurface = new GameObject("NavmeshSurface");
-            surface = navmeshSurface.AddComponent<NavMeshSurface>();
-            surface.layerMask = layerToConsider;
-            surface.BuildNavMesh();
+            GameObject navmeshSurface = new ("NavmeshSurface");
+            this.surface = navmeshSurface.AddComponent<NavMeshSurface>();
+            this.surface.layerMask = this.layerToConsider;
+            this.surface.BuildNavMesh();
         }
 
         [ContextMenu("Bake")]
         private void Bake()
         {
-            surface.BuildNavMesh();
+            this.surface.BuildNavMesh();
         }
 
         private void BakeInteraction()
@@ -154,9 +154,9 @@ namespace BrowserDesktop
 
             InteractableContainer[] containers = FindObjectsOfType<InteractableContainer>();
 
-            foreach (var container in containers)
+            foreach (InteractableContainer container in containers)
             {
-                interactables.Add(container.Interactable);
+                this.interactables.Add(container.Interactable);
             }
         }
 
@@ -176,13 +176,13 @@ namespace BrowserDesktop
             Vector3 target;
 
             RandomPoint(out target);
-            agent.SetDestination(target);
+            this.agent.SetDestination(target);
 
             while (true)
             {
-                if (Vector3.Distance(transform.position, agent.destination) > .3f)
+                if (Vector3.Distance(this.transform.position, this.agent.destination) > .3f)
                 {
-                    isWalking = true;
+                    this.isWalking = true;
 
                     yield return null;
                 }
@@ -191,15 +191,15 @@ namespace BrowserDesktop
                     Interact();
 
                     RandomPoint(out target);
-                    agent.SetDestination(target);
+                    this.agent.SetDestination(target);
 
-                    agent.isStopped = true;
-                    isWalking = false;
+                    this.agent.isStopped = true;
+                    this.isWalking = false;
 
                     yield return new WaitForSeconds(Random.Range(3f, 7f));
 
-                    isWalking = true;
-                    agent.isStopped = false;
+                    this.isWalking = true;
+                    this.agent.isStopped = false;
                 }
             }
         }
@@ -208,7 +208,7 @@ namespace BrowserDesktop
         {
             for (int i = 0; i < 30; i++)
             {
-                Vector3 random = new Vector3(Random.Range(-50f, 50f), 0, Random.Range(-50f, 50f));
+                var random = new Vector3(Random.Range(-50f, 50f), 0, Random.Range(-50f, 50f));
 
                 NavMeshHit hit;
                 if (NavMesh.SamplePosition(random, out hit, 4.0f, NavMesh.AllAreas))
@@ -229,17 +229,17 @@ namespace BrowserDesktop
         {
         }
 
-        public override void Navigate(NavigateDto data)
+        public override void Navigate(ulong environmentId, NavigateDto data)
         {
         }
 
-        public override void Teleport(TeleportDto data)
+        public override void Teleport(ulong environmentId, TeleportDto data)
         {
-            transform.localPosition = data.position.Struct();
-            transform.localRotation = data.rotation.Quaternion();
+            this.transform.localPosition = data.position.Struct();
+            this.transform.localRotation = data.rotation.Quaternion();
         }
 
-        public override void UpdateFrame(FrameRequestDto data)
+        public override void UpdateFrame(ulong environmentId, FrameRequestDto data)
         {
         }
 
@@ -249,7 +249,7 @@ namespace BrowserDesktop
             {
                 speed = new Vector3Dto()
                 {
-                    X = (isWalking ? .5f : 0f) / Time.deltaTime,
+                    X = (this.isWalking ? .5f : 0f) / Time.deltaTime,
                     Z = 0,
                     Y = 0
                 },
@@ -262,10 +262,10 @@ namespace BrowserDesktop
 
         private async void Interact()
         {
-            if (!simulateInteraction || interactables.Count == 0)
+            if (!simulateInteraction || this.interactables.Count == 0)
                 return;
 
-            Interactable interactable = interactables[Random.Range(0, interactables.Count)];
+            Interactable interactable = this.interactables[Random.Range(0, this.interactables.Count)];
             Debug.Log("Try to interact with " + interactable.name);
 
             if (interactable.interactions.Count == 0)
@@ -294,8 +294,8 @@ namespace BrowserDesktop
                     id = eventDto.id,
                     toolId = interactable.id,
                     hoveredObjectId = 0,
-                    bonePosition = transform.position.Dto(),
-                    boneRotation = transform.rotation.Dto()
+                    bonePosition = this.transform.position.Dto(),
+                    boneRotation = this.transform.rotation.Dto()
                 };
 
                 UMI3DClientServer.SendRequest(answer, true);
@@ -312,8 +312,8 @@ namespace BrowserDesktop
                     id = eventDto.id,
                     toolId = interactable.id,
                     hoveredObjectId = 0,
-                    bonePosition = transform.position.Dto(),
-                    boneRotation = transform.rotation.Dto()
+                    bonePosition = this.transform.position.Dto(),
+                    boneRotation = this.transform.rotation.Dto()
                 };
 
                 UMI3DClientServer.SendRequest(answer, true);
