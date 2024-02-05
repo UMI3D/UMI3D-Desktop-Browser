@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using umi3d.common.userCapture.description;
+
 namespace umi3d.cdk.userCapture.pose
 {
     /// <summary>
@@ -24,8 +26,7 @@ namespace umi3d.cdk.userCapture.pose
         /// <summary>
         /// Sets the related pose in the poseSkeleton
         /// </summary>
-        /// <param name="poseClip"></param>
-        void PlayPoseClip(PoseClip poseClip);
+        void PlayPoseClip(PoseClip poseClip, PoseAnchorDto anchorToForce, ISubskeletonDescriptionInterpolationPlayer.PlayingParameters parameters = null);
 
         /// <summary>
         /// Stops all poses

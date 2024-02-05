@@ -17,6 +17,9 @@ limitations under the License.
 using inetum.unityUtils;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using umi3d.common.userCapture;
+using umi3d.common.userCapture.description;
 using umi3d.common.userCapture.pose;
 using UnityEngine;
 
@@ -45,6 +48,16 @@ namespace umi3d.cdk.userCapture.pose
         public PoseClip PoseClip => poseClip;
         private PoseClip poseClip;
 
+        /// <summary>
+        /// See <see cref="PoseClipDto.pose"/>.
+        /// </summary>
+        public PoseAnchorDto Anchor => dto.anchor;
+
+        /// <summary>
+        /// See <see cref="PoseClipDto.isAnchored"/>.
+        /// </summary>
+        public bool IsAnchored => dto.isAnchored;
+
         public ulong RelativeNodeId => dto.relatedNodeId;
 
         /// <summary>
@@ -56,16 +69,6 @@ namespace umi3d.cdk.userCapture.pose
         /// How long the pose should last [Not Implemented]
         /// </summary>
         public DurationDto Duration => dto.duration;
-
-        /// <summary>
-        /// If the pose can be interpolated
-        /// </summary>
-        public bool IsInterpolable => dto.isInterpolable;
-
-        /// <summary>
-        /// If the pose can be added to  other poses
-        /// </summary>
-        public bool IsComposable => dto.isComposable;
 
         /// <summary>
         /// How the pose is activated.
@@ -186,7 +189,7 @@ namespace umi3d.cdk.userCapture.pose
         private void Apply()
         {
             IsApplied = true;
-            poseService.PlayPoseClip(poseClip);
+            poseService.PlayPoseClip(poseClip, Anchor);
             ConditionsValidated?.Invoke();
             StartWatchEndOfConditions();
         }
@@ -221,7 +224,9 @@ namespace umi3d.cdk.userCapture.pose
 
                 // check to enable/disable auto-watched poses (nonInteractional)
                 if (!IsApplied && CheckConditions())
+                {
                     Apply();
+                }
             }
             StopWatchActivationConditions();
         }
@@ -295,5 +300,7 @@ namespace umi3d.cdk.userCapture.pose
 
             return false;
         }
+
+        
     }
 }

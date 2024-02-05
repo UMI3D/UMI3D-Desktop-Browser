@@ -128,6 +128,12 @@ namespace umi3d.cdk
             return entitiesCollection[environmentid].WaitUntilEntityLoaded(id, tokens);
         }
 
+        public virtual async Task<UMI3DNodeInstance> WaitUntilNodeInstanceLoaded(ulong environmentid, ulong id, List<CancellationToken> tokens)
+        {
+            UMI3DEntityInstance nodeInstance = await WaitUntilEntityLoaded(environmentid, id, tokens);
+            return nodeInstance == null ? null : (UMI3DNodeInstance)nodeInstance;
+        }
+
 
         /// <summary>
         /// Return a list of all registered entities in every environment.
@@ -350,8 +356,7 @@ namespace umi3d.cdk
         /// <returns></returns>
         public async Task Load(GlTFEnvironmentDto dto, MultiProgress LoadProgress)
         {
-            ulong mainEnvironmentId = 0;
-            DeclareNewEnvironment(mainEnvironmentId, UMI3DClientServer.Environement.resourcesUrl);
+            DeclareNewEnvironment(UMI3DGlobalID.EnvironmentId, UMI3DClientServer.Environement.resourcesUrl);
 
             Progress downloadingProgress = new Progress(0, "Downloading");
             Progress ReadingDataProgress = new Progress(2, "Reading Data");
@@ -370,7 +375,7 @@ namespace umi3d.cdk
             isEnvironmentLoaded = false;
 
             environment = dto;
-            RegisterEntity(mainEnvironmentId, UMI3DGlobalID.EnvironementId, dto, null).NotifyLoaded();
+            RegisterEntity(UMI3DGlobalID.EnvironmentId, UMI3DGlobalID.EnvironmentId, dto, null).NotifyLoaded();
             //
             // Load resources
             //
@@ -382,9 +387,9 @@ namespace umi3d.cdk
             //
             // Instantiate nodes
             //
-            await ReadUMI3DExtension(mainEnvironmentId, dto, null);
+            await ReadUMI3DExtension(UMI3DGlobalID.EnvironmentId, dto, null);
             ReadingDataProgress.AddComplete();
-            await InstantiateNodes(mainEnvironmentId, loadingProgress);
+            await InstantiateNodes(UMI3DGlobalID.EnvironmentId, loadingProgress);
 
             endProgress.AddComplete();
             await UMI3DAsyncManager.Delay(200);
@@ -401,7 +406,7 @@ namespace umi3d.cdk
             endProgress.SetStatus("Rendering Probes");
             if (QualitySettings.realtimeReflectionProbes)
             {
-                await RenderProbes(mainEnvironmentId);
+                await RenderProbes(UMI3DGlobalID.EnvironmentId);
             }
             else
             {
@@ -637,10 +642,15 @@ namespace umi3d.cdk
         /// <param name="performed"></param>
         public static async Task DeleteEntity(ulong environmentid, ulong entityId, List<CancellationToken> tokens)
         {
+            await Instance.DeleteEntityInstance(environmentid, entityId, tokens);
+        }
+
+        public async Task DeleteEntityInstance(ulong environmentId, ulong entityId, List<CancellationToken> tokens = null)
+        {
             if (UMI3DResourcesManager.isKnowedLibrary(entityId))
                 UMI3DResourcesManager.UnloadLibrary(entityId);
             else
-                await Instance.entitiesCollection[environmentid].DeleteEntity(entityId, tokens);
+                await entitiesCollection[environmentId].DeleteEntity(entityId, tokens);
         }
 
         /// <summary>
@@ -648,6 +658,8 @@ namespace umi3d.cdk
         /// </summary>
         public static void Clear(bool clearCache = true)
         {
+            Instance.entitiesCollection.ForEach(ec => ec.Value?.Clear());
+
             Instance.entitiesCollection.Clear();
 
             if (clearCache)
@@ -677,7 +689,7 @@ namespace umi3d.cdk
         public virtual async Task ReadUMI3DExtension(ulong environmentId, GlTFEnvironmentDto dto, GameObject node)
         {
             UMI3DEnvironmentDto extension = dto?.extensions?.umi3d;
-            if (extension != null && environmentId == 0)
+            if (extension != null && environmentId == UMI3DGlobalID.EnvironmentId)
             {
                 if (extension.defaultMaterial != null && extension.defaultMaterial.variants != null && extension.defaultMaterial.variants.Count > 0)
                 {
@@ -710,7 +722,7 @@ namespace umi3d.cdk
             IResourcesLoader loader = AbstractParameters.SelectLoader(ext);
             if (loader != null)
             {
-                var mat = await UMI3DResourcesManager.LoadFile(UMI3DGlobalID.EnvironementId, fileToLoad, loader);
+                var mat = await UMI3DResourcesManager.LoadFile(UMI3DGlobalID.EnvironmentId, fileToLoad, loader);
                 SetBaseMaterial((Material)mat);
             }
         }

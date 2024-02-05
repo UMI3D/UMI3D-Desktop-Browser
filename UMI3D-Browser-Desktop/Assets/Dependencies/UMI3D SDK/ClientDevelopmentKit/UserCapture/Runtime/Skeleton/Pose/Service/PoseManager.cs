@@ -15,7 +15,10 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using System.Linq;
+
 using umi3d.common;
+using umi3d.common.userCapture.description;
 
 namespace umi3d.cdk.userCapture.pose
 {
@@ -70,12 +73,15 @@ namespace umi3d.cdk.userCapture.pose
         }
 
         /// <inheritdoc/>
-        public void PlayPoseClip(PoseClip poseClip)
+        public void PlayPoseClip(PoseClip poseClip, PoseAnchorDto anchorToForce = null, ISubskeletonDescriptionInterpolationPlayer.PlayingParameters parameters = null)
         {
             if (poseClip == null)
                 throw new System.ArgumentNullException(nameof(poseClip));
 
-            skeletonManager.PersonalSkeleton.PoseSubskeleton.StartPose(poseClip);
+            if (skeletonManager.PersonalSkeleton.PoseSubskeleton.AppliedPoses.Contains(poseClip))
+                return;
+
+            skeletonManager.PersonalSkeleton.PoseSubskeleton.StartPose(poseClip, parameters: parameters, anchorToForce: anchorToForce);
         }
 
         /// <inheritdoc/>
@@ -83,6 +89,9 @@ namespace umi3d.cdk.userCapture.pose
         {
             if (poseClip == null)
                 throw new System.ArgumentNullException(nameof(poseClip));
+
+            if (!skeletonManager.PersonalSkeleton.PoseSubskeleton.AppliedPoses.Contains(poseClip))
+                return;
 
             skeletonManager.PersonalSkeleton.PoseSubskeleton.StopPose(poseClip);
         }
