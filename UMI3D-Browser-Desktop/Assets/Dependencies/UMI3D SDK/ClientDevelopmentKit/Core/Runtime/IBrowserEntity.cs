@@ -14,28 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.common.userCapture.description;
+using umi3d.common;
 
-namespace umi3d.common.userCapture.pose
+namespace umi3d.cdk
 {
     /// <summary>
-    /// A pose animation to apply to a skeleton.
+    /// Loaded entity in browser.
     /// </summary>
-    public class PoseClipDto : AbstractEntityDto, IEntity
+    public interface IBrowserEntity
     {
-        /// <summary>
-        /// Pose description for the animation.
-        /// </summary>
-        public PoseDto pose { get; set; }
+        ulong Id { get; }
 
-        /// <summary>
-        /// If the pose can be interpolated
-        /// </summary>
-        public bool isInterpolable { get; set; }
-
-        /// <summary>
-        /// If the pose can be added to  other poses
-        /// </summary>
-        public bool isComposable { get; set; }
+        ulong EnvironmentId 
+        {
+            get => UMI3DGlobalID.EnvironmentId; 
+        }
     }
 }
