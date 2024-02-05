@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: GeneralSettings
+  m_EditorClassIdentifier: 
+  Title: GeneralSettings
+  Items:
+  - Key: Language
+    _trads:
+    - Key:
+        Name: French
+      Value: Langage
+    - Key:
+        Name: Spanish
+      Value: Idioma
+    - Key:
+        Name: English
+      Value: Language
+  - Key: English
+    _trads:
+    - Key:
+        Name: French
+      Value: Anglais
+    - Key:
+        Name: Spanish
+      Value: "Ingl\xE9s"
+    - Key:
+        Name: English
+      Value: English
+  - Key: French
+    _trads:
+    - Key:
+        Name: French
+      Value: "Fran\xE7ais"
+    - Key:
+        Name: Spanish
+      Value: "Franc\xE9s"
+    - Key:
+        Name: English
+      Value: French
+  - Key: Spanish
+    _trads:
+    - Key:
+        Name: French
+      Value: Espagnol
+    - Key:
+        Name: Spanish
+      Value: "Espa\xF1ol"
+    - Key:
+        Name: English
+      Value: Spanish
+  - Key: Theme_Titre
+    _trads:
+    - Key:
+        Name: French
+      Value: "Th\xE8me"
+    - Key:
+        Name: Spanish
+      Value: Tema
+    - Key:
+        Name: English
+      Value: Theme
+  - Key: Theme_Default
+    _trads:
+    - Key:
+        Name: French
+      Value: "D\xE9faut"
+    - Key:
+        Name: Spanish
+      Value: Defecto
+    - Key:
+        Name: English
+      Value: Default

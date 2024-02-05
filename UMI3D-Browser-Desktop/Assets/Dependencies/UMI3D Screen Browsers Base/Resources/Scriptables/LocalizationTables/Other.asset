@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: Other
+  m_EditorClassIdentifier: 
+  Title: Other
+  Items:
+  - Key: LoadingPercent
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Charge totale : {0} %.'
+    - Key:
+        Name: Spanish
+      Value: 'Carga total : {0} %'
+    - Key:
+        Name: English
+      Value: 'Total loading : {0} %'
+  - Key: LoadingEnv
+    _trads:
+    - Key:
+        Name: French
+      Value: Chargement de l'environnement
+    - Key:
+        Name: Spanish
+      Value: Cargar el entorno
+    - Key:
+        Name: English
+      Value: Loading environment
+  - Key: LeavingEnv
+    _trads:
+    - Key:
+        Name: French
+      Value: Quitter l'environnement
+    - Key:
+        Name: Spanish
+      Value: Abandonar el entorno
+    - Key:
+        Name: English
+      Value: Leaving environment
+  - Key: EditText
+    _trads:
+    - Key:
+        Name: French
+      Value: Modifier le texte
+    - Key:
+        Name: Spanish
+      Value: Editar texto
+    - Key:
+        Name: English
+      Value: Edit Text
+  - Key: DisplayInteractionsMenu
+    _trads:
+    - Key:
+        Name: French
+      Value: Afficher le menu des interactions
+    - Key:
+        Name: Spanish
+      Value: "Mostrar men\xFA de interacciones"
+    - Key:
+        Name: English
+      Value: Display interactions menu
+  - Key: LeaveEnvironment
+    _trads:
+    - Key:
+        Name: French
+      Value: Quitter l'environnement
+    - Key:
+        Name: Spanish
+      Value: Salir del entorno
+    - Key:
+        Name: English
+      Value: Leave  the environment

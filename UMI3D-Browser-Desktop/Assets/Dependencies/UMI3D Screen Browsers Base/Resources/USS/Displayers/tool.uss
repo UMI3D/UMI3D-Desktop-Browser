@@ -1,0 +1,25 @@
+.tool {
+	flex-shrink: 1;
+
+	align-items: center;
+}
+
+.tool .tool-icon {
+	width: 100%;
+	height: 100%;
+}
+
+.tool .button-content__container {
+	padding-left: var(--margin_padding-displayer);
+    padding-right: var(--margin_padding-displayer);
+    padding-top: var(--margin_padding-displayer);
+    padding-bottom: var(--margin_padding-displayer);
+}
+
+.tool-type__toolboxmenu .tool-icon {
+	background-image: var(--image-toolbox-menu-displayer);
+}
+
+.tool-type__toolbox .tool-icon {
+	background-image: var(--image-toolbox-displayer);
+}

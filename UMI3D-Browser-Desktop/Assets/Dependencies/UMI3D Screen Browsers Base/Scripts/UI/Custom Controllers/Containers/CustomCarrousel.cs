@@ -18,8 +18,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
+using umi3d.commonScreen.Displayer;
 
-public abstract class CustomCarrousel : VisualElement, ICustomElement
+public abstract class CustomCarrousel : VisualElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
@@ -189,13 +190,13 @@ public abstract class CustomCarrousel : VisualElement, ICustomElement
     protected List<float> sizesElts = new List<float>();
     protected List<VisualElement> Carrousel_Elts = new List<VisualElement>();
 
-    public CustomButton Prev;
+    public Button_C Prev = new Button_C { name = "precedent" };
     public VisualElement Prev_Icon = new VisualElement();
     public VisualElement Container_Box = new VisualElement();
     public VisualElement Box_Elts = new VisualElement();
     public VisualElement Bottom_Buttons = new VisualElement();
     public VisualElement PageSelectIcon = new VisualElement();
-    public CustomButton Next;
+    public Button_C Next = new Button_C { name = "next" };
     public VisualElement Next_Icon = new VisualElement();
 
     public virtual void InitElement()

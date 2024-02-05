@@ -33,7 +33,11 @@ namespace umi3d.commonScreen.Container
 
         public void InitAndBindUI()
         {
-            m_form = new Form_C(Category, Title, null);
+            m_form = new Form_C
+            {
+                Category = Category,
+                Title = Title
+            };
         }
 
         private void Start()

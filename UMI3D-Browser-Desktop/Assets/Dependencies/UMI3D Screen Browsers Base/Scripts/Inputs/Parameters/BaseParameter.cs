@@ -14,9 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+using umi3d.baseBrowser.inputs.interactions;
+using umi3d.common;
+using UnityEngine;
+
 namespace umi3d.baseBrowser.parameters
 {
-    public abstract class BaseParameter<InputMenuItem, ParameterType, ValueType> : umi3d.cdk.interaction.AbstractUMI3DInput
+    public abstract class BaseParameter<InputMenuItem, ParameterType, ValueType> : umi3d.cdk.interaction.AbstractUMI3DInput, IInteractionWithBone
         where InputMenuItem : umi3d.cdk.menu.AbstractInputMenuItem<ValueType>, new()
         where ParameterType : umi3d.common.interaction.AbstractParameterDto<ValueType>
     {
@@ -36,9 +41,19 @@ namespace umi3d.baseBrowser.parameters
         /// Associated callback
         /// </summary>
         /// <see cref="Associate(AbstractInteractionDto)"/>
-        protected UnityEngine.Events.UnityAction<ValueType> callback;
+        protected Action<ValueType> callback;
 
         protected ulong hoveredObjectId { get; private set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public Transform boneTransform { get; set; }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public uint bone { get; set; }
+
         protected ulong GetCurrentHoveredObjectID() => hoveredObjectId;
 
         private void OnDestroy() => Dissociate();
@@ -72,7 +87,10 @@ namespace umi3d.baseBrowser.parameters
                     id = currentInteraction.id,
                     toolId = toolId,
                     parameter = dto,
-                    hoveredObjectId = GetCurrentHoveredObjectID()
+                    hoveredObjectId = GetCurrentHoveredObjectID(),
+                    boneType = bone,
+                    bonePosition = (Vector3Dto)boneTransform.position.Dto(),
+                    boneRotation = (Vector4Dto)boneTransform.rotation.Dto()
                 };
                 umi3d.cdk.UMI3DClientServer.SendData(pararmeterDto, true);
             };

@@ -28,14 +28,15 @@
 	bottom: 0;
 }
 
-.trailing__area-object__menu {
-	position: absolute;
-	left: 5%;
-	max-height: 100%;
+.trailing__area-manipulations {
+	/*height: 245px;*/
+
+
+	/*background-color: black;*/
 }
 
-.trailing__area-emote__window {
-	position: absolute;
-	left: 5%;
-	max-height: 100%;
+.trailing__area-window__container {
+	width: 70%;
+
+	justify-content: center;
 }

@@ -23,6 +23,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using umi3d;
+using umi3d.baseBrowser.cursor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -77,7 +78,7 @@ public class BugReporter : SingleBehaviour<BugReporter>
         //umi3d.baseBrowser.connection.BaseConnectionMenu.Instance.document.rootVisualElement.Add(popUp);
         popUp.BringToFront();
 
-        umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
+        BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
     }
 
     public void ClosePopUp(bool generateReport)
@@ -91,7 +92,7 @@ public class BugReporter : SingleBehaviour<BugReporter>
         reproStepsInput.SetValueWithoutNotify(string.Empty);
         titleInput.SetValueWithoutNotify(string.Empty);
 
-        umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Center);
+        BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
     }
 
     private void GenerateBugReport(string name, string title, string reproSteps)

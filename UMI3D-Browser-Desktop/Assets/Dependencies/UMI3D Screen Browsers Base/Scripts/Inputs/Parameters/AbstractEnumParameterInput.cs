@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using umi3d.common;
+
 namespace umi3d.baseBrowser.parameters
 {
     public abstract class AbstractEnumParameterInput<InputMenuItem, ValueType> : BaseParameter<InputMenuItem, common.interaction.EnumParameterDto<ValueType>, ValueType>
@@ -37,7 +39,10 @@ namespace umi3d.baseBrowser.parameters
                     id = currentInteraction.id,
                     toolId = toolId,
                     parameter = dto,
-                    hoveredObjectId = GetCurrentHoveredObjectID()
+                    hoveredObjectId = GetCurrentHoveredObjectID(),
+                    boneType = bone,
+                    bonePosition = (Vector3Dto)boneTransform.position.Dto(),
+                    boneRotation = (Vector4Dto)boneTransform.rotation.Dto()
                 };
                 cdk.UMI3DClientServer.SendData(pararmeterDto, true);
             };

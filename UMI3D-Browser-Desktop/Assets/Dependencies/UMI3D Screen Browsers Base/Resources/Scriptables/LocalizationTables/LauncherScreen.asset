@@ -1,0 +1,327 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: LauncherScreen
+  m_EditorClassIdentifier: 
+  Title: LauncherScreen
+  Items:
+  - Key: LocalisationChoice
+    _trads:
+    - Key:
+        Name: French
+      Value: "S\xE9lectionnez la langue que l'application utilisera."
+    - Key:
+        Name: Spanish
+      Value: "Seleccione el idioma que usar\xE1 la aplicaci\xF3n."
+    - Key:
+        Name: English
+      Value: Select the language the app will use.
+  - Key: Home
+    _trads:
+    - Key:
+        Name: French
+      Value: Accueil
+    - Key:
+        Name: Spanish
+      Value: Inicio
+    - Key:
+        Name: English
+      Value: Home
+  - Key: Settings
+    _trads:
+    - Key:
+        Name: French
+      Value: "Param\xE8tres"
+    - Key:
+        Name: Spanish
+      Value: "Configuraci\xF3n"
+    - Key:
+        Name: English
+      Value: Settings
+  - Key: Data
+    _trads:
+    - Key:
+        Name: French
+      Value: "Donn\xE9es"
+    - Key:
+        Name: Spanish
+      Value: Datos
+    - Key:
+        Name: English
+      Value: Data
+  - Key: Libraries
+    _trads:
+    - Key:
+        Name: French
+      Value: "Biblioth\xE8ques"
+    - Key:
+        Name: Spanish
+      Value: Bibliotecas
+    - Key:
+        Name: English
+      Value: Libraries
+  - Key: No_Connection_Tile
+    _trads:
+    - Key:
+        Name: French
+      Value: Pas de connexion internet
+    - Key:
+        Name: Spanish
+      Value: "Sin conexi\xF3n a Internet"
+    - Key:
+        Name: English
+      Value: No internet connection
+  - Key: NoConnection_Description
+    _trads:
+    - Key:
+        Name: French
+      Value: Connectez votre appareil pour charger {0}
+    - Key:
+        Name: Spanish
+      Value: Conecta tu dispositivo para cargar {0}
+    - Key:
+        Name: English
+      Value: Connect your device to load {0}
+  - Key: WeakConnection_Title
+    _trads:
+    - Key:
+        Name: French
+      Value: "Vous \xEAtes connect\xE9 \xE0 l'internet via le r\xE9seau de donn\xE9es
+        de l'op\xE9rateur"
+    - Key:
+        Name: Spanish
+      Value: "Est\xE1s conectado a Internet a trav\xE9s de la red de datos del operador"
+    - Key:
+        Name: English
+      Value: You are connected to internet via carrier data network
+  - Key: WeakConnection_Description
+    _trads:
+    - Key:
+        Name: French
+      Value: ' if you can you should connect via wifi or cable and retry'
+    - Key:
+        Name: Spanish
+      Value: "Vous essayez de charger {0} via un r\xE9seau de donn\xE9es porteur.
+        \\nL'environnement de chargement consomme beaucoup de donn\xE9es"
+    - Key:
+        Name: English
+      Value: You are trying to load {0} via carrier data network. \nLoading environment
+        use a lot of data
+  - Key: WeakConnection_ConnectAnyway
+    _trads:
+    - Key:
+        Name: French
+      Value: "Connectez-vous quand m\xEAme"
+    - Key:
+        Name: Spanish
+      Value: "Con\xE9ctate de todos modos"
+    - Key:
+        Name: English
+      Value: Connect anyway
+  - Key: DeleteServer_Description
+    _trads:
+    - Key:
+        Name: French
+      Value: Supprimer ce serveur de l'enregistrement ?
+    - Key:
+        Name: Spanish
+      Value: "\xBFBorrar este servidor de los registrados?"
+    - Key:
+        Name: English
+      Value: Delete this server from registered ?
+  - Key: UpdateServer_Description
+    _trads:
+    - Key:
+        Name: French
+      Value: "Mise \xE0 jour du serveur sauvegard\xE9"
+    - Key:
+        Name: Spanish
+      Value: Actualizar servidor guardado
+    - Key:
+        Name: English
+      Value: Update saved server
+  - Key: ConnectNewServer
+    _trads:
+    - Key:
+        Name: French
+      Value: "Se connecter \xE0 un nouveau serveur"
+    - Key:
+        Name: Spanish
+      Value: Conectarse a un nuevo servidor
+    - Key:
+        Name: English
+      Value: Connect to a new server
+  - Key: DisplaySavedServer
+    _trads:
+    - Key:
+        Name: French
+      Value: "Afficher les serveurs sauvegard\xE9s"
+    - Key:
+        Name: Spanish
+      Value: Mostrar servidores guardados
+    - Key:
+        Name: English
+      Value: Display saved servers
+  - Key: RememberServer
+    _trads:
+    - Key:
+        Name: French
+      Value: Enregistre ce serveur
+    - Key:
+        Name: Spanish
+      Value: Recuerde este servidor
+    - Key:
+        Name: English
+      Value: Remember this server
+  - Key: SavedServers
+    _trads:
+    - Key:
+        Name: French
+      Value: "Serveurs sauvegard\xE9s"
+    - Key:
+        Name: Spanish
+      Value: Servidores guardados
+    - Key:
+        Name: English
+      Value: Saved Servers
+  - Key: ServerURL
+    _trads:
+    - Key:
+        Name: French
+      Value: URL du serveur
+    - Key:
+        Name: Spanish
+      Value: URL del servidor
+    - Key:
+        Name: English
+      Value: Server URL
+  - Key: CloseMenu
+    _trads:
+    - Key:
+        Name: French
+      Value: Fermer le menu
+    - Key:
+        Name: Spanish
+      Value: "Cerrar men\xFA"
+    - Key:
+        Name: English
+      Value: Close menu
+  - Key: LeaveEnvironment
+    _trads:
+    - Key:
+        Name: French
+      Value: Quitter l'environnement
+    - Key:
+        Name: Spanish
+      Value: Salir del entorno
+    - Key:
+        Name: English
+      Value: Leave environment
+  - Key: SessionCountLabel
+    _trads:
+    - Key:
+        Name: French
+      Value: "Participants/Capacit\xE9"
+    - Key:
+        Name: Spanish
+      Value: Participantes/Capacidad
+    - Key:
+        Name: English
+      Value: Participants/Capacity
+  - Key: ConnectionSettings
+    _trads:
+    - Key:
+        Name: French
+      Value: "Param\xE8tres de connexion"
+    - Key:
+        Name: Spanish
+      Value: "Ajustes de conexi\xF3n"
+    - Key:
+        Name: English
+      Value: Connection settings
+  - Key: IPAdress
+    _trads:
+    - Key:
+        Name: French
+      Value: Adresse IP
+    - Key:
+        Name: Spanish
+      Value: "Direcci\xF3n IP"
+    - Key:
+        Name: English
+      Value: IP adress
+  - Key: HttpPort
+    _trads:
+    - Key:
+        Name: French
+      Value: Port Http
+    - Key:
+        Name: Spanish
+      Value: Puerto http
+    - Key:
+        Name: English
+      Value: Http port
+  - Key: NewServer
+    _trads:
+    - Key:
+        Name: French
+      Value: Nouveau serveur
+    - Key:
+        Name: Spanish
+      Value: Nuevo servidor
+    - Key:
+        Name: English
+      Value: New server
+  - Key: EnterNewServer
+    _trads:
+    - Key:
+        Name: French
+      Value: Entrez l'URL du serveur ici
+    - Key:
+        Name: Spanish
+      Value: "Introduzca aqu\xED la url del servidor"
+    - Key:
+        Name: English
+      Value: Enter a server url here
+  - Key: ConnectionHistory
+    _trads:
+    - Key:
+        Name: French
+      Value: Historique des connexions
+    - Key:
+        Name: Spanish
+      Value: Historial de conexiones
+    - Key:
+        Name: English
+      Value: Connection history
+  - Key: DeleteServerHistory_Description
+    _trads:
+    - Key:
+        Name: French
+      Value: Supprimer ce serveur de l'historique ?
+    - Key:
+        Name: Spanish
+      Value: "\xBF Borrar este servidor del historial ?"
+    - Key:
+        Name: English
+      Value: Delete this server from the history ?
+  - Key: Tips
+    _trads:
+    - Key:
+        Name: French
+      Value: Aide
+    - Key:
+        Name: Spanish
+      Value: Consejos
+    - Key:
+        Name: English
+      Value: Tips

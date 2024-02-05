@@ -2,6 +2,7 @@
     "name": "UMI3D.BaseBrowser.Controller",
     "rootNamespace": "",
     "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
         "GUID:d0bf4ea2ef3a7c74e9160b8995fd902b",
         "GUID:aebbed5eed3757846bab9faf35cac448",
         "GUID:8537d47cf9ea6504d84cf56365c6d93b",
@@ -10,7 +11,9 @@
         "GUID:29a403b1410bc9e44b9b0cbcfde58e71",
         "GUID:608ff695b5b1d8f46a32962b70ec9792",
         "GUID:09603449e2002d4418d8adc054084195",
-        "GUID:379812115ad52434f9cabb9fc78512c0"
+        "GUID:379812115ad52434f9cabb9fc78512c0",
+        "GUID:289e6060f23453d4aafb1bfe56cbf3b9",
+        "GUID:8ab383a2396734d448f79f61be487229"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

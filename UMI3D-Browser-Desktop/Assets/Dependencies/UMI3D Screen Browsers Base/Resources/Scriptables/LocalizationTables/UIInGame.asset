@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: UIInGame
+  m_EditorClassIdentifier: 
+  Title: UIInGame
+  Items:
+  - Key: Crouch
+    _trads:
+    - Key:
+        Name: French
+      Value: S'accroupir
+    - Key:
+        Name: Spanish
+      Value: Agazaparse
+    - Key:
+        Name: English
+      Value: Crouch
+  - Key: Jump
+    _trads:
+    - Key:
+        Name: French
+      Value: Sauter
+    - Key:
+        Name: Spanish
+      Value: Saltar
+    - Key:
+        Name: English
+      Value: Jump
+  - Key: Action
+    _trads:
+    - Key:
+        Name: French
+      Value: Action
+    - Key:
+        Name: Spanish
+      Value: "Acci\xF3n"
+    - Key:
+        Name: English
+      Value: Action
+  - Key: ContextualMenu
+    _trads:
+    - Key:
+        Name: French
+      Value: Menu contextuel
+    - Key:
+        Name: Spanish
+      Value: "Men\xFA contextual"
+    - Key:
+        Name: English
+      Value: Contextual Menu

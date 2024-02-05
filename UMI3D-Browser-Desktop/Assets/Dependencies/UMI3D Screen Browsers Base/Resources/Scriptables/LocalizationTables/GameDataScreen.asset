@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: GameDataScreen
+  m_EditorClassIdentifier: 
+  Title: GameDataScreen
+  Items:
+  - Key: GameData
+    _trads:
+    - Key:
+        Name: French
+      Value: "Donn\xE9es du jeu"
+    - Key:
+        Name: Spanish
+      Value: Datos del juego
+    - Key:
+        Name: English
+      Value: Game Data
+  - Key: WorldName
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Nom du monde :'
+    - Key:
+        Name: Spanish
+      Value: 'Nombre del mundo:'
+    - Key:
+        Name: English
+      Value: 'World name:'
+  - Key: EnvironmentName
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Nom de l''environnement :'
+    - Key:
+        Name: Spanish
+      Value: 'Nombre del entorno:'
+    - Key:
+        Name: English
+      Value: 'Environment name:'
+  - Key: TimeSpent
+    _trads:
+    - Key:
+        Name: French
+      Value: "Temps pass\xE9 dans l'environnement :"
+    - Key:
+        Name: Spanish
+      Value: 'Tiempo pasado en el entorno:'
+    - Key:
+        Name: English
+      Value: 'Time spent in the environment:'
+  - Key: NbParticipants
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Nombre de participants dans l''environnement :'
+    - Key:
+        Name: Spanish
+      Value: "N\xFAmero de participantes en el entorno:"
+    - Key:
+        Name: English
+      Value: 'Number of participants in the environment:'

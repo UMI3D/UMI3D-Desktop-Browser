@@ -16,10 +16,6 @@
 .textfield > .unity-text-field__input {
     max-height: 90px;
     color: rgb(255, 255, 255);
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
     background-color: transparent;
     border-left-width: var(--border-width-displayer);
     border-right-width: var(--border-width-displayer);
@@ -40,11 +36,16 @@
     margin-bottom: var(--margin_padding-displayer);
 }
 
-.textfield > .unity-text-field__input {
+.textfield > .unity-base-text-field__input.unity-base-field__input {
     margin-left: var(--margin_padding-displayer);
     margin-right: var(--margin_padding-displayer);
     margin-top: var(--margin_padding-displayer);
     margin-bottom: var(--margin_padding-displayer);
+
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .textfield__toggle > .unity-toggle__input > .unity-toggle__checkmark {

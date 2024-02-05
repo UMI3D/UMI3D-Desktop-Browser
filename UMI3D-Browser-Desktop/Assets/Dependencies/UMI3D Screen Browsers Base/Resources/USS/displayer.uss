@@ -22,7 +22,8 @@
 	--color-border-game-displayer: rgb(0, 193, 216);
 
 	--image-arrow__ligth-displayer: resource("Icons/arrow_light");
-	--image-arrow__ligth-displayer: resource("Icons/arrow_light");
+	--image-toolbox-menu-displayer: resource("Icons/TOOLBOXES/TOOLBOX_MENU");
+	--image-toolbox-displayer: resource("Icons/TOOLBOXES/TOOLBOX");
 
 	--background-image-mic-on: resource('Icons/Mic/MIC_ON');
 	--background-image-mic-off: resource('Icons/Mic/MIC_OFF');
@@ -54,4 +55,14 @@
 
 	--size-separator-picker: 3px;
 	--color-background-separator-picker: white;
+
+	--image-dof-x : resource('Icons/Manipulation Icons/X');
+	--image-dof-y : resource('Icons/Manipulation Icons/Y');
+	--image-dof-z : resource('Icons/Manipulation Icons/Z');
+	--image-dof-xy : resource('Icons/Manipulation Icons/XY');
+	--image-dof-xz : resource('Icons/Manipulation Icons/XZ');
+	--image-dof-yz : resource('Icons/Manipulation Icons/YZ');
+	--image-dof-rx : resource('Icons/Manipulation Icons/RX');
+	--image-dof-ry : resource('Icons/Manipulation Icons/RY');
+	--image-dof-rz : resource('Icons/Manipulation Icons/RZ');
 }

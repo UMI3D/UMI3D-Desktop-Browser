@@ -13,12 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using umi3d.baseBrowser.cursor;
 using umi3d.common.interaction;
 using UnityEngine;
 
 namespace umi3d.mobileBrowser.interactions
 {
-    public class MainMobileAction : baseBrowser.inputs.interactions.KeyMenuInput
+    public class MainMobileAction : baseBrowser.inputs.interactions.EventInteraction
     {
         public static int MenuCount;
         public static event System.Action Down;
@@ -29,6 +30,21 @@ namespace umi3d.mobileBrowser.interactions
 
         public static void OnClickedDown() => Down?.Invoke();
         public static void OnClickedUp() => Up?.Invoke();
+
+        private void OnEnable()
+        {
+            Down += OnDown;
+            Up += OnUp;
+        }
+
+        private void OnDisable()
+        {
+            Down -= OnDown;
+            Up -= OnUp;
+        }
+
+        private void OnDown() => BaseCursor.State = BaseCursor.CursorState.Clicked;
+        private void OnUp() => BaseCursor.State = BaseCursor.CursorState.Default;
 
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {

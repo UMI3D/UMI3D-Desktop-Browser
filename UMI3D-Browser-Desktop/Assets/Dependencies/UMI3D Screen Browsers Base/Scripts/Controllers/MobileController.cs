@@ -14,91 +14,85 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using umi3d.baseBrowser.Controller;
+using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.interaction;
+using umi3d.cdk.menu;
 using umi3d.common.interaction;
 using UnityEngine;
 
 namespace umi3d.mobileBrowser.Controller
 {
-    public class MobileController : umi3d.baseBrowser.Controller.BaseController
+    public class MobileController : IConcreteController
     {
-        public static bool Exists => s_instance != null;
-        public static MobileController Instance
-        {
-            get => s_instance;
-            set
-            {
-                if (Exists) return;
-                s_instance = value;
-            }
-        }
-        protected static MobileController s_instance;
+        public BaseController Controller;
+        public MenuAsset ObjectMenu;
 
-        public override List<AbstractUMI3DInput> inputs
-        {
-            get {
-                List<AbstractUMI3DInput> list = new List<AbstractUMI3DInput>();
-                //list.AddRange(ManipulationInputs);
-                list.AddRange(KeyMenuInputs);
-                list.AddRange(floatParameterInputs);
-                list.AddRange(floatRangeParameterInputs);
-                list.AddRange(intParameterInputs);
-                list.AddRange(boolParameterInputs);
-                list.AddRange(stringParameterInputs);
-                list.AddRange(stringEnumParameterInputs);
-                return list;
-            }
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            s_instance = this;
-
-            interactions.MainMobileAction mainAction = GetComponentInChildren<interactions.MainMobileAction>();
-            KeyMenuInputs.Add(mainAction);
-            mainAction.Init(this);
-            mainAction.bone = interactionBoneType;
-            mainAction.Menu = ObjectMenu.menu;
-        }
-
-        public override AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
-        {
-            Debug.Log("TODO : Find input for manipulation dto");
-            //ManipulationGroup group = ManipulationInputs.Find(i => i.IsAvailableFor(manip));
-            //if (group == null)
-            //{
-            //    group = ManipulationGroup.Instanciate(this, ManipulationActionInput, dofGroups, transform);
-            //    if (group == null)
-            //    {
-            //        Debug.LogWarning("find manip input FAILED");
-            //        return null;
-            //    }
-            //    group.bone = interactionBoneType;
-            //    ManipulationInputs.Add(group);
-            //}
-            return null;
-        }
-
-        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
-            => FindInput(KeyMenuInputs, i => i.IsAvailable() || !unused, this.gameObject);
+        protected interactions.MainMobileAction m_mainAction;
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="tool"></param>
-        /// <param name="releasable"></param>
-        /// <param name="reason"></param>
-        /// <param name="hoveredObjectId"></param>
-        public override void Project(AbstractTool tool, bool releasable, InteractionMappingReason reason, ulong hoveredObjectId)
+        public List<AbstractUMI3DInput> Inputs
         {
-            if (reason is RequestedByEnvironment)
-            {
-                interactions.MainMobileAction mainAction = KeyMenuInputs.Find(i => i is umi3d.mobileBrowser.interactions.MainMobileAction) as umi3d.mobileBrowser.interactions.MainMobileAction;
-                if (mainAction != null) mainAction.ForceDissociate();
+            get {
+                List<AbstractUMI3DInput> list = new List<AbstractUMI3DInput>();
+                return list;
             }
-            base.Project(tool, releasable, reason, hoveredObjectId);
+        }
+
+        public List<BaseInteraction<EventDto>> Manipulations => throw new System.NotImplementedException();
+
+        public BaseManipulationGroup ManipulationGroup { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void Awake()
+        {
+            m_mainAction = Controller.MobileAction.GetComponent<interactions.MainMobileAction>();
+        }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void Start()
+        {
+            Inputs.Add(m_mainAction);
+            m_mainAction.Init(Controller);
+            m_mainAction.bone = Controller.interactionBoneType;
+            m_mainAction.Menu = ObjectMenu.menu;
+            m_mainAction.boneTransform = Controller.hoverBoneTransform;
+        }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void Update()
+        {
+
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <param name="unused"></param>
+        /// <param name="tryToFindInputForHoldableEvent"></param>
+        /// <returns></returns>
+        public AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
+            => m_mainAction.IsAvailable() || !unused ? m_mainAction : null;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void ClearInputs()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void ResetInputsWhenEnvironmentLaunch()
+        {
         }
     }
 }

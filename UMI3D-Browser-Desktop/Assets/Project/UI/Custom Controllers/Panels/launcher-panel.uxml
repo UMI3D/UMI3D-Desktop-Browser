@@ -1,3 +1,3 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <umi3d.commonScreen.menu.Launcher_C />
+    <umi3d.commonScreen.menu.Launcher_C version="1.2.3.445566" />
 </ui:UXML>

@@ -1,0 +1,76 @@
+.scrollable__form {
+    overflow: hidden;
+    flex-grow: 1;
+    border-top-left-radius: var(--border-radius-container);
+    border-top-right-radius: var(--border-radius-container);
+    border-bottom-left-radius: var(--border-radius-container);
+    border-bottom-right-radius: var(--border-radius-container);
+    background-color: var(--background-color-transparent-game);
+}
+
+.scrollable__form > .scrollable__form-title {
+    justify-content: center;
+    padding-top: var(--margin_padding-container);
+    padding-bottom: var(--margin_padding-container);
+    -unity-text-align: middle-center;
+}
+
+.scrollable__form > .scrollable__form-icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    margin-left: var(--margin_padding-container);
+    margin-right: var(--margin_padding-container);
+    margin-top: var(--margin_padding-container);
+    margin-bottom: var(--margin_padding-container);
+}
+
+.scrollable__form.scrollable__form-menu > .scrollable__form-title {
+    background-color: var(--color-border-menu-container);
+}
+
+.scrollable__form.scrollable__form-game > .scrollable__form-title {
+    background-color: var(--color-border-game-container);
+}
+
+.scrollable__form.emote__window .button-label {
+	min-width: auto;
+	flex-grow: 1;
+}
+
+.scrollable__form.emote__window .button-body {
+	flex-grow: 0;
+}
+
+.scrollable__form.emote__window .emote__window-icon {
+	width: 75px;
+	height: 75px;
+}
+
+.scrollable__form.tools__items__window .sdc-box > * {
+    width: 99%;
+}
+
+/* tools__window */
+.tools__window .tools__window-inputs__box {
+    margin-left: 20%;
+
+    background-color: var(--background-color-container);
+
+	border-top-left-radius: var(--border-radius-container);
+    border-bottom-left-radius: var(--border-radius-container);
+    border-top-right-radius: var(--border-radius-container);
+    border-bottom-right-radius: var(--border-radius-container);
+
+    border-left-width: var(--border-width-displayer);
+    border-right-width: var(--border-width-displayer);
+    border-top-width: var(--border-width-displayer);
+    border-bottom-width: var(--border-width-displayer);
+
+    width: 80%;
+}
+.tools__window-edc {
+    width: 100%;
+}

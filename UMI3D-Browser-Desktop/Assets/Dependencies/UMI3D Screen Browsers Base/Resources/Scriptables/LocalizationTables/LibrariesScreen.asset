@@ -1,0 +1,181 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: LibrariesScreen
+  m_EditorClassIdentifier: 
+  Title: LibrariesScreen
+  Items:
+  - Key: Library_UsedBy
+    _trads:
+    - Key:
+        Name: French
+      Value: "Utilis\xE9 par:\\n\\n{0}"
+    - Key:
+        Name: Spanish
+      Value: Utilizado por:\n\n{0}
+    - Key:
+        Name: English
+      Value: Used by:\n\n{0}
+  - Key: Search_Label
+    _trads:
+    - Key:
+        Name: French
+      Value: Recherche
+    - Key:
+        Name: Spanish
+      Value: Buscar en
+    - Key:
+        Name: English
+      Value: Search
+  - Key: Filter_Label
+    _trads:
+    - Key:
+        Name: French
+      Value: Filtre
+    - Key:
+        Name: Spanish
+      Value: Filtro
+    - Key:
+        Name: English
+      Value: Filter
+  - Key: Sort_Name
+    _trads:
+    - Key:
+        Name: French
+      Value: Nom
+    - Key:
+        Name: Spanish
+      Value: Nombre
+    - Key:
+        Name: English
+      Value: Name
+  - Key: Sort_Size
+    _trads:
+    - Key:
+        Name: French
+      Value: Taille
+    - Key:
+        Name: Spanish
+      Value: Talla
+    - Key:
+        Name: English
+      Value: Size
+  - Key: Delete_library_Title
+    _trads:
+    - Key:
+        Name: French
+      Value: "Voulez-vous d\xE9sinstaller cette biblioth\xE8que ?"
+    - Key:
+        Name: Spanish
+      Value: "\xBFDesea desinstalar esta biblioteca?"
+    - Key:
+        Name: English
+      Value: Do you want to uninstall this library ?
+  - Key: Delete_Library_Description
+    _trads:
+    - Key:
+        Name: French
+      Value: '''{0}'' est requis par {1} environnements.'
+    - Key:
+        Name: Spanish
+      Value: '{0}'' es requerido por {1} entornos'
+    - Key:
+        Name: English
+      Value: '''{0}'' is required by {1} environments'
+  - Key: Delete_All_libraries
+    _trads:
+    - Key:
+        Name: French
+      Value: "Supprimer toutes les biblioth\xE8ques"
+    - Key:
+        Name: Spanish
+      Value: Borrar todas las bibliotecas
+    - Key:
+        Name: English
+      Value: Delete All libraries
+  - Key: Delete_Filtered_libraries
+    _trads:
+    - Key:
+        Name: French
+      Value: "Supprimer les biblioth\xE8ques de {0}"
+    - Key:
+        Name: Spanish
+      Value: Borrar bibliotecas de {0}
+    - Key:
+        Name: English
+      Value: Delete libraries from {0}
+  - Key: Filter_All
+    _trads:
+    - Key:
+        Name: French
+      Value: Tout
+    - Key:
+        Name: Spanish
+      Value: Todos
+    - Key:
+        Name: English
+      Value: All
+  - Key: Delete_Filteredlibraries_Title
+    _trads:
+    - Key:
+        Name: French
+      Value: "D\xE9sinstaller les biblioth\xE8ques filtr\xE9es"
+    - Key:
+        Name: Spanish
+      Value: Desinstalar bibliotecas filtradas
+    - Key:
+        Name: English
+      Value: Uninstall filtered libraries
+  - Key: Delete_Filteredlibraries_Description
+    _trads:
+    - Key:
+        Name: French
+      Value: "Voulez-vous d\xE9sinstaller les {0} biblioth\xE8ques filtr\xE9es ?"
+    - Key:
+        Name: Spanish
+      Value: "\xBFDesea desinstalar las {0} bibliotecas filtradas?"
+    - Key:
+        Name: English
+      Value: Do you want to uninstall the {0} filtered libraries ?
+  - Key: Library_WrongPath_Title
+    _trads:
+    - Key:
+        Name: French
+      Value: "Certaines biblioth\xE8ques ne sont pas trouv\xE9es"
+    - Key:
+        Name: Spanish
+      Value: Algunas bibliotecas no se encuentran
+    - Key:
+        Name: English
+      Value: Some libraries are not found
+  - Key: Library_WrongPath_Description
+    _trads:
+    - Key:
+        Name: French
+      Value: "Voici la liste des chemins qui ne sont pas trouv\xE9s :"
+    - Key:
+        Name: Spanish
+      Value: "Aqu\xED est\xE1 la lista de la ruta que no se encuentran:"
+    - Key:
+        Name: English
+      Value: 'Here is the list of the path that are not found:'
+  - Key: Library_WrongPath_ShowMe
+    _trads:
+    - Key:
+        Name: French
+      Value: Montre-moi
+    - Key:
+        Name: Spanish
+      Value: "Mu\xE9strame"
+    - Key:
+        Name: English
+      Value: Show me

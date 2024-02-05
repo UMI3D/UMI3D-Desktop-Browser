@@ -4,7 +4,7 @@
 	padding-right: var(--size-margin-and-padding-game);
 }
 
-.user__list-filter__label.text.unity-label {
+.user__list-filter__label.text {
 	position: absolute;
 	margin-top: 30px;
 	margin-left: 25px;

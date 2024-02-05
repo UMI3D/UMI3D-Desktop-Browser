@@ -17,9 +17,9 @@
 	--border-color-joystick__foreground__icon: var(--border-color-game);
 	--border-width-joystick__foreground__icon: 3px;
 
-	--size-mic__sound: 50px;
+	--size-mic__sound: 70px;
 	--left-mic: -50px;
-	--padding-short-inf: 120px;
+	--padding-short-inf: 135px;
 	--background-image-avatar-on: resource('Icons/Avatar/AVATAR_ON');
 	--background-image-avatar-off: resource('Icons/Avatar/AVATAR_OFF');
 	--background-image-mic-on: resource('Icons/Mic/MIC_ON');
@@ -29,6 +29,7 @@
 	--background-image-notif__users-on: resource('Icons/NotifAndUsers/Arrow_Left');
 	--background-image-notif__users-off: resource('Icons/NotifAndUsers/Arrow_Right');
 	--background-image-emote: resource('Icons/Emote/Smile');
+	--background-image-toolbox: resource('Icons/Toolboxes/TOOLBOX_MENU');
 	--size__width-short-inf: 40%;
 	--size__height-short-inf: 76px;
 

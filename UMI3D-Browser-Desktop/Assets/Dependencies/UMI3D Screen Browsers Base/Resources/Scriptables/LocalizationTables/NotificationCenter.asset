@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: NotificationCenter
+  m_EditorClassIdentifier: 
+  Title: NotificationCenter
+  Items:
+  - Key: Timestamp_Now
+    _trads:
+    - Key:
+        Name: French
+      Value: Maintenant
+    - Key:
+        Name: Spanish
+      Value: Ahora
+    - Key:
+        Name: English
+      Value: Now
+  - Key: No_Notif
+    _trads:
+    - Key:
+        Name: French
+      Value: Pas de notification
+    - Key:
+        Name: Spanish
+      Value: "Sin notificaci\xF3n"
+    - Key:
+        Name: English
+      Value: No notification
+  - Key: No_NewNotif
+    _trads:
+    - Key:
+        Name: French
+      Value: Pas de nouvelle notification
+    - Key:
+        Name: Spanish
+      Value: "Ninguna nueva notificaci\xF3n"
+    - Key:
+        Name: English
+      Value: No new notification
+  - Key: UserList_FilterLabel
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Recherche par nom d''utilisateur :'
+    - Key:
+        Name: Spanish
+      Value: "B\xFAsqueda por nombre de usuario:"
+    - Key:
+        Name: English
+      Value: 'Search by user name:'
+  - Key: NbNotifs
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Notifications : {0}'
+    - Key:
+        Name: Spanish
+      Value: 'Notificaciones: {0}'
+    - Key:
+        Name: English
+      Value: 'Notifications: {0}'
+  - Key: NbUsers
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Utilisateurs : {0}'
+    - Key:
+        Name: Spanish
+      Value: 'Usuarios: {0}'
+    - Key:
+        Name: English
+      Value: 'Users: {0}'

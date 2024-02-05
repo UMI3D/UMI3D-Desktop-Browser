@@ -1,18 +1,43 @@
 * {
-    -unity-font: url('project://database/Assets/Project/UI/Font/Decker.ttf?fileID=12800000&guid=fe65ffc0529064145a59e12f47be69a3&type=3#Decker');
+    -unity-font: resource('Font/Decker');
 }
 
 .text {
     white-space: normal;
+
+    flex-shrink: 0;
+    flex-grow: 0;
+
+    padding-left: 7px;
+    padding-right: 7px;
 }
 
-.text.unity-label {
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+.text-alignment-leadingtop {
+    -unity-text-align: upper-left;
+}
+.text-alignment-top {
+    -unity-text-align: upper-center;
+}
+.text-alignment-trailingtop {
+    -unity-text-align: upper-right;
+}
+.text-alignment-leading {
+    -unity-text-align: middle-left;
+}
+.text-alignment-center {
+    -unity-text-align: middle-center;
+}
+.text-alignment-trailing {
+    -unity-text-align: middle-right;
+}
+.text-alignment-leadingbottom {
+    -unity-text-align: lower-left;
+}
+.text-alignment-bottom {
+    -unity-text-align: lower-center;
+}
+.text-alignment-trailingbottom {
+    -unity-text-align: lower-right;
 }
 
 .text-white {
@@ -22,11 +47,9 @@
 .text-white .unity-text-element {
     color: rgb(255, 255, 255);
 }
-
 .text-menu {
     color: rgb(205, 154, 79);
 }
-
 .text-game {
     color: rgb(0, 193, 216);
 }
@@ -35,21 +58,17 @@
     font-size: 58px;
     -unity-font-style: bold;
 }
-
 .text-lowtitle {
     font-size: 32px;
     -unity-font-style: bold;
 }
-
 .text-subtitle {
     font-size: 27px;
     -unity-font-style: bold;
 }
-
 .text-body {
     font-size: 22px;
 }
-
 .text-caption {
     font-size: 18px;
 }

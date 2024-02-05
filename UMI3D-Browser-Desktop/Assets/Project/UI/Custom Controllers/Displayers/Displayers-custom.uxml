@@ -9,4 +9,9 @@
     <umi3d.commonScreen.Displayer.Toggle_C label="Label" />
     <umi3d.commonScreen.Displayer.User_C user-name="Romain" />
     <umi3d.commonScreen.Displayer.ThresholdSlider_C show-input-field="true" content-value="5.57" value="2.83" />
+    <umi3d.commonScreen.Displayer.InteractableMappingRow_C action-name="Cube 0">
+        <umi3d.commonScreen.Displayer.Mapping_C type="Mouse" />
+        <umi3d.commonScreen.Displayer.Mapping_C mapping-name="Ctrl" />
+    </umi3d.commonScreen.Displayer.InteractableMappingRow_C>
+    <umi3d.commonScreen.Displayer.Tool_C is-selected="false" label="Label" tool-type="ToolboxMenu" />
 </ui:UXML>

@@ -1,5 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Dependencies/UMI3D%20Screen%20Browsers%20Base/Scripts/UI/Custom%20Controllers/Resources/USS/Containers/form.uss?fileID=7433441132597879392&amp;guid=574512d8f85b6704baf231b52f2e0df2&amp;type=3#form" />
     <umi3d.commonScreen.Container.Form_C title="Title">
         <ui:Label text="Label" display-tooltip-when-elided="true" />
         <ui:Label text="Label" display-tooltip-when-elided="true" />

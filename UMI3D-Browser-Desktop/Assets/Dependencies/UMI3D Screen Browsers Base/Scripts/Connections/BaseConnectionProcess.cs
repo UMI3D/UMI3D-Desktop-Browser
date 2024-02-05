@@ -20,6 +20,7 @@ using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.common;
 using UnityEngine;
+using umi3d.baseBrowser.cursor;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -59,7 +60,7 @@ namespace umi3d.baseBrowser.connection
             Identifier.ShouldDownloadLib = ShouldDownloadLibraries;
             Identifier.GetParameters = (form, callback) => GetParameterDtos?.Invoke(form, callback);
 
-            LoadingParameters = Resources.Load<UMI3DCollabLoadingParameters>("Scriptables/GamePanel/CollabLoadingParameters");
+            LoadingParameters =  Resources.Load<UMI3DCollabLoadingParameters>("Scriptables/GamePanel/CollabLoadingParameters");
             LoadingParameters.supportedformats.Clear();
             LoadingParameters.supportedformats.Add(UMI3DAssetFormat.gltf);
             LoadingParameters.supportedformats.Add(UMI3DAssetFormat.obj);
@@ -88,8 +89,14 @@ namespace umi3d.baseBrowser.connection
 
             cdk.collaboration.UMI3DCollaborationClientServer.EnvironmentProgress = () =>
             {
-                var p = new MultiProgress("Join Environement");
-                p.ResumeAfterFail = ResumeAfterFail;
+                var p = new MultiProgress("Join Environment");
+                //p.ResumeAfterFail = ResumeAfterFail;
+                p.ResumeAfterFail = async (e) =>
+                {
+                    await Task.Delay(10000);
+                    UnityEngine.Debug.Log("<color=Orange>Join environment fail: </color>" + $"{e}");
+                    return true;
+                };
 
                 return p;
             };
@@ -98,11 +105,15 @@ namespace umi3d.baseBrowser.connection
 
             cdk.collaboration.UMI3DEnvironmentClient.EnvironementLoaded.AddListener(() => EnvironmentLoaded?.Invoke());
 
-            UMI3DCollaborationEnvironmentLoader.OnUpdateJoinnedUserList += () => UserCountUpdated?.Invoke(UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Count());
+            UMI3DCollaborationEnvironmentLoader.Instance.OnUpdateJoinnedUserList += () => UserCountUpdated?.Invoke(UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Count());
         }
 
         #region Launcher
 
+        [HideInInspector]
+        public event System.Action<string> ConnectionInitialized;
+        [HideInInspector]
+        public event System.Action<string> ConnectionInitializationFailled;
         [HideInInspector]
         public event System.Action DisplaySessions;
         [HideInInspector]
@@ -129,6 +140,8 @@ namespace umi3d.baseBrowser.connection
 
         public void ResetLauncherEvent()
         {
+            ConnectionInitialized = null;
+            ConnectionInitializationFailled = null;
             DisplaySessions = null;
             LoadingEnvironment = null;
             LoadedLauncher = null;
@@ -144,6 +157,7 @@ namespace umi3d.baseBrowser.connection
                 Debug.Log("Only one connection at a time");
                 return;
             }
+            ConnectionInitialized?.Invoke(currentServer.serverUrl);
             await ConnectWithMasterServerOrMediaDto(saveInfo);
             while (onlyOneConnection) await UMI3DAsyncManager.Yield();
         }
@@ -252,10 +266,10 @@ namespace umi3d.baseBrowser.connection
             while (onlyOneConnection)
             {
                 await UMI3DAsyncManager.Yield();
-                if (masterServerFound || mediaDtoFound)
-                    return;
+                if (masterServerFound || mediaDtoFound) return;
                 if (_masterServerFound != null && _mediaDtoFound != null)
                 {
+                    ConnectionInitializationFailled?.Invoke(currentServer.serverUrl);
                     onlyOneConnection = false;
                     return;
                 }
@@ -324,7 +338,7 @@ namespace umi3d.baseBrowser.connection
         [HideInInspector]
         public event System.Action<int, System.Action<bool>> AskForDownloadingLibraries;
         [HideInInspector]
-        public event System.Action<common.interaction.FormDto, System.Action<common.interaction.FormAnswerDto>> GetParameterDtos;
+        public event System.Action<common.interaction.ConnectionFormDto, System.Action<common.interaction.FormAnswerDto>> GetParameterDtos;
         [HideInInspector]
         public event System.Action<common.MediaDto> ConnectionSucces;
         [HideInInspector]
@@ -451,7 +465,7 @@ namespace umi3d.baseBrowser.connection
             cdk.UMI3DEnvironmentLoader.Clear();
             cdk.UMI3DResourcesManager.Instance.ClearCache();
 
-            Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Free);
+            BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
 
             EnvironmentLeave?.Invoke();
 

@@ -1,0 +1,280 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: GenericStrings
+  m_EditorClassIdentifier: 
+  Title: GenericStrings
+  Items:
+  - Key: Retry
+    _trads:
+    - Key:
+        Name: French
+      Value: "R\xE9essayer"
+    - Key:
+        Name: Spanish
+      Value: Reintentar
+    - Key:
+        Name: English
+      Value: Retry
+  - Key: Save
+    _trads:
+    - Key:
+        Name: French
+      Value: Sauvegarder
+    - Key:
+        Name: Spanish
+      Value: Guardar
+    - Key:
+        Name: English
+      Value: Save
+  - Key: General
+    _trads:
+    - Key:
+        Name: French
+      Value: "G\xE9n\xE9ral"
+    - Key:
+        Name: Spanish
+      Value: General
+    - Key:
+        Name: English
+      Value: General
+  - Key: Graphics
+    _trads:
+    - Key:
+        Name: French
+      Value: Graphiques
+    - Key:
+        Name: Spanish
+      Value: "Gr\xE1ficos"
+    - Key:
+        Name: English
+      Value: Graphics
+  - Key: Controls
+    _trads:
+    - Key:
+        Name: French
+      Value: "Contr\xF4les"
+    - Key:
+        Name: Spanish
+      Value: Controla
+    - Key:
+        Name: English
+      Value: Controls
+  - Key: Audio
+    _trads:
+    - Key:
+        Name: French
+      Value: Audio
+    - Key:
+        Name: Spanish
+      Value: Audio
+    - Key:
+        Name: English
+      Value: Audio
+  - Key: Notifications
+    _trads:
+    - Key:
+        Name: French
+      Value: Notifications
+    - Key:
+        Name: Spanish
+      Value: Notificaciones
+    - Key:
+        Name: English
+      Value: Notifications
+  - Key: Connect
+    _trads:
+    - Key:
+        Name: French
+      Value: Se connecter
+    - Key:
+        Name: Spanish
+      Value: Conectar
+    - Key:
+        Name: English
+      Value: Connect
+  - Key: Edit
+    _trads:
+    - Key:
+        Name: French
+      Value: Modifier
+    - Key:
+        Name: Spanish
+      Value: Editar
+    - Key:
+        Name: English
+      Value: Edit
+  - Key: New
+    _trads:
+    - Key:
+        Name: French
+      Value: Nouveau
+    - Key:
+        Name: Spanish
+      Value: Nuevo
+    - Key:
+        Name: English
+      Value: New
+  - Key: Default
+    _trads:
+    - Key:
+        Name: French
+      Value: "D\xE9faut"
+    - Key:
+        Name: Spanish
+      Value: Defecto
+    - Key:
+        Name: English
+      Value: Default
+  - Key: Cancel
+    _trads:
+    - Key:
+        Name: French
+      Value: Annuler
+    - Key:
+        Name: Spanish
+      Value: Cancelar
+    - Key:
+        Name: English
+      Value: Cancel
+  - Key: Delete
+    _trads:
+    - Key:
+        Name: French
+      Value: Supprimer
+    - Key:
+        Name: Spanish
+      Value: Borrar
+    - Key:
+        Name: English
+      Value: Delete
+  - Key: Sessions
+    _trads:
+    - Key:
+        Name: French
+      Value: Sessions
+    - Key:
+        Name: Spanish
+      Value: Sesiones
+    - Key:
+        Name: English
+      Value: Sessions
+  - Key: Name
+    _trads:
+    - Key:
+        Name: French
+      Value: Nom
+    - Key:
+        Name: Spanish
+      Value: Nombre
+    - Key:
+        Name: English
+      Value: Name
+  - Key: Resume
+    _trads:
+    - Key:
+        Name: French
+      Value: Reprendre
+    - Key:
+        Name: Spanish
+      Value: Retomar
+    - Key:
+        Name: English
+      Value: Resume
+  - Key: Stop
+    _trads:
+    - Key:
+        Name: French
+      Value: "Arr\xEAter"
+    - Key:
+        Name: Spanish
+      Value: Parada
+    - Key:
+        Name: English
+      Value: Stop
+  - Key: Leave
+    _trads:
+    - Key:
+        Name: French
+      Value: Quitter
+    - Key:
+        Name: Spanish
+      Value: Deja
+    - Key:
+        Name: English
+      Value: Leave
+  - Key: Reconnect
+    _trads:
+    - Key:
+        Name: French
+      Value: Reconnecter
+    - Key:
+        Name: Spanish
+      Value: Reconectar
+    - Key:
+        Name: English
+      Value: Reconnect
+  - Key: Accept
+    _trads:
+    - Key:
+        Name: French
+      Value: Accepter
+    - Key:
+        Name: Spanish
+      Value: Acepte
+    - Key:
+        Name: English
+      Value: Accept
+  - Key: Deny
+    _trads:
+    - Key:
+        Name: French
+      Value: Refuser
+    - Key:
+        Name: Spanish
+      Value: Denegar
+    - Key:
+        Name: English
+      Value: Deny
+  - Key: Connection
+    _trads:
+    - Key:
+        Name: French
+      Value: Connexion
+    - Key:
+        Name: Spanish
+      Value: "Conexi\xF3n"
+    - Key:
+        Name: English
+      Value: Connection
+  - Key: Stay
+    _trads:
+    - Key:
+        Name: French
+      Value: Rester
+    - Key:
+        Name: Spanish
+      Value: Quedarse
+    - Key:
+        Name: English
+      Value: Stay
+  - Key: Join
+    _trads:
+    - Key:
+        Name: French
+      Value: Rejoindre
+    - Key:
+        Name: Spanish
+      Value: Entrar
+    - Key:
+        Name: English
+      Value: Join

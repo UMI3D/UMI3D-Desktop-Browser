@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,153 +14,93 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using umi3d.baseBrowser.cursor;
+using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.common;
 using umi3d.common.interaction;
+using umi3d.desktopBrowser.Controller;
+using umi3d.mobileBrowser.Controller;
 using UnityEngine;
 
 namespace umi3d.baseBrowser.Controller
 {
-    public abstract class BaseController : AbstractController
+    public partial class BaseController : AbstractController
     {
-        #region Types
-        public class HoverEvent : UnityEngine.Events.UnityEvent<ulong> { };
-        public struct MouseData
-        {
-            public bool ForceProjection, ForceProjectionReleasable;
-            public ButtonMenuItem ForceProjectionReleasableButton;
-
-            public Interactable LastProjected, OldHovered, CurrentHovered;
-            public ulong LastHoveredId, CurrentHoveredId;
-            public Transform CurrentHoveredTransform;
-
-            public Vector3 LastPosition, LastNormal, LastDirection;
-            public Vector3 Position, Normal, Direction;
-            public Vector3 CenteredWorldPosition, WorldPosition, WorldNormal, WorlDirection;
-
-            public HoverState HoverState;
-
-            public int saveDelay;
-
-            public void Save()
-            {
-                if (saveDelay > 0) saveDelay--;
-                else
-                {
-                    if (saveDelay < 0) saveDelay = 0;
-                    OldHovered = CurrentHovered;
-                    LastHoveredId = CurrentHoveredId;
-                    CurrentHovered = null;
-                    CurrentHoveredTransform = null;
-                    CurrentHoveredId = 0;
-                    LastPosition = Position;
-                    LastNormal = Normal;
-                    LastDirection = Direction;
-                }
-            }
-
-            public bool IsDelaying() => saveDelay > 0;
-        }
-        public enum HoverState
-        {
-            None, //No hovering 
-            Hovering, //Mouse is hovering an object
-            AutoProjected //The projection is auto.
-        }
-        #endregion
-
         #region Fields
-        [HideInInspector]
-        public MenuAsset ObjectMenu;
-        public MouseData mouseData;
 
-        public static event System.Action EscClicked;
-        public static event System.Action MainActionClicked;
-        public static event System.Action SecondActionClicked;
-        public static event System.Action EnterKeyPressed;
-        public static event System.Action<int> EmoteKeyPressed;
+        public static bool Exists => s_instance != null;
+        public static BaseController Instance
+        {
+            get => s_instance;
+            set
+            {
+                if (Exists) return;
+                s_instance = value;
+            }
+        }
+        protected static BaseController s_instance;
 
-        //[SerializeField]
-        //protected cdk.menu.view.MenuDisplayManager m_objectMenu;
-        [SerializeField]
-        protected Transform CameraTransform;
         [SerializeField]
         protected InteractionMapper InteractionMapper;
-        [Header("Degrees Of Freedom")]
         [SerializeField]
-        protected List<DofGroupEnum> dofGroups = new List<DofGroupEnum>();
+        protected Transform CameraTransform;
+
+        [Header("Actions' parents")]
+        public GameObject ParameterActions;
+        public GameObject EventActions;
+        public GameObject ManipulationGroupActions;
+        public GameObject ManipulationActions;
+
+        [Header("Keyboard' parents")]
+        public GameObject KeyboardActions;
+        public GameObject KeyboardShortcuts;
+        public GameObject KeyboardEmotes;
+        public GameObject KeyboardNavigations;
+        public GameObject KeyboardManipulations;
+
+        [Header("Mobile' parents")]
+        public GameObject MobileAction;
+
+        [HideInInspector]
+        public MenuAsset ObjectMenu;
+        [Space(15)]
+        public MenuAsset ManipulationMenu;
+        public CursorData mouseData;
+
+        public IConcreteController CurrentController;
+
+        protected List<IConcreteController> m_controllers = new List<IConcreteController>();
+        
         [Header("Bone Type")]
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
         [SerializeField]
         [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
-        protected uint interactionBoneType = common.userCapture.BoneType.RightHand;
+        public uint interactionBoneType = common.userCapture.BoneType.RightHand;
+
         [SerializeField]
         [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
         protected uint hoverBoneType = common.userCapture.BoneType.Head;
-
-        //protected List<ManipulationGroup> ManipulationInputs = new List<ManipulationGroup>();
-        protected List<inputs.interactions.KeyMenuInput> KeyMenuInputs = new List<inputs.interactions.KeyMenuInput>();
-        protected List<inputs.interactions.FormInput> FormInputs = new List<inputs.interactions.FormInput>();
-        protected List<inputs.interactions.LinkInput> LinkInputs = new List<inputs.interactions.LinkInput>();
-        /// <summary>
-        /// Instantiated float parameter inputs.
-        /// </summary>
-        /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<parameters.FloatParameterInput> floatParameterInputs = new List<parameters.FloatParameterInput>();
-        /// <summary>
-        /// Instantiated float range parameter inputs.
-        /// </summary>
-        /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<parameters.FloatRangeParameterInput> floatRangeParameterInputs = new List<parameters.FloatRangeParameterInput>();
-        /// <summary>
-        /// Instantiated int parameter inputs.
-        /// </summary>
-        /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<parameters.IntParameterInput> intParameterInputs = new List<parameters.IntParameterInput>();
-        /// <summary>
-        /// Instantiated bool parameter inputs.
-        /// </summary>
-        /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<parameters.BooleanParameterInput> boolParameterInputs = new List<parameters.BooleanParameterInput>();
-        /// <summary>
-        /// Instantiated string parameter inputs.
-        /// </summary>
-        /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<parameters.StringParameterInput> stringParameterInputs = new List<parameters.StringParameterInput>();
-        /// <summary>
-        /// Instantiated string enum parameter inputs.
-        /// </summary>
-        /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<parameters.StringEnumParameterInput> stringEnumParameterInputs = new List<parameters.StringEnumParameterInput>();
+        public Transform hoverBoneTransform;
 
         protected int m_navigationDirect = 0;
         protected AutoProjectOnHover reason = new AutoProjectOnHover();
 
-        public static HoverEvent HoverEnter = new HoverEvent();
-        public static HoverEvent HoverUpdate = new HoverEvent();
-        public static HoverEvent HoverExit = new HoverEvent();
+        public static event System.Action<ulong> HoverEnter;
+        public static event System.Action<ulong> HoverUpdate;
+        public static event System.Action<ulong> HoverExit;
         public static bool CanProcess = false;
         #endregion
-
-        public static void OnEscClicked() => EscClicked?.Invoke();
-        public static void OnMainActionClicked() => MainActionClicked?.Invoke();
-        public static void OnSecondActionClicked() => SecondActionClicked?.Invoke();
-        public static void OnEnterKeyPressed() => EnterKeyPressed?.Invoke();
-        public static void OnEmoteKeyPressed(int value) => EmoteKeyPressed?.Invoke(value);
 
         #region Monobehaviour Life Cycle
         protected virtual void Awake()
         {
-            EscClicked = null;
-            MainActionClicked = null;
-            SecondActionClicked = null;
-            EnterKeyPressed = null;
+            s_instance = this;
 
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Add manipulator in android browser and reactivate it in desktop browser");
             mouseData.ForceProjectionReleasableButton = new ButtonMenuItem
             {
                 Name = "Release",
@@ -170,99 +110,58 @@ namespace umi3d.baseBrowser.Controller
 
             mouseData.saveDelay = 0;
             ObjectMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ObjectMenu");
+            ManipulationMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ManipulationMenu");
+
+            ManipulationGroupInputs.AddRange(ManipulationGroupActions.GetComponents<BaseManipulationGroup>());
+            //TODO instantiate concrete controllers.
+            m_controllers.Add
+            (
+                new KeyboardAndMouseController() 
+                { 
+                    Controller = this,
+                    ObjectMenu = ObjectMenu,
+                    ManipulationGroup = ManipulationGroupInputs.Find(a => a is ManipulationGroupeForDesktop)
+                }
+            );
+            m_controllers.Add
+            (
+                new MobileController()
+                {
+                    Controller = this,
+                    ObjectMenu = ObjectMenu,
+                }
+            );
+
+            m_controllers.ForEach(controller => controller?.Awake());
+
+            //TODO for now CurrentController is the desktop one.
+            CurrentController = m_controllers.Find(controller => controller is KeyboardAndMouseController);
+        }
+
+        protected virtual void Start()
+        {
+            m_controllers.ForEach(controller => controller?.Start());
         }
 
         protected virtual void LateUpdate()
         {
             if (!CanProcess) return;
 
-            //if (m_navigationDirect > 0) ManipulationInput.NextManipulation();
-            //else if (m_navigationDirect < 0) ManipulationInput.PreviousManipulation();
             m_navigationDirect = 0;
             MouseHandler();
         }
-        protected virtual void Update() { }
-        #endregion
-
-        #region Inputs
-        public override void Clear()
+        protected virtual void Update() 
         {
-            //foreach (ManipulationGroup input in ManipulationInputs) if (!input.IsAvailable()) input.Dissociate();
-            //foreach (KeyInput input in KeyInputs) if (!input.IsAvailable()) input.Dissociate();
-            ClearParameters();
-        }
-        protected void ClearParameters()
-        {
-            System.Action<AbstractUMI3DInput> action = (input) =>
-            {
-                input.Dissociate();
-                Destroy(input);
-            };
-
-            ClearInputs(ref KeyMenuInputs, action);
-            ClearInputs(ref floatParameterInputs, action);
-            ClearInputs(ref floatRangeParameterInputs, action);
-            ClearInputs(ref intParameterInputs, action);
-            ClearInputs(ref boolParameterInputs, action);
-            ClearInputs(ref stringParameterInputs, action);
-            ClearInputs(ref stringEnumParameterInputs, action);
-        }
-        protected void ClearInputs<T>(ref List<T> inputs, System.Action<T> action)
-            where T : AbstractUMI3DInput
-        {
-            inputs.ForEach(action);
-            inputs = new List<T>();
+            CurrentController?.Update();
         }
 
-        public override DofGroupOptionDto FindBest(DofGroupOptionDto[] options)
+        private void OnDisable()
         {
-            foreach (var GroupOption in options)
-            {
-                bool ok = true;
-                foreach (DofGroupDto dof in GroupOption.separations)
-                {
-                    if (!dofGroups.Contains(dof.dofs))
-                    {
-                        ok = false;
-                        break;
-                    }
-                }
-                if (ok) return GroupOption;
-            }
-
-            throw new System.NotImplementedException();
-        }
-        public override AbstractUMI3DInput FindInput(FormDto form, bool unused = true)
-            => FindInput(FormInputs, i => i.IsAvailable() || !unused, this.gameObject);
-        public override AbstractUMI3DInput FindInput(LinkDto link, bool unused = true)
-            => FindInput(LinkInputs, i => i.IsAvailable() || !unused, this.gameObject);
-        public override AbstractUMI3DInput FindInput(AbstractParameterDto param, bool unused = true)
-        {
-            if (param is FloatRangeParameterDto) return FindInput(floatRangeParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is FloatParameterDto) return FindInput(floatParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is IntegerParameterDto) return FindInput(intParameterInputs, i => i.IsAvailable());
-            else if (param is IntegerRangeParameterDto) throw new System.NotImplementedException();
-            else if (param is BooleanParameterDto) return FindInput(boolParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is StringParameterDto) return FindInput(stringParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is EnumParameterDto<string>) return FindInput(stringEnumParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else return null;
-        }
-        protected AbstractUMI3DInput FindInput<T>(List<T> inputs, System.Predicate<T> predicate, GameObject gO = null) where T : AbstractUMI3DInput, new()
-        {
-            T input = inputs.Find(predicate);
-            if (input == null) AddInput(inputs, out input, gO);
-            return input;
-        }
-        protected void AddInput<T>(List<T> inputs, out T input, GameObject gO) where T : AbstractUMI3DInput, new()
-        {
-            if (gO != null) input = gO.AddComponent<T>();
-            else input = new T();
-
-            if (input is inputs.interactions.KeyMenuInput keyMenuInput) keyMenuInput.bone = interactionBoneType;
-            else if (input is inputs.interactions.FormInput formInput) formInput.bone = interactionBoneType;
-            else if (input is inputs.interactions.LinkInput linkInput) linkInput.bone = interactionBoneType;
-            input.Menu = ObjectMenu.menu;
-            inputs.Add(input);
+            KeyboardInteraction.S_Interactions.Clear();
+            KeyboardShortcut.S_Shortcuts.Clear();
+            KeyboardEmote.S_Emotes.Clear();
+            KeyboardNavigation.S_Navigations.Clear();
+            KeyboardManipulation.S_Manipulations.Clear();
         }
         #endregion
 
@@ -362,12 +261,12 @@ namespace umi3d.baseBrowser.Controller
         /// <returns></returns>
         public override bool IsCompatibleWith(AbstractTool tool)
         {
-            foreach (var man in tool.interactions.FindAll(x => x is ManipulationDto))
+            foreach (var man in tool.interactionsLoaded.FindAll(x => x is ManipulationDto))
             {
                 System.Predicate<DofGroupOptionDto> predicat = (sep) =>
                 {
                     foreach (DofGroupDto dof in sep.separations)
-                        if (!dofGroups.Contains(dof.dofs)) return false;
+                        if (!BaseManipulationGroup.DofGroups.Contains(dof.dofs)) return false;
                     return true;
                 };
 
@@ -382,9 +281,9 @@ namespace umi3d.baseBrowser.Controller
         /// <returns></returns>
         public override bool RequiresMenu(AbstractTool tool)
         {
-            List<AbstractInteractionDto> interactions = tool.interactions;
-            List<AbstractInteractionDto> manips = interactions.FindAll(x => x is ManipulationDto);
-            List<AbstractInteractionDto> events = interactions.FindAll(x => x is EventDto);
+            //List<AbstractInteractionDto> interactions = tool.interactions;
+            //List<AbstractInteractionDto> manips = interactions.FindAll(x => x is ManipulationDto);
+            //List<AbstractInteractionDto> events = interactions.FindAll(x => x is EventDto);
             //List<AbstractInteractionDto> parameters = tool.Interactions.FindAll(x => x is AbstractParameterDto);
             // return ((events.Count > 7 || manips.Count > 0) && (events.Count > 6 || manips.Count > 1));
             return false; // (/*(parameters.Count > 0) ||*/ (events.Count > 7) || (manips.Count > 1) || ((manips.Count > 0) && (events.Count > 6)));
@@ -457,7 +356,7 @@ namespace umi3d.baseBrowser.Controller
                 if (mouseData.LastProjected != null) ReleaseAutoProjection();
                 bool isInteractionsEmpty = mouseData.CurrentHovered.dto.interactions.Count == 0;
                 bool isCompatible = IsCompatibleWith(mouseData.CurrentHovered);
-                if (!isInteractionsEmpty && isCompatible && !baseBrowser.inputs.interactions.KeyMenuInput.IsInputHold) SetAutoProjection();
+                if (!isInteractionsEmpty && isCompatible && !baseBrowser.inputs.interactions.EventInteraction.IsInputHold) SetAutoProjection();
             }
             else if (mouseData.LastProjected != null) ReleaseAutoProjection();
         }
@@ -468,13 +367,14 @@ namespace umi3d.baseBrowser.Controller
         {
             mouseData.Save();
             Ray ray = new Ray(CameraTransform.position, CameraTransform.forward);
-            RaycastHit[] hits = umi3d.common.Physics.RaycastAll(ray, 100f);
+            var raycastInfo = common.Physics.RaycastAll(ray, 100f);
 
             //1. Cast a ray to find all interactables
             List<(RaycastHit, InteractableContainer)> interactables = new List<(RaycastHit, InteractableContainer)>();
-            foreach (RaycastHit hit in hits)
+            for (int i = 0; i < raycastInfo.hitCount; i++)
             {
-                if (hit.collider.gameObject.GetComponentInParent<cdk.UMI3DEnvironmentLoader>() == null) continue;
+                RaycastHit hit = raycastInfo.hits[i];
+                if (hit.collider.gameObject.GetComponentInParent<cdk.UMI3DLoadingHandler>() == null) continue;
                 var interactable = hit.collider.gameObject.GetComponent<InteractableContainer>();
                 if (interactable == null) interactable = hit.collider.gameObject.GetComponentInParent<InteractableContainer>();
                 if (interactable != null) interactables.Add((hit, interactable));
@@ -550,7 +450,8 @@ namespace umi3d.baseBrowser.Controller
                         input.UpdateHoveredObjectId(mouseData.CurrentHoveredId);
                 }
 
-                mouseData.CurrentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.Position, mouseData.Normal, mouseData.Direction);
+                var v = new Vector4(hoverBoneTransform.rotation.x, hoverBoneTransform.rotation.y, hoverBoneTransform.rotation.z, hoverBoneTransform.rotation.w);
+                mouseData.CurrentHovered.Hovered(hoverBoneType,hoverBoneTransform.position,v, mouseData.CurrentHoveredId, mouseData.Position, mouseData.Normal, mouseData.Direction);
             }
         }
         private void OldHoverExitAndCurrentHoverEnter()
@@ -558,50 +459,62 @@ namespace umi3d.baseBrowser.Controller
             OldHoverExit();
             CurrentHoverEnter();
         }
-        private void OldHoverExit()
+        private async void OldHoverExit()
         {
             if (mouseData.OldHovered == null) return;
 
             ulong lastHoverId = mouseData.LastHoveredId;
+            var v = new Vector4(hoverBoneTransform.rotation.x, hoverBoneTransform.rotation.y, hoverBoneTransform.rotation.z, hoverBoneTransform.rotation.w);
             mouseData.OldHovered
-                .HoverExit(hoverBoneType, lastHoverId, mouseData.LastPosition, mouseData.LastNormal, mouseData.LastDirection);
+                .HoverExit(hoverBoneType,hoverBoneTransform.position,v, lastHoverId, mouseData.LastPosition, mouseData.LastNormal, mouseData.LastDirection);
 
             ulong hoverExitAnimationId = mouseData.OldHovered.dto.HoverExitAnimationId;
             if (hoverExitAnimationId != 0)
             {
                 cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverExitAnimationId);
 
-                anim.SetUMI3DProperty(UMI3DEnvironmentLoader.GetEntity(hoverExitAnimationId), new SetEntityPropertyDto()
-                {
-                    entityId = hoverExitAnimationId,
-                    property = UMI3DPropertyKeys.AnimationPlaying,
-                    value = true
-                });
+                await anim.SetUMI3DProperty(
+                    new SetUMI3DPropertyData( 
+                        new SetEntityPropertyDto()
+                            {
+                                entityId = hoverExitAnimationId,
+                                property = UMI3DPropertyKeys.AnimationPlaying,
+                                value = true
+                            },
+                        UMI3DEnvironmentLoader.GetEntity(hoverExitAnimationId)
+                        )
+                    );
 
                 HoverExit.Invoke(lastHoverId);
                 if (anim != null) anim.Start();
             }
             mouseData.OldHovered = null;
         }
-        private void CurrentHoverEnter()
+        private async void CurrentHoverEnter()
         {
             if (mouseData.CurrentHovered == null) return;
 
             ulong currentHoverId = mouseData.CurrentHoveredId;
+            var v = new Vector4(hoverBoneTransform.rotation.x, hoverBoneTransform.rotation.y, hoverBoneTransform.rotation.z, hoverBoneTransform.rotation.w);
             mouseData.CurrentHovered
-                .HoverEnter(hoverBoneType, currentHoverId, mouseData.Position, mouseData.Normal, mouseData.Direction);
+                .HoverEnter(hoverBoneType,hoverBoneTransform.position,v, currentHoverId, mouseData.Position, mouseData.Normal, mouseData.Direction);
 
             ulong hoverEnterAnimationId = mouseData.CurrentHovered.dto.HoverEnterAnimationId;
             if (hoverEnterAnimationId != 0)
             {
                 cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverEnterAnimationId);
 
-                anim.SetUMI3DProperty(UMI3DEnvironmentLoader.GetEntity(hoverEnterAnimationId), new SetEntityPropertyDto()
-                {
-                    entityId = hoverEnterAnimationId,
-                    property = UMI3DPropertyKeys.AnimationPlaying,
-                    value = true
-                });
+                await anim.SetUMI3DProperty(
+                    new SetUMI3DPropertyData(
+                        new SetEntityPropertyDto()
+                        {
+                            entityId = hoverEnterAnimationId,
+                            property = UMI3DPropertyKeys.AnimationPlaying,
+                            value = true
+                        },
+                        UMI3DEnvironmentLoader.GetEntity(hoverEnterAnimationId)
+                        )
+                    );
 
                 HoverEnter.Invoke(currentHoverId);
                 if (anim != null) anim.Start();

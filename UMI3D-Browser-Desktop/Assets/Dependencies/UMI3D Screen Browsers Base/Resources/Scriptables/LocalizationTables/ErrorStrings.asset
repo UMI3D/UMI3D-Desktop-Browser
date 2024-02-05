@@ -1,0 +1,170 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: ErrorStrings
+  m_EditorClassIdentifier: 
+  Title: ErrorStrings
+  Items:
+  - Key: Error
+    _trads:
+    - Key:
+        Name: French
+      Value: Erreur
+    - Key:
+        Name: Spanish
+      Value: Error
+    - Key:
+        Name: English
+      Value: Error
+  - Key: OtherError
+    _trads:
+    - Key:
+        Name: French
+      Value: Autre erreur
+    - Key:
+        Name: Spanish
+      Value: Otro error
+    - Key:
+        Name: English
+      Value: Other error
+  - Key: LoadError
+    _trads:
+    - Key:
+        Name: French
+      Value: Erreur de chargement
+    - Key:
+        Name: Spanish
+      Value: Error de carga
+    - Key:
+        Name: English
+      Value: Loading error
+  - Key: NetworkError
+    _trads:
+    - Key:
+        Name: French
+      Value: "Erreur de mise en r\xE9seau {0}"
+    - Key:
+        Name: Spanish
+      Value: Error de red {0}
+    - Key:
+        Name: English
+      Value: Networking error {0}
+  - Key: ResourcesDenied
+    _trads:
+    - Key:
+        Name: French
+      Value: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
+    - Key:
+        Name: Spanish
+      Value: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
+    - Key:
+        Name: English
+      Value: Resources acess was denied
+  - Key: ResourcesEmpty
+    _trads:
+    - Key:
+        Name: French
+      Value: "Les ressources t\xE9l\xE9charg\xE9es \xE9taient vides"
+    - Key:
+        Name: Spanish
+      Value: "Los recursos descargados estaban vac\xEDos"
+    - Key:
+        Name: English
+      Value: Resources Downloaded was empty
+  - Key: ServerError
+    _trads:
+    - Key:
+        Name: French
+      Value: Erreur de serveur
+    - Key:
+        Name: Spanish
+      Value: Error del servidor
+    - Key:
+        Name: English
+      Value: Server error
+  - Key: ConnectionLost
+    _trads:
+    - Key:
+        Name: French
+      Value: Perte de la connexion au serveur
+    - Key:
+        Name: Spanish
+      Value: Perte de la connexion au serveur
+    - Key:
+        Name: English
+      Value: Connection to the server lost
+  - Key: LeaveOrTry
+    _trads:
+    - Key:
+        Name: French
+      Value: Quitter l'environnement ou essayer de se reconnecter ?
+    - Key:
+        Name: Spanish
+      Value: "\xBFSalir del entorno o intentar volver a conectarse?"
+    - Key:
+        Name: English
+      Value: Leave the environment or try to reconnect ?
+  - Key: ForcedDeco
+    _trads:
+    - Key:
+        Name: French
+      Value: "D\xE9connexion forc\xE9e"
+    - Key:
+        Name: Spanish
+      Value: "Desconexi\xF3n forzada"
+    - Key:
+        Name: English
+      Value: Forced Deconnection
+  - Key: AssetsLibRequired1
+    _trads:
+    - Key:
+        Name: French
+      Value: "Une biblioth\xE8que de ressources est n\xE9cessaire"
+    - Key:
+        Name: Spanish
+      Value: Se necesita una biblioteca de activos
+    - Key:
+        Name: English
+      Value: One assets library is required
+  - Key: AssetsLibRequired
+    _trads:
+    - Key:
+        Name: French
+      Value: "{0} biblioth\xE8ques de ressources sont n\xE9cessaires"
+    - Key:
+        Name: Spanish
+      Value: Se necesitan {0} bibliotecas de activos
+    - Key:
+        Name: English
+      Value: '{0} assets libraries are required'
+  - Key: DownloadAndConnect
+    _trads:
+    - Key:
+        Name: French
+      Value: "T\xE9l\xE9charger les biblioth\xE8ques et se connecter au serveur ?"
+    - Key:
+        Name: Spanish
+      Value: Descargar bibliotecas y conectarse al servidor ?
+    - Key:
+        Name: English
+      Value: Download libraries and connect to the server ?
+  - Key: LeaveEnv?
+    _trads:
+    - Key:
+        Name: French
+      Value: Voulez-vous quitter l'environnement ?
+    - Key:
+        Name: Spanish
+      Value: "\xBFQuiere abandonar el medio ambiente?"
+    - Key:
+        Name: English
+      Value: Do you want to leave the environment ?
