@@ -20,9 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using umi3d.cdk.userCapture.tracking;
 using umi3d.common;
-using umi3d.common.userCapture;
 using umi3d.common.userCapture.description;
-using umi3d.common.userCapture.pose;
 using umi3d.common.userCapture.tracking;
 
 namespace umi3d.cdk.userCapture.pose
@@ -37,14 +35,18 @@ namespace umi3d.cdk.userCapture.pose
         #region Dependency Injection
 
         private readonly IEnvironmentManager environmentManagerService;
+        private readonly ISkeleton parentSkeleton;
 
-        public PoseSubskeleton(ulong environmentId) : this(environmentId:environmentId,environmentManagerService: UMI3DEnvironmentLoader.Instance)
+        public PoseSubskeleton(ulong environmentId, ISkeleton parentSkeleton) : this(environmentId: environmentId,
+                                                                                       parentSkeleton: parentSkeleton,
+                                                                                       environmentManagerService: UMI3DEnvironmentLoader.Instance)
         {
         }
 
-        public PoseSubskeleton(ulong environmentId, IEnvironmentManager environmentManagerService)
+        public PoseSubskeleton(ulong environmentId, ISkeleton parentSkeleton, IEnvironmentManager environmentManagerService)
         {
             this.environmentManagerService = environmentManagerService;
+            this.parentSkeleton = parentSkeleton;
             EnvironmentId = environmentId;
         }
 
@@ -57,12 +59,46 @@ namespace umi3d.cdk.userCapture.pose
 
         public int Priority => PRIORITY;
 
-        public ulong EnvironmentId { get ; set ; }
+        public ulong EnvironmentId { get; set; }
 
         private const int PRIORITY = 100;
 
+        private readonly Dictionary<PoseClip, PosePlayingControllers> posePlayingControllers = new();
+
+        private class PosePlayingControllers
+        {
+            public ISubskeletonDescriptionInterpolationPlayer Player;
+            public PoseAnchorDto Anchor;
+        }
+
+        private SubskeletonDescriptionInterpolationPlayer AddPoseClip(PoseClip poseClip, PoseAnchorDto anchor = null)
+        {
+            SubskeletonDescriptionInterpolationPlayer posePlayer = new (poseClip, poseClip.IsInterpolable, parentSkeleton);
+            PosePlayingControllers posePlayingData = new()
+            {
+                Player = posePlayer,
+                Anchor = anchor
+            };
+            posePlayingControllers[poseClip] = posePlayingData;
+            return posePlayer;
+        }
+
+        private void RemovePoseClip(PoseClip poseClip)
+        {
+            if (!posePlayingControllers.TryGetValue(poseClip, out PosePlayingControllers playingControllers))
+                return;
+
+            if (playingControllers.Player.IsPlaying)
+                playingControllers.Player.End(true);
+
+            if (playingControllers.Anchor != null)
+                parentSkeleton.TrackedSubskeleton.StopTrackerSimulation(playingControllers.Anchor);
+
+            posePlayingControllers.Remove(poseClip);
+        }
+
         /// <inheritdoc/>
-        public void StartPose(IEnumerable<PoseClip> posesToAdd, bool isOverriding = false)
+        public void StartPose(IEnumerable<PoseClip> posesToAdd, bool isOverriding = false, ISubskeletonDescriptionInterpolationPlayer.PlayingParameters parameters = null, PoseAnchorDto anchorToForce = null)
         {
             if (posesToAdd == null)
                 throw new ArgumentNullException(nameof(posesToAdd), $"Cannot start poses.");
@@ -70,11 +106,12 @@ namespace umi3d.cdk.userCapture.pose
             if (isOverriding)
                 StopAllPoses();
 
-            appliedPoses.AddRange(posesToAdd);
+            foreach (PoseClip poseClip in posesToAdd)
+                StartPose(poseClip, parameters: parameters, anchorToForce: anchorToForce);
         }
 
         /// <inheritdoc/>
-        public void StartPose(PoseClip poseToAdd, bool isOverriding = false)
+        public void StartPose(PoseClip poseToAdd, bool isOverriding = false, ISubskeletonDescriptionInterpolationPlayer.PlayingParameters parameters = null, PoseAnchorDto anchorToForce = null)
         {
             if (poseToAdd == null)
                 throw new ArgumentNullException(nameof(poseToAdd), $"Cannot start pose.");
@@ -83,7 +120,17 @@ namespace umi3d.cdk.userCapture.pose
                 StopAllPoses();
 
             if (!appliedPoses.Contains(poseToAdd))
+            {
                 appliedPoses.Add(poseToAdd);
+
+                SubskeletonDescriptionInterpolationPlayer player = AddPoseClip(poseToAdd, anchorToForce ?? poseToAdd.Pose.anchor);
+
+                player.Play(parameters);
+
+                PoseAnchorDto anchor = posePlayingControllers[poseToAdd].Anchor;
+                if (anchor != null)
+                   parentSkeleton.TrackedSubskeleton.StartTrackerSimulation(anchor);
+            }
             else
                 UMI3DLogger.LogWarning($"Pose clip {poseToAdd.Id} is already playing.", DebugScope.CDK | DebugScope.UserCapture);
         }
@@ -103,7 +150,14 @@ namespace umi3d.cdk.userCapture.pose
             if (poseToStop == null)
                 return;
 
+            if (!posePlayingControllers.TryGetValue(poseToStop, out PosePlayingControllers posePlayer))
+                return;
+
+            posePlayer.Player.End();
             appliedPoses.Remove(poseToStop);
+
+            if (posePlayer.Anchor != null)
+                parentSkeleton.TrackedSubskeleton.StopTrackerSimulation(posePlayer.Anchor);
         }
 
         /// <inheritdoc/>
@@ -130,71 +184,30 @@ namespace umi3d.cdk.userCapture.pose
             if (hierarchy == null)
                 throw new ArgumentNullException(nameof(hierarchy));
 
-            SubSkeletonPoseDto poseDto = new SubSkeletonPoseDto() { bones = new List<SubSkeletonBoneDto>() };
-            foreach (var pose in appliedPoses)
+            Dictionary<uint, SubSkeletonBoneDto> bonePoses = new();
+
+            // merge poses from pose players
+            foreach (var (poseClip, posePlayingController) in posePlayingControllers)
             {
-                foreach (var bone in pose.Bones)
+                if (!posePlayingController.Player.IsPlaying)
+                    continue;
+
+                SubSkeletonPoseDto subSkeletonPose = posePlayingController.Player.GetPose(hierarchy);
+                Dictionary<uint, SubSkeletonBoneDto> subskeletonBonePose = subSkeletonPose.bones.ToDictionary(x => x.boneType, y => y);
+
+                foreach (BoneDto bone in poseClip.Bones)
                 {
-                    int indexOf = poseDto.bones.FindIndex(a => a.boneType == bone.boneType);
-
-                    SubSkeletonBoneDto bonePose = GetBonePose(hierarchy, bone, pose).subBone;
-                    if (indexOf != -1)
-                        poseDto.bones[indexOf] = bonePose;
-                    else
-                        poseDto.bones.Add(bonePose);
+                    bonePoses[bone.boneType] = subskeletonBonePose[bone.boneType];
                 }
+
+                if (!poseClip.IsComposable)
+                    break;
             }
 
-            computedMap.Clear();
-            return poseDto;
-        }
-
-        private Dictionary<uint, (BoneDto bone, SubSkeletonBoneDto subBone)> computedMap = new();
-
-        /// <summary>
-        /// Recursively compute local rotation for a bone.
-        /// </summary>
-        /// <param name="hierarchy"></param>
-        /// <param name="boneDto"></param>
-        /// <param name="pose"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
-        private (BoneDto bone, SubSkeletonBoneDto subBone) GetBonePose(UMI3DSkeletonHierarchy hierarchy, BoneDto boneDto, PoseClip pose)
-        {
-            if (boneDto == null)
-                throw new ArgumentNullException(nameof(boneDto));
-
-            uint boneType = boneDto.boneType;
-
-            if (computedMap.ContainsKey(boneType))
-                return computedMap[boneType];
-
-            if (!hierarchy.Relations.ContainsKey(boneType))
-                throw new ArgumentException($"Bone ({boneType}, \"{BoneTypeHelper.GetBoneName(boneType)}\") not defined in hierarchy.", nameof(boneDto));
-
-            var relation = hierarchy.Relations[boneType];
-
-            var parentBone = pose.Bones.Find(b => b.boneType == relation.boneTypeParent);
-
-            SubSkeletonBoneDto subBone = new() { boneType = boneType };
-            if (parentBone == default || parentBone.boneType == BoneType.None) // bone has no parent
+            return new SubSkeletonPoseDto()
             {
-                subBone.localRotation = boneDto.rotation;
-            }
-            else // bone has a parent and thus its rotation depends on it
-            {
-                var parent = GetBonePose(hierarchy, parentBone, pose);
-                subBone.localRotation = (UnityEngine.Quaternion.Inverse(parent.bone.rotation.Quaternion()) * boneDto.rotation.Quaternion()).Dto();
-            }
-
-            computedMap[boneType] = new()
-            {
-                bone = boneDto,
-                subBone = subBone
+                bones = bonePoses.Values.ToList()
             };
-
-            return computedMap[boneType];
         }
 
         /// <inheritdoc/>
