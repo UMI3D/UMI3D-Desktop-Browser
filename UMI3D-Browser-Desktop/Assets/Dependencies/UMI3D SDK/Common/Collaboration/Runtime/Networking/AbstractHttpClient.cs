@@ -696,7 +696,7 @@ namespace umi3d.common.collaboration
 #endif
             {
                 return
-                    await (instance?.Sub__GetRequest(www, date, HeaderToken, url, ShouldTryAgain, UseCredential, headers, tryCount) 
+                    await (instance?.Sub__GetRequest(www, date, HeaderToken, url, ShouldTryAgain, UseCredential, headers, tryCount)
                     ?? throw new Umi3dNetworkingException(www, "Failed to get "));
 
             }
