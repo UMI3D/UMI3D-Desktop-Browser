@@ -168,7 +168,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e689d2ddec318694e8c180d7057ddca0, type: 2}
   - {fileID: 11400000, guid: e6decc6c755d2214293b88299db3a4b5, type: 2}
   - {fileID: 11400000, guid: a9cc9c10345dd1146986e6bb5a80330e, type: 2}
-  curr_language: 0
 --- !u!4 &14984307
 Transform:
   m_ObjectHideFlags: 0
@@ -600,36 +599,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dee479a7b501484b8b1c8e522450361, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnLeaving:
-    m_PersistentCalls:
-      m_Calls: []
-  OnLeavingEnvironment:
-    m_PersistentCalls:
-      m_Calls: []
-  OnNewToken:
-    m_PersistentCalls:
-      m_Calls: []
-  OnConnectionLost:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRedirectionStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRedirectionAborted:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRedirection:
-    m_PersistentCalls:
-      m_Calls: []
-  OnReconnect:
-    m_PersistentCalls:
-      m_Calls: []
-  OnConnectionCheck:
-    m_PersistentCalls:
-      m_Calls: []
-  OnConnectionRetreived:
-    m_PersistentCalls:
-      m_Calls: []
   Identifier: {fileID: 11400000, guid: a3c89eef08c21e647a83ef6b16993957, type: 2}
 --- !u!4 &1294132166
 Transform:

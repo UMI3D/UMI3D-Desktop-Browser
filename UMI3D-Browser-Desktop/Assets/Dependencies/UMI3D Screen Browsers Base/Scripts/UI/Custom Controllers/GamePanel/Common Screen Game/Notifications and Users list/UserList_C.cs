@@ -126,6 +126,8 @@ namespace umi3d.commonScreen.game
 
         public virtual void RemoveUser(UMI3DUser u)
         {
+            if (m_users == null)
+                return;
             m_users.FirstOrDefault
             (U =>
             {
