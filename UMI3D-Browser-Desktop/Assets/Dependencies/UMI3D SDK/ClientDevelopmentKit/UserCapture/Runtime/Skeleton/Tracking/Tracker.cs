@@ -24,7 +24,7 @@ namespace umi3d.cdk.userCapture.tracking
         [EditorReadOnly,SerializeField, ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
         protected uint boneType;
 
-        public uint Bonetype => boneType;
+        public uint BoneType => boneType;
 
         public bool isActif = true;
 
@@ -32,21 +32,31 @@ namespace umi3d.cdk.userCapture.tracking
 
         protected void Awake()
         {
+            CreateDistantController();
+        }
+
+        protected virtual void Update()
+        {
+            UpdateDistantController();
+        }
+
+        protected void CreateDistantController()
+        {
             distantController = new DistantController()
             {
                 boneType = boneType,
                 position = transform.position,
                 rotation = transform.rotation,
-                isActif = isActif,
+                isActive = isActif,
                 isOverrider = isOverrider
             };
         }
 
-        protected virtual void Update()
+        protected void UpdateDistantController()
         {
             distantController.position = transform.position;
             distantController.rotation = transform.rotation;
-            distantController.isActif = isActif;
+            distantController.isActive = isActif;
             distantController.isOverrider = isOverrider;
         }
 

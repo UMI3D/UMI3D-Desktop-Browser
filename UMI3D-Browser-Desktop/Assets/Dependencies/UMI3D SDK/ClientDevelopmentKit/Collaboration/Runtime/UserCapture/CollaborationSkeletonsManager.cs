@@ -15,10 +15,14 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
 using umi3d.cdk.userCapture;
 using umi3d.cdk.userCapture.pose;
 using umi3d.cdk.userCapture.tracking;
@@ -26,6 +30,7 @@ using umi3d.common;
 using umi3d.common.userCapture.description;
 using umi3d.common.userCapture.pose;
 using umi3d.common.userCapture.tracking;
+
 using UnityEngine;
 
 namespace umi3d.cdk.collaboration.userCapture
@@ -42,7 +47,7 @@ namespace umi3d.cdk.collaboration.userCapture
         public AbstractNavigation navigation;
 
         /// <inheritdoc/>
-        public virtual IReadOnlyDictionary<(ulong,ulong), ISkeleton> Skeletons => skeletons;
+        public virtual IReadOnlyDictionary<(ulong, ulong), ISkeleton> Skeletons => skeletons;
         protected Dictionary<(ulong, ulong), ISkeleton> skeletons = new();
 
         /// <inheritdoc/>
@@ -75,7 +80,7 @@ namespace umi3d.cdk.collaboration.userCapture
         /// If true the avatar tracking is sent.
         /// </summary>
         public virtual bool ShouldSendTracking
-        { 
+        {
             get
             {
                 return shouldSendTracking;
@@ -157,21 +162,20 @@ namespace umi3d.cdk.collaboration.userCapture
             {
                 routineService.DetachLateRoutine(computeCoroutine);
                 computeCoroutine = null;
-            } 
+            }
         }
 
         private void InitSkeletons()
         {
             PersonalSkeleton.UserId = collaborationClientServerService.GetUserId();
             PersonalSkeleton.EnvironmentId = UMI3DGlobalID.EnvironmentId;
-            skeletons[(UMI3DGlobalID.EnvironmentId,PersonalSkeleton.UserId)] = PersonalSkeleton;
+            skeletons[(UMI3DGlobalID.EnvironmentId, PersonalSkeleton.UserId)] = PersonalSkeleton;
         }
 
         private void UpdateSkeletons(IEnumerable<UMI3DUser> users)
         {
             try
             {
-                UnityEngine.Debug.Log($" user {users.ToString<UMI3DUser>(u => $"{u.EnvironmentId} {u.id.ToString()}")}");
                 List<(ulong, ulong)> readyUserIdList = users.Where(u => u.status >= StatusType.READY).Select(u => (u.EnvironmentId, u.id)).ToList();
                 readyUserIdList.Remove((UMI3DGlobalID.EnvironmentId, collaborationClientServerService.GetUserId()));
 
@@ -195,7 +199,7 @@ namespace umi3d.cdk.collaboration.userCapture
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 UnityEngine.Debug.LogException(e);
             }
@@ -222,7 +226,10 @@ namespace umi3d.cdk.collaboration.userCapture
             var trackedSkeleton = UnityEngine.Object.Instantiate(trackedSkeletonPrefab, cs.transform).GetComponent<TrackedSubskeleton>();
             trackedSkeleton.EnvironmentId = environmentId;
 
-            var poseSkeleton = new PoseSubskeleton(environmentId);
+            var poseSkeleton = new PoseSubskeleton(environmentId,
+                                                                parentSkeleton: cs,
+                                                                environmentManagerService: collaborativeEnvironmentManagementService,
+                                                                trackerSimulator: TrackerSimulationManager.Instance.GetTrackerSimulator(cs));
 
             cs.Init(trackedSkeleton, poseSkeleton);
 
@@ -235,9 +242,38 @@ namespace umi3d.cdk.collaboration.userCapture
                     cs.Bones[bone] = new ISkeleton.Transformation() { Rotation = Quaternion.identity };
             }
 
-            skeletons[(environmentId,userId)] = cs;
+            skeletons[(environmentId, userId)] = cs;
             CollaborativeSkeletonCreated?.Invoke(userId);
             return cs;
+        }
+
+        /// <inheritdoc/>
+        /// In the same way than EnvironmentLaoder.WaitForEntityToBeLoaded, risk of waiting infinitely.
+        public virtual async Task<ISkeleton> WaitForSkeleton(ulong environmentId, ulong userId, List<CancellationToken> tokens = null)
+        {
+            if (Skeletons.TryGetValue((environmentId, userId), out ISkeleton skeleton))
+                return skeleton;
+
+            void WaitSkeletonCreation(ulong createdSkeletonUserId)
+            {
+                if (createdSkeletonUserId != userId)
+                    return;
+
+                if (Skeletons.TryGetValue((environmentId, userId), out ISkeleton c))
+                {
+                    skeleton = c;
+                    CollaborativeSkeletonCreated -= WaitSkeletonCreation;
+                }
+            };
+            CollaborativeSkeletonCreated += WaitSkeletonCreation;
+
+            while (skeleton == null)
+                await UMI3DAsyncManager.Yield(tokens);
+
+            if (skeleton == null)
+                UMI3DLogger.LogWarning($"Impossible to get skeleton of user ({environmentId},{userId}). Skeleton does not exist.", scope);
+
+            return skeleton;
         }
 
         #endregion LifeCycle
@@ -255,9 +291,9 @@ namespace umi3d.cdk.collaboration.userCapture
             return Skeletons.Values.Where(x => x is CollaborativeSkeleton).Cast<CollaborativeSkeleton>();
         }
 
-        public ISkeleton TryGetSkeletonById(ulong environmentId,ulong userId)
+        public ISkeleton TryGetSkeletonById(ulong environmentId, ulong userId)
         {
-            Skeletons.TryGetValue((environmentId,userId), out var cs);
+            Skeletons.TryGetValue((environmentId, userId), out var cs);
             return cs;
         }
 
@@ -277,7 +313,7 @@ namespace umi3d.cdk.collaboration.userCapture
                 return;
 
             foreach (var frame in frames)
-                    UpdateSkeleton(frame);
+                UpdateSkeleton(frame);
         }
 
         public virtual void UpdateSkeleton(UserTrackingFrameDto frame)
@@ -416,20 +452,17 @@ namespace umi3d.cdk.collaboration.userCapture
 
         public virtual void ApplyPoseRequest(ulong environmentId, PlayPoseClipDto playPoseDto)
         {
-            if (!Skeletons.TryGetValue((environmentId,playPoseDto.userID), out ISkeleton skeleton))
+            if (!Skeletons.TryGetValue((environmentId, playPoseDto.userID), out ISkeleton skeleton))
             {
                 UMI3DLogger.LogWarning($"Cannot apply pose request for user {playPoseDto.userID}. Skeleton not found.", scope);
                 return;
             }
 
-            UMI3DEntityInstance entity = UMI3DCollaborationEnvironmentLoader.instance.TryGetEntityInstance(environmentId, playPoseDto.poseId);
-            if (entity == null)
+            if (!collaborativeEnvironmentManagementService.TryGetEntity(environmentId, playPoseDto.poseId, out PoseClip pose))
             {
                 UMI3DLogger.LogWarning($"Cannot apply pose request for user {playPoseDto.userID}. Pose {playPoseDto.poseId} not found.", scope);
                 return;
             }
-
-            PoseClip pose = entity.Object as PoseClip;
 
             if (playPoseDto.stopPose)
                 skeleton.PoseSubskeleton.StopPose(pose);

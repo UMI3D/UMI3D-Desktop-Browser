@@ -16,11 +16,11 @@ limitations under the License.
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.common;
 using UnityEngine;
 using umi3d.baseBrowser.cursor;
+using umi3d.cdk;
 
 namespace umi3d.baseBrowser.connection
 {
