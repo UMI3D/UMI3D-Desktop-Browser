@@ -63,7 +63,7 @@ namespace umi3d.cdk.userCapture.pose
         /// <inheritdoc/>
         public bool TryActivatePoseAnimator(ulong environmentId, ulong poseAnimatorId)
         {
-            if (!environmentManager.TryGetEntity(environmentId, poseAnimatorId, out PoseAnimator poseAnimator))
+            if (!environmentManager.TryGetEntity(environmentId, poseAnimatorId, out IPoseAnimator poseAnimator))
             {
                 UMI3DLogger.LogWarning($"Unable to try to activate pose animator {environmentId} {poseAnimatorId}. Entity {poseAnimatorId} not found.", DEBUG_SCOPE);
                 return false;
@@ -72,14 +72,22 @@ namespace umi3d.cdk.userCapture.pose
             return poseAnimator.TryActivate();
         }
 
+        public bool TryDeactivatePoseAnimator(ulong environmentId, ulong poseAnimatorId)
+        {
+            if (!environmentManager.TryGetEntity(environmentId, poseAnimatorId, out IPoseAnimator poseAnimator))
+            {
+                UMI3DLogger.LogWarning($"Unable to try to deactivate pose animator {environmentId} {poseAnimatorId}. Entity {poseAnimatorId} not found.", DEBUG_SCOPE);
+                return false;
+            }
+
+            return poseAnimator.TryDeactivate();
+        }
+
         /// <inheritdoc/>
         public void PlayPoseClip(PoseClip poseClip, PoseAnchorDto anchorToForce = null, ISubskeletonDescriptionInterpolationPlayer.PlayingParameters parameters = null)
         {
             if (poseClip == null)
                 throw new System.ArgumentNullException(nameof(poseClip));
-
-            if (skeletonManager.PersonalSkeleton.PoseSubskeleton.AppliedPoses.Contains(poseClip))
-                return;
 
             skeletonManager.PersonalSkeleton.PoseSubskeleton.StartPose(poseClip, parameters: parameters, anchorToForce: anchorToForce);
         }
