@@ -22,13 +22,15 @@ MonoBehaviour:
   maximumResolution: 0
   notificationLoader: {fileID: 11400000, guid: ac8ff0a36de4f9546b9facb0633729df, type: 2}
   _skyboxMaterial: {fileID: 2100000, guid: dfb4cc00185bacc43b3d69539f922c99, type: 2}
-  defaultMat: {fileID: -3033667219593020291, guid: 39c6d47b1a4d6104ca879e04a32cfe56,
-    type: 3}
+  defaultMat: {fileID: 2100000, guid: 05469e08cff52964c98239a779d41da9, type: 2}
   _skyboxEquirectangularMaterial: {fileID: 2100000, guid: 550ddc5eab91acd47adeb9d3fd1b2ff8,
     type: 2}
+  hasImmersiveDevice: 0
+  hasHeadMountedDisplay: 0
   skeletonHierarchyDefinition: {fileID: 11400000, guid: e4facea53a30b4c40aa447fc608d5c8a,
     type: 2}
   clientPoses: []
+  bonesWithController: []
   collaborationUserCaptureActivated: 0
   collabTrackedSkeleton: {fileID: 3328692698567505491, guid: d35b455ecdb2f7e49bed74b7ffa742b9,
     type: 3}
