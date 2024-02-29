@@ -17,6 +17,7 @@ limitations under the License.
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using VoltstroStudios.UnityWebBrowser.Shared;
 using VoltstroStudios.UnityWebBrowser.Shared.Events;
 
 namespace BrowserDesktop
@@ -151,6 +152,20 @@ namespace BrowserDesktop
 
             if (scroll != 0)
                 webview.browser.browserClient.SendMouseScroll(pointerPos, (int)scroll);
+
+            if (!webview.browser.GetMousePosition(out Vector2 _) && isHover)
+            {
+                if (!webview.browser.disableKeyboardInputs)
+                {
+                    //Input
+                    WindowsKey[] keysDown = webview.browser.inputHandler.GetDownKeys();
+                    WindowsKey[] keysUp = webview.browser.inputHandler.GetUpKeys();
+                    string inputBuffer = webview.browser.inputHandler.GetFrameInputBuffer();
+
+                    if (keysDown.Length > 0 || keysUp.Length > 0 || inputBuffer.Length > 0)
+                        webview.browser.browserClient.SendKeyboardControls(keysDown, keysUp, inputBuffer.ToCharArray());
+                }
+            }
         }
     }
 }
