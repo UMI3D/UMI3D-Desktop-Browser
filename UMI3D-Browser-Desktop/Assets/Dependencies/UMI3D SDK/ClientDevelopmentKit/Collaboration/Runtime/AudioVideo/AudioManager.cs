@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using inetum.unityUtils.audio;
 using Mumble;
 using System.Collections;
 using System.Collections.Generic;

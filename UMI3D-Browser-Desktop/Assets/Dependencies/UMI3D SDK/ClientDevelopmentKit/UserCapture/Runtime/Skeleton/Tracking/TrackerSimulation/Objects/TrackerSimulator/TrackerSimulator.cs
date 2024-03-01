@@ -105,38 +105,25 @@ namespace umi3d.cdk.userCapture.tracking
             simulatedTrackingRecords.Add(poseAnchor.bone, trackingRecord);
 
             skeleton.TrackedSubskeleton.ReplaceController(tracker.Controller, true);
-
-            tracker.Destroyed += (tracker) =>
-            {
-                OnTrackerDestroyed(tracker.BoneType);
-            };
         }
 
         public void StopTrackerSimulation(PoseAnchorDto poseAnchor)
         {
             if (!simulatedTrackingRecords.TryGetValue(poseAnchor.bone, out SimulatedTrackingRecord simulatedTrackingRecord))
-            {
-                UMI3DLogger.LogWarning("No SimulatedTracked found for this PoseAnchor", DebugScope.CDK | DebugScope.UserCapture);
                 return;
-            }
 
             simulatedTrackingRecord.registeredPoseAnchors.Remove(poseAnchor);
 
             if (simulatedTrackingRecord.registeredPoseAnchors.Count > 0)
                 return;
 
+            simulatedTrackingRecord.simulatedTracker.Controller.isActive = false;
+
+            simulatedTrackingRecords.Remove(poseAnchor.bone);
+            skeleton.TrackedSubskeleton.RemoveController(poseAnchor.bone);
+
             if (simulatedTrackingRecord.simulatedTracker.GameObject != null)
                 GameObject.Destroy(simulatedTrackingRecord.simulatedTracker.GameObject);
-            else
-                OnTrackerDestroyed(poseAnchor.bone);
-        }
-
-        private void OnTrackerDestroyed(uint boneType)
-        {
-            if (simulatedTrackingRecords.ContainsKey(boneType))
-                simulatedTrackingRecords.Remove(boneType);
-
-            skeleton.TrackedSubskeleton.RemoveTracker(boneType);
         }
     }
 }

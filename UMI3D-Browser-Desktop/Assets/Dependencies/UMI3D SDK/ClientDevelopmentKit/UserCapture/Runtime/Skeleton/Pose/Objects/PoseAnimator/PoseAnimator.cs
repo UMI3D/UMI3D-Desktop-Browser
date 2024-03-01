@@ -33,6 +33,11 @@ namespace umi3d.cdk.userCapture.pose
         private PoseAnimatorDto dto;
 
         /// <summary>
+        /// DTO access for loader only.
+        /// </summary>
+        protected internal PoseAnimatorDto Dto => dto;
+
+        /// <summary>
         /// If true, the animator is applying its pose override.
         /// </summary>
         public bool IsApplied { get; set; }
@@ -45,7 +50,11 @@ namespace umi3d.cdk.userCapture.pose
         /// <summary>
         /// Pose clip associated to this animator;
         /// </summary>
-        public PoseClip PoseClip => poseClip;
+        public PoseClip PoseClip
+        {
+            get => poseClip;
+            internal set => poseClip = value;
+        }
         private PoseClip poseClip;
 
         /// <summary>
@@ -63,7 +72,7 @@ namespace umi3d.cdk.userCapture.pose
         /// <summary>
         /// The different condition that are needed for the overrider to get activated
         /// </summary>
-        public IPoseCondition[] PoseConditions { get; private set; }
+        public IPoseCondition[] PoseConditions { get; internal set; }
 
         /// <summary>
         /// How long the pose should last [Not Implemented]
@@ -177,6 +186,23 @@ namespace umi3d.cdk.userCapture.pose
             if (ActivationMode == (ushort)PoseAnimatorActivationMode.ON_REQUEST && CheckConditions())
             {
                 Apply();
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Disable poses that listens to this activation mode.
+        /// </summary>
+        public virtual bool TryDeactivate()
+        {
+            if (!IsApplied)
+                return false;
+
+            if (ActivationMode == (ushort)PoseAnimatorActivationMode.ON_REQUEST && !CheckConditions())
+            {
+                EndApply();
                 return true;
             }
 

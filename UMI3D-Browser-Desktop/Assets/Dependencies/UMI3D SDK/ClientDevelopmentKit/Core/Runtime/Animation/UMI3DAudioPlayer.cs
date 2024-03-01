@@ -13,6 +13,7 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using inetum.unityUtils.audio;
 using MainThreadDispatcher;
 using System.Collections;
 using System.Threading.Tasks;

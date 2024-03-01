@@ -234,6 +234,8 @@ namespace umi3d.cdk.collaboration
 
             networkManagerComponent?.Disconnect();
             networkManagerComponent = null;
+
+            UMI3DClientServer.transactionDispatcher = null;
         }
 
         #region signaling
@@ -388,8 +390,16 @@ namespace umi3d.cdk.collaboration
                     case TransactionDto transaction:
                         MainThreadManager.Run(async () =>
                         {
-                            await UMI3DClientServer.transactionDispatcher.PerformTransaction(UMI3DGlobalID.EnvironmentId, transaction);
-                            if(UMI3DCollaborationClientServer.transactionPending != null)
+                            try
+                            {
+                                await UMI3DClientServer.transactionDispatcher?.PerformTransaction(UMI3DGlobalID.EnvironmentId, transaction);
+                            }
+                            catch (Exception e)
+                            {
+                                UnityEngine.Debug.LogException(e);
+                            }
+
+                            if (UMI3DCollaborationClientServer.transactionPending != null)
                                 UMI3DCollaborationClientServer.transactionPending.areTransactionPending = false;
                         });
 
@@ -681,12 +691,16 @@ namespace umi3d.cdk.collaboration
                         });
                         break;
                     }
-                case UMI3DOperationKeys.ActivatePoseAnimatorRequest:
+                case UMI3DOperationKeys.CheckPoseAnimatorConditionsRequest:
                     {
                         ulong poseOverriderId = UMI3DSerializer.Read<ulong>(container);
+                        bool shouldActivate = UMI3DSerializer.Read<bool>(container);
                         MainThreadManager.Run(() =>
                         {
-                            PoseManager.Instance.TryActivatePoseAnimator(container.environmentId, poseOverriderId);
+                            if (shouldActivate)
+                                PoseManager.Instance.TryActivatePoseAnimator(container.environmentId, poseOverriderId);
+                            else
+                                PoseManager.Instance.TryDeactivatePoseAnimator(container.environmentId, poseOverriderId);
                         });
                         break;
                     }

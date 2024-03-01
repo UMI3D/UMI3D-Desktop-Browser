@@ -1,5 +1,5 @@
-﻿/*
-Copyright 2019 - 2023 Inetum
+/*
+Copyright 2019 - 2024 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.userCapture.pose
+using System;
+using UnityEngine;
+
+namespace inetum.unityUtils.saveSystem
 {
-    /// <summary>
-    /// Request to trigger the activation a pose animator.
-    /// </summary>
-    public class TryActivatePoseAnimatorDto : AbstractOperationDto
+    public struct SSOData 
     {
-        /// <summary>
-        /// UMI3D Id of the pose animator to activate.
-        /// </summary>
-        public ulong PoseAnimatorId { get; set; }
+        public string json;
+
+        public SSOData(string json)
+        {
+            this.json = json;
+        }
+
+        //public SSOStack(SerializableScriptableObject sso, int amount)
+        //{
+        //    this.guid = sso.Guid;
+        //    this.amount = amount;
+        //}
     }
 }
