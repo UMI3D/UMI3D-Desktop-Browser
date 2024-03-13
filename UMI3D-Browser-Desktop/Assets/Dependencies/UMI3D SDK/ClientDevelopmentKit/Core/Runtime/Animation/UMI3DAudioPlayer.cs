@@ -290,6 +290,10 @@ namespace umi3d.cdk
         /// <inheritdoc/>
         public override void Start(float atTime)
         {
+            if (audioSource.outputAudioMixerGroup == null)
+            {
+                AudioMixerControl.SetEnvironmentGroup(audioSource);
+            }
             atTime = atTime / 1000f; //Convert to seconds
 
             if (audioSource != null)
