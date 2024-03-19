@@ -78,7 +78,7 @@ namespace umi3d.cdk
 
         public static void DeclareNewEnvironment(ulong id, string url)
         {
-            Instance.entitiesCollection[id] = new(id,url);
+            Instance.entitiesCollection[id] = new(id, url);
         }
 
         public IReadOnlyList<string> GetResourcesUrls()
@@ -111,7 +111,7 @@ namespace umi3d.cdk
         public virtual void WaitUntilEntityLoaded(ulong environmentid, ulong id, Action<UMI3DEntityInstance> entityLoaded, Action entityFailedToLoad = null)
         {
             if (entitiesCollection == null) return;
-            entitiesCollection[environmentid].WaitUntilEntityLoaded(id,entityLoaded,entityFailedToLoad);
+            entitiesCollection[environmentid].WaitUntilEntityLoaded(id, entityLoaded, entityFailedToLoad);
         }
 
         public static async Task<UMI3DEntityInstance> WaitForAnEntityToBeLoaded(ulong environmentid, ulong id, List<CancellationToken> tokens)
@@ -229,7 +229,7 @@ namespace umi3d.cdk
         /// </summary>
         /// <param name="collider">collider.</param>
         /// <returns></returns>
-        public static ulong GetNodeID(Collider collider) { return Exists ? Instance.entitiesCollection.Select( e => e.Value.GetNodeID(collider)).FirstOrDefault( id => id != 0) : 0; }
+        public static ulong GetNodeID(Collider collider) { return Exists ? Instance.entitiesCollection.Select(e => e.Value.GetNodeID(collider)).FirstOrDefault(id => id != 0) : 0; }
 
         /// <summary>
         /// Get node id associated to <paramref name="t"/>.
@@ -530,9 +530,9 @@ namespace umi3d.cdk
             await Task.WhenAll(scenes.Select(async scene =>
             {
                 Progress progress1 = new Progress(0, $"Load scene {scene.name}");
-                if(progress != null)
+                if (progress != null)
                     progress.Add(progress1);
-                await sceneLoader.LoadGlTFScene(environmentid,scene, progress1);
+                await sceneLoader.LoadGlTFScene(environmentid, scene, progress1);
 
             }));
             //Organize scenes
@@ -544,7 +544,7 @@ namespace umi3d.cdk
                 progress1.AddComplete();
                 var node = GetNodeInstance(environmentid, scene.extensions.umi3d.id);
                 UMI3DSceneNodeDto umi3dScene = scene.extensions.umi3d;
-                await sceneLoader.ReadUMI3DExtension(new ReadUMI3DExtensionData(environmentid,umi3dScene, node.gameObject));
+                await sceneLoader.ReadUMI3DExtension(new ReadUMI3DExtensionData(environmentid, umi3dScene, node.gameObject));
                 progress1.AddComplete();
                 node.gameObject.SetActive(umi3dScene.active);
             }));
@@ -601,11 +601,11 @@ namespace umi3d.cdk
                             //register the material
                             if (m == null)
                             {
-                                RegisterEntity(environmentId,((AbstractEntityDto)matDto.extensions.umi3d).id, matDto, new List<Material>()).NotifyLoaded();
+                                RegisterEntity(environmentId, ((AbstractEntityDto)matDto.extensions.umi3d).id, matDto, new List<Material>()).NotifyLoaded();
                             }
                             else
                             {
-                                RegisterEntity(environmentId,((AbstractEntityDto)matDto.extensions.umi3d).id, matDto, m).NotifyLoaded();
+                                RegisterEntity(environmentId, ((AbstractEntityDto)matDto.extensions.umi3d).id, matDto, m).NotifyLoaded();
                             }
                         });
                         break;
@@ -678,7 +678,7 @@ namespace umi3d.cdk
         {
             UMI3DVideoPlayerLoader.Clear();
 
-            foreach(var entity in Instance.entitiesCollection)
+            foreach (var entity in Instance.entitiesCollection)
                 entity.Value.InternalClear();
 
             isEnvironmentLoaded = false;
@@ -709,10 +709,8 @@ namespace umi3d.cdk
                 RenderSettings.ambientEquatorColor = extension.horizontalColor.Struct();
                 RenderSettings.ambientGroundColor = extension.groundColor.Struct();
                 RenderSettings.ambientIntensity = extension.ambientIntensity;
-                if (extension.skybox != null)
-                {
-                    AbstractParameters.LoadSkybox(extension.skybox, extension.skyboxType, extension.skyboxRotation, extension.ambientIntensity);
-                }
+
+                AbstractParameters.LoadSkybox(extension.skybox, extension.skyboxType, extension.skyboxRotation, extension.ambientIntensity);
             }
         }
 
@@ -802,11 +800,8 @@ namespace umi3d.cdk
                     RenderSettings.ambientIntensity = (float)data.property.value;
                     return AbstractParameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
                 case UMI3DPropertyKeys.AmbientSkyboxImage:
-                    if (dto.skybox != null)
-                    {
-                        AbstractParameters.LoadSkybox(dto.skybox, dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
-                        AbstractParameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
-                    }
+                    AbstractParameters.LoadSkybox(dto.skybox, dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
+                    AbstractParameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
                     return true;
                 case UMI3DPropertyKeys.AmbientSkyboxRotation:
                     return AbstractParameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
@@ -849,11 +844,8 @@ namespace umi3d.cdk
                     return AbstractParameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
                 case UMI3DPropertyKeys.AmbientSkyboxImage:
                     dto.skybox = UMI3DSerializer.Read<ResourceDto>(data.container);
-                    if (dto.skybox != null)
-                    {
-                        AbstractParameters.LoadSkybox(dto.skybox, dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
-                        AbstractParameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
-                    }
+                    AbstractParameters.LoadSkybox(dto.skybox, dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
+                    AbstractParameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
                     return true;
                 case UMI3DPropertyKeys.AmbientSkyboxRotation:
                     dto.skyboxRotation = UMI3DSerializer.Read<float>(data.container);
@@ -933,8 +925,8 @@ namespace umi3d.cdk
         /// <returns></returns>
         public static async Task<bool> SetEntity(ulong environmentId, ulong entityId, SetUMI3DPropertyContainerData data)
         {
-           // UnityMainThreadDispatcher.Instance().Enqueue(() => UnityEngine.Debug.Log($"SetEntityProperty {environmentId} {entityId}"));
-            if (await Instance.entitiesCollection[environmentId].SetEntity(entityId,data, ReadValueEntity))
+            // UnityMainThreadDispatcher.Instance().Enqueue(() => UnityEngine.Debug.Log($"SetEntityProperty {environmentId} {entityId}"));
+            if (await Instance.entitiesCollection[environmentId].SetEntity(entityId, data, ReadValueEntity))
                 return true;
             else
             {
