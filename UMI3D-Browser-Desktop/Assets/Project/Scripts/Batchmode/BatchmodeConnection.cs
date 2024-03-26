@@ -32,9 +32,14 @@ namespace BrowserDesktop
 
         private const string simulationInteractionArg = "-interaction";
 
+        private const string useMicrophoneArg = "-useMic";
+
         private Dictionary<string, string> formDataDictionary = new();
 
         private static bool hasTriedToConnect = false;
+
+        private static bool isBatchMode = false;
+        public static bool IsBatchMode => isBatchMode;
 
         #endregion
 
@@ -42,7 +47,13 @@ namespace BrowserDesktop
 
         async void Start()
         {
-            if (!Application.isBatchMode)
+#if DEBUG_BATCHMODE
+            isBatchMode = true;
+#else
+            isBatchMode = Application.isBatchMode;
+#endif
+
+            if (!IsBatchMode)
                 return;
 
             if (hasTriedToConnect)
@@ -146,6 +157,10 @@ namespace BrowserDesktop
                 {
                     BatchmodeFPSController.simulateInteraction = true;
                 }
+                else if (args[i] == useMicrophoneArg)
+                {
+                    BatchmodeFPSController.useMicrophone = true;
+                }
                 else
                 {
                     string[] arg = args[i].Split(":");
@@ -159,7 +174,7 @@ namespace BrowserDesktop
             }
         }
 
-        #endregion
+#endregion
     }
 
     [Serializable]

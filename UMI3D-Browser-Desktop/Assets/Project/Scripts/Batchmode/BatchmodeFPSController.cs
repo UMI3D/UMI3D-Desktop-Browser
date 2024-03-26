@@ -34,6 +34,7 @@ namespace BrowserDesktop
     public class BatchmodeFPSController : AbstractNavigation
     {
         public static bool simulateInteraction = false;
+        public static bool useMicrophone = false;
 
         #region Fields
 
@@ -65,7 +66,7 @@ namespace BrowserDesktop
 
         void Start()
         {
-            if (!Application.isBatchMode)
+            if (!BatchmodeConnection.IsBatchMode)
                 return;
 
             Debug.Assert(this.fpsController != null);
@@ -73,7 +74,7 @@ namespace BrowserDesktop
 
         private void OnEnable()
         {
-            if (!Application.isBatchMode)
+            if (!BatchmodeConnection.IsBatchMode)
                 return;
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
@@ -82,7 +83,7 @@ namespace BrowserDesktop
 
         private void OnDisable()
         {
-            if (!Application.isBatchMode)
+            if (!BatchmodeConnection.IsBatchMode)
                 return;
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.RemoveListener(OnEnvironmentLoaded);
@@ -96,6 +97,8 @@ namespace BrowserDesktop
             BakeNavmesh();
 
             BakeInteraction();
+
+            UnmuteMicrophone();
 
             this.agent = this.gameObject.AddComponent<NavMeshAgent>();
             this.agent.speed = 2f;
@@ -158,6 +161,20 @@ namespace BrowserDesktop
             {
                 this.interactables.Add(container.Interactable);
             }
+        }
+
+        private void UnmuteMicrophone()
+        {
+#if DEBUG_USE_MIC
+            EnvironmentSettings.Instance.MicSetting.Set(true);
+#else
+
+            if (useMicrophone)
+            {
+                EnvironmentSettings.Instance.MicSetting.Set(true);
+                MicrophoneListener.Instance.SetCurrentMicrophoneMode(MicrophoneMode.AlwaysSend);
+            }
+#endif
         }
 
         public static int ToLayer(int bitmask)
@@ -320,6 +337,6 @@ namespace BrowserDesktop
             }
         }
 
-        #endregion
+#endregion
     }
 }
