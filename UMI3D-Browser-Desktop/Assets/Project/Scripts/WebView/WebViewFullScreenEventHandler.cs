@@ -144,7 +144,7 @@ namespace BrowserDesktop
 
         private void Update()
         {
-            if (!ProcessEvent())
+            if (!ProcessEvent() || !webview.browser.browserClient.IsConnected)
                 return;
 
             scroll = webview.browser.inputHandler.GetScroll();

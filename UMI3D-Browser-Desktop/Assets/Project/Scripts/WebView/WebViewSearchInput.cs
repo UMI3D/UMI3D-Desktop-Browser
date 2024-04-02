@@ -36,15 +36,22 @@ namespace BrowserDesktop
         private void Start()
         {
             validateDateRegex = new Regex("^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$");
+
+            url.onSubmit.AddListener(SearchUrl);
         }
 
         public void SearchUrl()
         {
-            string uri = url.text;
+            SearchUrl(url.text);
+        }
 
-            if (!validateDateRegex.IsMatch(url.text))
+        public void SearchUrl(string url)
+        {
+            string uri = url;
+
+            if (!validateDateRegex.IsMatch(url))
             {
-                if (url.text.EndsWith(".com") || url.text.EndsWith(".net") || url.text.EndsWith(".fr") || url.text.EndsWith(".org"))
+                if (url.EndsWith(".com") || url.EndsWith(".net") || url.EndsWith(".fr") || url.EndsWith(".org"))
                     uri = "http://" + uri;
                 else
                     uri = "https://www.google.com/search?q=" + uri;
@@ -53,7 +60,8 @@ namespace BrowserDesktop
             if (webView.CheckIfUrlValid(uri))
             {
                 webView.browser.NavigateUrl(uri);
-            } else
+            }
+            else
             {
                 webView.LoadNotAccessibleWebPage(uri);
             }

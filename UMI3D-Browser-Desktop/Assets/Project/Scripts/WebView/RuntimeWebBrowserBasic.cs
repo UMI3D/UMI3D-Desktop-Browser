@@ -14,8 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using UnityEngine;
 using VoltstroStudios.UnityWebBrowser.Communication;
 using VoltstroStudios.UnityWebBrowser.Core;
+using VoltstroStudios.UnityWebBrowser.Helper;
 
 namespace BrowserDesktop
 {
@@ -23,13 +25,17 @@ namespace BrowserDesktop
     {
         void Awake()
         {
-            TCPCommunicationLayer layer = new TCPCommunicationLayer();
+            TCPCommunicationLayer layer = ScriptableObject.CreateInstance<TCPCommunicationLayer>();
 
-            var ports = (WebViewFactory.Instance as WebViewFactory).GetPorts();
-            layer.inPort = ports.Item1;
-            layer.outPort = ports.Item2;
+            (int inPort, int outPort) = (WebViewFactory.Instance as WebViewFactory).GetPorts();
+
+            layer.inPort = inPort;
+            layer.outPort = outPort;
 
             browserClient.communicationLayer = layer;
+            browserClient.CachePath = (WebViewFactory.Instance as WebViewFactory).GetCachePath();
+
+            Debug.Log($"[ {nameof(RuntimeWebBrowserBasic)}] TCPCommunicationLayer created with ports { inPort }; { outPort } and cache path { browserClient.CachePath.FullName }");
         }
     }
 }
