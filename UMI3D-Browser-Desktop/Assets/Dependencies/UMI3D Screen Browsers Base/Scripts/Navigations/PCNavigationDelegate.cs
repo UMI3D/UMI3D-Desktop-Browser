@@ -21,17 +21,26 @@ using UnityEngine;
 
 public class PCNavigationDelegate : INavigationDelegate
 {
+    #region Dependencies
 
-    public bool IsActive { get; private set; }
+    public Transform playerTransform;
+    public UMI3DCollisionManager collisionManager;
+
+    /// <summary>
+    /// Is player active ?
+    /// </summary>
+    public bool isActive = false;
+
+    #endregion
 
     public void Activate()
     {
-        IsActive = true;
+        isActive = true;
     }
 
     public void Disable()
     {
-        IsActive = false;
+        isActive = false;
     }
 
     public NavigationData GetNavigationData()
@@ -46,7 +55,9 @@ public class PCNavigationDelegate : INavigationDelegate
 
     public void Teleport(ulong environmentId, TeleportDto data)
     {
-        throw new System.NotImplementedException();
+        playerTransform.localPosition = data.position.Struct();
+        playerTransform.localRotation = data.rotation.Quaternion();
+        collisionManager.ComputeGround();
     }
 
     public void UpdateFrame(ulong environmentId, FrameRequestDto data)
