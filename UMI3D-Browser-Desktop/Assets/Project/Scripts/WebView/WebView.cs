@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using System;
+using System.Collections;
 using System.Text.RegularExpressions;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk;
@@ -23,7 +24,6 @@ using umi3d.common.interaction;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
 
 namespace BrowserDesktop
 {
@@ -97,10 +97,17 @@ namespace BrowserDesktop
             canvas.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 3;
 
             browser.browserClient.OnUrlChanged += OnUrlLoaded;
+
+            autoRefreshCoroutine = StartCoroutine(AutoRefresh());
         }
 
         private void OnUrlLoaded(string url)
         {
+            if (autoRefreshCoroutine is not null)
+                StopCoroutine(autoRefreshCoroutine);
+
+            autoRefreshCoroutine = StartCoroutine(AutoRefresh());
+
             if (url == previousUrl)
             {
                 return;
@@ -127,8 +134,8 @@ namespace BrowserDesktop
 
                     UMI3DClientServer.SendRequest(request, true);
                 }
-
-            } else
+            }
+            else
             {
                 LoadNotAccessibleWebPage(url);
             }
@@ -313,6 +320,23 @@ namespace BrowserDesktop
         public void LoadNotAccessibleWebPage(string notAuhtorizedUrl)
         {
             browser.LoadHtml("<html><head><meta charset=\"utf-8\"><title>Not authorized</title></head><body>Impossible to load " + notAuhtorizedUrl + ", this url is either blacklisted or not white listed. Contact your administrator.</body></html>");
+        }
+
+        private Coroutine autoRefreshCoroutine;
+
+        /// <summary>
+        /// Auto refresh to fix a time out bug.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator AutoRefresh()
+        {
+            var wait = new WaitForSeconds(60 * 4);
+
+            while (true)
+            {
+                yield return wait;
+                browser.Refresh();
+            }
         }
 
         #endregion
