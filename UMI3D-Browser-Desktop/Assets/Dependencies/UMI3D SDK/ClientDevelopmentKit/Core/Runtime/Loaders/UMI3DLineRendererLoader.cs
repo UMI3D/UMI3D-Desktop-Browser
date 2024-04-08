@@ -272,7 +272,7 @@ namespace umi3d.cdk
 
             await UMI3DAsyncManager.Yield();
 
-            line.BakeMesh(mesh);
+            line.BakeMesh(mesh, true);
 
             await UMI3DAsyncManager.Yield();
 
