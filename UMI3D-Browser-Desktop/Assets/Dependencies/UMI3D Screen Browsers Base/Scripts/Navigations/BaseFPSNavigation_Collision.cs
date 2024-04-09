@@ -74,17 +74,26 @@ namespace umi3d.baseBrowser.Navigation
         protected bool CheckNavmesh(Vector3 direction)
         {
             RaycastHit hit;
-            RaycastHit foundHit = new RaycastHit { distance = Mathf.Infinity };
+            RaycastHit foundHit = new() { distance = Mathf.Infinity };
             direction /= 2f;
+
+            Vector3 startRayPosition;
+
             foreach (Transform foot in feetRaycastOrigin)
             {
+  
+                startRayPosition = foot.position + Vector3.up * maxStepHeight + direction;
+                if (IsCrouching)
+                    startRayPosition += -Vector3.up * data.squatHeight;
+
                 if (
-                    Physics.Raycast(foot.position + Vector3.up * maxStepHeight + direction, Vector3.down, out hit, 100, navmeshLayer)
+                    Physics.Raycast(startRayPosition, Vector3.down, out hit, 100, navmeshLayer)
                     && foundHit.distance > hit.distance
                     && Vector3.Angle(transform.up, hit.normal) <= maxSlopeAngle
                     )
                     foundHit = hit;
             }
+
             if (foundHit.distance < Mathf.Infinity)
             {
                 float newHeight = foundHit.point.y;
@@ -96,6 +105,7 @@ namespace umi3d.baseBrowser.Navigation
                 else hasGroundHeightChangedLastFrame = false;
                 return true;
             }
+
             hasGroundHeightChangedLastFrame = false;
             return false;
         }
