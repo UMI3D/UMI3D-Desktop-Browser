@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using umi3d.baseBrowser.Navigation;
 using umi3d.cdk.navigation;
 using umi3d.common;
 
@@ -25,6 +26,7 @@ public class PCNavigationDelegate : INavigationDelegate
 
     public Transform playerTransform;
     public UMI3DCollisionManager collisionManager;
+    public BaseFPSData data;
 
     /// <summary>
     /// Is player active ?
@@ -45,19 +47,29 @@ public class PCNavigationDelegate : INavigationDelegate
 
     public NavigationData GetNavigationData()
     {
-        throw new System.NotImplementedException();
+        return new NavigationData()
+        {
+            speed = new Vector3Dto()
+            {
+                X = data.Movement.x / Time.deltaTime,
+                Y = data.Movement.y / Time.deltaTime,
+                Z = data.Movement.z / Time.deltaTime
+            },
+            crouching = data.IsCrouching,
+            jumping = data.IsJumping,
+            grounded = collisionManager.IsGrounded,
+        };
     }
 
     public void Navigate(ulong environmentId, NavigateDto data)
     {
-        throw new System.NotImplementedException();
+        this.data.continuousDestination = playerTransform.parent.position + data.position.Struct();
     }
 
     public void Teleport(ulong environmentId, TeleportDto data)
     {
         playerTransform.localPosition = data.position.Struct();
         playerTransform.localRotation = data.rotation.Quaternion();
-        collisionManager.ComputeGround();
     }
 
     public void UpdateFrame(ulong environmentId, FrameRequestDto data)

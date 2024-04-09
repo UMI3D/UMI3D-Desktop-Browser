@@ -35,33 +35,13 @@ public sealed class UMI3DCollisionManager
     public LayerMask obstacleLayer;
     public LayerMask navmeshLayer;
 
-    /// <summary>
-    /// Radius used from player center to raycast
-    /// </summary>
-    public float playerRadius = .3f;
-    /// <summary>
-    /// Maximum angle for slope.
-    /// </summary>
-    public float maxSlopeAngle = 45f;
-    /// <summary>
-    /// Maximum height for step
-    /// </summary>
-    public float maxStepHeight = .2f;
-    public float stepEpsilon = 0.05f;
-
     public BaseFPSData data;
 
     #endregion
 
-    /// <summary>
-    /// Current ground height.
-    /// </summary>
-    public float Ground { get; private set; } = 0f;
-
-
     float lastObstacleHeight = .5f;
     /// <summary>
-    /// Has <see cref="Ground"/> changed last frame ?
+    /// Has <see cref="groundYAxis"/> changed last frame ?
     /// </summary>
     bool hasGroundHeightChangedLastFrame = false;
 
@@ -74,8 +54,8 @@ public sealed class UMI3DCollisionManager
     {
         return
         (
-            playerTransform.position + playerTransform.up * (playerRadius + maxStepHeight + stepEpsilon),
-            topHead.position - playerTransform.up * playerRadius
+            playerTransform.position + playerTransform.up * (data.playerRadius + data.maxStepHeight + data.stepEpsilon),
+            topHead.position - playerTransform.up * data.playerRadius
         );
     }
 
@@ -92,14 +72,14 @@ public sealed class UMI3DCollisionManager
         foreach (Transform foot in feetRaycastOrigin)
         {
             var hasHit = Physics.Raycast(
-                foot.position + Vector3.up * maxStepHeight + desiredDirection,
+                foot.position + Vector3.up * data.maxStepHeight + desiredDirection,
                 Vector3.down,
                 out RaycastHit hit,
                 100,
                 navmeshLayer
             );
             Func<bool> hasFoundACloserHit = () => hit.distance < (_foundHit?.distance ?? Mathf.Infinity);
-            Func<bool> isSlopeInfToMaxSlop = () => Vector3.Angle(playerTransform.up, hit.normal) <= maxSlopeAngle;
+            Func<bool> isSlopeInfToMaxSlop = () => Vector3.Angle(playerTransform.up, hit.normal) <= data.maxSlopeAngle;
 
             if (hasHit && hasFoundACloserHit() && isSlopeInfToMaxSlop())
             {
@@ -109,22 +89,23 @@ public sealed class UMI3DCollisionManager
 
         return _foundHit.HasValue;
 
-        if (!_foundHit.HasValue)
-        {
-            hasGroundHeightChangedLastFrame = false;
-            return false;
-        }
+        //if (!_foundHit.HasValue)
+        //{
+        //    hasGroundHeightChangedLastFrame = false;
+        //    return false;
+        //}
 
-        // If a collision has been found update groundHeight. ?????????
-        RaycastHit foundHit = _foundHit.Value;
-        float newGroundHeight = foundHit.point.y;
-        Ground = newGroundHeight;
-        hasGroundHeightChangedLastFrame = Mathf.Abs(newGroundHeight - Ground) > .001f;
-        return true;
+        //// If a collision has been found update groundHeight. ?????????
+        //RaycastHit foundHit = _foundHit.Value;
+        //float newGroundHeight = foundHit.point.y;
+        //groundYAxis = newGroundHeight;
+        //hasGroundHeightChangedLastFrame = Mathf.Abs(newGroundHeight - groundYAxis) > .001f;
+        //return true;
     }
 
     /// <summary>
-    /// Return true if the player will collide with something that has a layer [<paramref name="layer"/>] 
+    /// Return true if the player will collide with something 
+    /// that has a layer [<paramref name="layer"/>] 
     /// in the direction [<paramref name="direction"/>].<br/>
     /// </summary>
     /// <param name="direction"></param>
@@ -142,7 +123,7 @@ public sealed class UMI3DCollisionManager
         return !Physics.CapsuleCast(
                 capsule.Item1,
                 capsule.Item2,
-                playerRadius,
+                data.playerRadius,
                 direction,
                 out hit,
                 maxDistance,
@@ -157,7 +138,7 @@ public sealed class UMI3DCollisionManager
         int hitCount = Physics.CapsuleCastNonAlloc(
             capsule.Item1,
             capsule.Item2,
-            playerRadius,
+            data.playerRadius,
             Vector3.down,
             hits,
             100,
@@ -168,7 +149,7 @@ public sealed class UMI3DCollisionManager
         {
             RaycastHit hit = hits[i];
             var hasFoundACloserHit = hit.distance < (_foundHit?.distance ?? Mathf.Infinity);
-            var isSlopeInfToMaxSlop = Vector3.Angle(playerTransform.up, hit.normal) <= maxSlopeAngle;
+            var isSlopeInfToMaxSlop = Vector3.Angle(playerTransform.up, hit.normal) <= data.maxSlopeAngle;
             if (hasFoundACloserHit && isSlopeInfToMaxSlop)
             {
                 _foundHit = hit;
@@ -176,7 +157,7 @@ public sealed class UMI3DCollisionManager
         }
         if (_foundHit.HasValue)
         {
-            Ground = _foundHit.Value.point.y;
+            data.groundYAxis = _foundHit.Value.point.y;
         }
     }
 
@@ -195,6 +176,20 @@ public sealed class UMI3DCollisionManager
             );
     }
 
+    public bool CanStandUp()
+    {
+        Func<bool> isSquattingAndWillNotCollideIfStandUp 
+            = () => 
+            data.IsCrouching
+            && !WillCollide(
+                playerTransform.up,
+                out var hit,
+                data.MaxJumpHeight, // TODO: update this value.
+                obstacleLayer
+            );
+        return !data.IsCrouching || isSquattingAndWillNotCollideIfStandUp();
+    }
+
     #endregion
 
     /// <summary>
@@ -208,6 +203,11 @@ public sealed class UMI3DCollisionManager
     /// <returns></returns>
     public Vector3 GetPossibleDirection(Vector3 desiredDirection)
     {
+        if (data.navigationMode == E_NavigationMode.Debug)
+        {
+            return desiredDirection;
+        }
+
         bool willTranslationEndUpAboveNavMesh = WillTranslationEndUpAboveNavMesh(desiredDirection);
         if (!willTranslationEndUpAboveNavMesh)
         {
@@ -244,5 +244,7 @@ public sealed class UMI3DCollisionManager
     /// <summary>
     /// Is player currently grounded ?
     /// </summary>
-    public bool IsGrounded => Mathf.Abs(playerTransform.position.y - Ground) < maxStepHeight;
+    public bool IsGrounded => Mathf.Abs(playerTransform.position.y - data.groundYAxis) < data.maxStepHeight;
+
+    public bool ShouldSquat => data.WantToCrouch || !CanStandUp();
 }

@@ -53,53 +53,15 @@ namespace umi3d.baseBrowser.Navigation
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void UpdateMovement(ref Vector2 move)
-        {
-            if (KeyboardNavigation.IsPressed(NavigationEnum.Forward)) move.x += 1;
-            if (KeyboardNavigation.IsPressed(NavigationEnum.Backward)) move.x -= 1;
-            if (KeyboardNavigation.IsPressed(NavigationEnum.Right)) move.y += 1;
-            if (KeyboardNavigation.IsPressed(NavigationEnum.Left)) move.y -= 1;
-            if (move != Vector2.zero) FPSNavigation.OnPlayerMoved();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         /// <param name="move"></param>
         /// <param name="height"></param>
         public void Walk(ref Vector2 move, ref float height)
         {
-            FPSNavigation.WantToCrouch = KeyboardNavigation.IsPressed(NavigationEnum.Crouch);
 
-            FPSNavigation.IsCrouching = FPSNavigation.WantToCrouch 
-                || (FPSNavigation.IsCrouching && !FPSNavigation.CanJump());
 
-            if (FPSNavigation.IsCrouching)
-            {
-                move.x *= (move.x > 0) ? data.forwardSpeed.y : data.backwardSpeed.y;
-                move.y *= data.lateralSpeed.y;
-            }
-            else if (KeyboardNavigation.IsPressed(NavigationEnum.sprint))
-            {
-                move.x *= (move.x > 0) ? data.forwardSpeed.z : data.backwardSpeed.z;
-                move.y *= data.lateralSpeed.z;
-            }
-            else
-            {
-                move.x *= (move.x > 0) ? data.forwardSpeed.x : data.backwardSpeed.x;
-                move.y *= data.lateralSpeed.x;
-            }
+            
 
-            FPSNavigation.skeleton.transform.localPosition = new Vector3
-            (
-                0, 
-                Mathf.Lerp
-                (
-                    FPSNavigation.skeleton.transform.localPosition.y, 
-                    (FPSNavigation.IsCrouching) ? data.squatHeight : data.standHeight, 
-                    data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed
-                ), 
-                0);
+            
 
             FPSNavigation.ComputeGravity(KeyboardNavigation.IsPressed(NavigationEnum.Jump), ref height);
         }
@@ -121,6 +83,21 @@ namespace umi3d.baseBrowser.Navigation
             );
 
             FPSNavigation.BaseHandleView(angleView, angularSpeed);
+        }
+
+        public Vector3 HandleUserInput()
+        {
+            Vector3 result = Vector3.zero;
+            if (KeyboardNavigation.IsPressed(NavigationEnum.Forward)) result.z += 1;
+            if (KeyboardNavigation.IsPressed(NavigationEnum.Backward)) result.z -= 1;
+            if (KeyboardNavigation.IsPressed(NavigationEnum.Right)) result.x += 1;
+            if (KeyboardNavigation.IsPressed(NavigationEnum.Left)) result.x -= 1;
+
+            data.WantToJump = KeyboardNavigation.IsPressed(NavigationEnum.Jump);
+            data.WantToCrouch = KeyboardNavigation.IsPressed(NavigationEnum.Crouch);
+            data.WantToSprint = KeyboardNavigation.IsPressed(NavigationEnum.sprint);
+
+            return result;
         }
     }
 }

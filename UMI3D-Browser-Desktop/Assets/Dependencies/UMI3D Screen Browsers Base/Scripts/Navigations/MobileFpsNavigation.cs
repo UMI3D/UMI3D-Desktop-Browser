@@ -63,19 +63,8 @@ namespace umi3d.mobileBrowser.Controller
 
         public void Walk(ref Vector2 move, ref float height)
         {
-            FPSNavigation.IsCrouching = FPSNavigation.WantToCrouch || (FPSNavigation.IsCrouching && !FPSNavigation.CanJump());
-            if (FPSNavigation.IsCrouching)
-            {
-                move.x *= (move.x > 0) ? data.forwardSpeed.y : data.backwardSpeed.y;
-                move.y *= data.lateralSpeed.z;
-            }
-            else
-            {
-                move.x *= (move.x > 0) ? data.forwardSpeed.z : data.backwardSpeed.z;
-                move.y *= data.lateralSpeed.z;
-            }
+            
 
-            FPSNavigation.skeleton.transform.localPosition = new Vector3(0, Mathf.Lerp(FPSNavigation.skeleton.transform.localPosition.y, (FPSNavigation.IsCrouching) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed), 0);
 
             FPSNavigation.ComputeGravity(FPSNavigation.WantToJump, ref height);
         }

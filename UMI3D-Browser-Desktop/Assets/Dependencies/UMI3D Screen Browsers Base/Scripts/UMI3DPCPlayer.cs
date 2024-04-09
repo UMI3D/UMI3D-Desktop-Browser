@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Collections.Generic;
+using umi3d.baseBrowser.Navigation;
 using umi3d.cdk.navigation;
 
 using UnityEngine;
@@ -22,11 +24,59 @@ namespace umi3d.baseBrowser
 {
     public class UMI3DPCPlayer : MonoBehaviour
     {
+        public BaseFPSData fpsData;
+        public Transform playerTransform;
+        public Transform skeleton;
+        public Transform topHead;
+        /// <summary>
+        /// List of point which from rays will be created to check if there is a navmesh under player's feet
+        /// </summary>
+        public List<Transform> feetRaycastOrigin;
+        public LayerMask obstacleLayer;
+        public LayerMask navmeshLayer;
+
         [HideInInspector] public UMI3DNavigation navigation = new();
+
+        UMI3DCollisionManager collisionManager;
+        UMI3DMovementManager movementManager;
+        PCNavigationDelegate navigationDelegate;
 
         void Awake()
         {
+            collisionManager = new()
+            {
+                data = fpsData,
+                playerTransform = playerTransform,
+                topHead = topHead,
+                feetRaycastOrigin = feetRaycastOrigin,
+                navmeshLayer = navmeshLayer,
+                obstacleLayer = obstacleLayer
+            };
+            movementManager = new()
+            {
+                data = fpsData,
+                playerTransform = playerTransform,
+                skeleton = skeleton,
+                collisionManager = collisionManager,
+                concreteFPSNavigation = null // TODO replace that.
+            };
+            navigationDelegate = new()
+            {
+                data = fpsData,
+                playerTransform = playerTransform,
+                collisionManager = collisionManager,
+            };
+            navigation.Init(navigationDelegate);
+        }
 
+        private void Update()
+        {
+            if (!navigationDelegate.isActive)
+            {
+                return; 
+            }
+
+            movementManager.ComputeMovement();
         }
     }
 }

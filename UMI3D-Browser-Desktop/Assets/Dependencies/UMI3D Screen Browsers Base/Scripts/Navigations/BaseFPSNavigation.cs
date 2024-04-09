@@ -26,18 +26,10 @@ namespace umi3d.baseBrowser.Navigation
     {
         #region Fields
 
-        public static BaseFPSNavigation Instance => s_instance;
-        protected static BaseFPSNavigation s_instance;
-
         public IConcreteFPSNavigation CurrentNavigation;
 
         protected List<IConcreteFPSNavigation> m_navigations = new List<IConcreteFPSNavigation>();
         public List<IConcreteFPSNavigation> Navigations => m_navigations;
-
-        /// <summary>
-        /// Is player active ?
-        /// </summary>
-        protected bool isActive = false;
 
         [Header("Player Body")]
         public Transform skeleton;
@@ -63,20 +55,9 @@ namespace umi3d.baseBrowser.Navigation
         {
             isActive = true;
             state = State.Default;
-            jumpData = new JumpData()
-            {
-                data = data,
-                maxJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(data.gravity) * data.MaxJumpHeight)
-            };
             UpdateBaseHeight();
         }
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override void Disable()
-        {
-            isActive = false;
-        }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -87,25 +68,10 @@ namespace umi3d.baseBrowser.Navigation
             navigationDestination = transform.parent.position + data.position.Struct();
         }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="data"></param>
-        public override void Teleport(ulong environmentId, common.TeleportDto data)
-        {
-            transform.localPosition = data.position.Struct();
-            groundHeight = data.position.Y;
-            transform.localRotation = data.rotation.Quaternion();
-            UpdateBaseHeight();
-        }
-
         #endregion
 
         private void Awake()
         {
-            if (s_instance == null) s_instance = this;
-            else Destroy(this.gameObject);
-
             //TODO instantiate concrete navigations.
             m_navigations.Add
             (
@@ -158,10 +124,10 @@ namespace umi3d.baseBrowser.Navigation
             (currentCapsuleBase, currentCapsuleEnd) = GetCapsuleSphereCenters();
 
             if
-            (
+            ( 
                 (BaseCursor.Movement == BaseCursor.CursorMovement.Free
                 || BaseCursor.Movement == BaseCursor.CursorMovement.FreeHidden)
-                && navigation != Navigation.Flying
+                && navigation != NavigationMode.Flying
             )
             {
                 float height = transform.position.y;
@@ -171,23 +137,6 @@ namespace umi3d.baseBrowser.Navigation
             }
 
             return true;
-        }
-
-        public override NavigationData GetNavigationData()
-        {
-            return new NavigationData()
-            {
-                speed = new Vector3Dto()
-                {
-                    X = Movement.y / Time.deltaTime,
-                    Z = Movement.x / Time.deltaTime,
-                    Y = heightDelta / Time.deltaTime
-                },
-                
-                crouching = IsCrouching,
-                jumping = jumpData.IsJumping,
-                grounded = lastHeight == groundHeight,
-            };
         }
 
         #endregion
