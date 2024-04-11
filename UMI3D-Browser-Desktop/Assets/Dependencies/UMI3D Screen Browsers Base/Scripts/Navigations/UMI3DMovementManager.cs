@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.cursor;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.baseBrowser.Navigation;
 using umi3d.common;
@@ -13,6 +14,7 @@ public sealed class UMI3DMovementManager
     public Transform playerTransform;
     public Transform skeleton;
     public UMI3DCollisionManager collisionManager;
+    public UMI3DCameraManager cameraManager;
     public BaseFPSData data;
     public IConcreteFPSNavigation concreteFPSNavigation;
 
@@ -23,16 +25,19 @@ public sealed class UMI3DMovementManager
 
     public void ComputeMovement()
     {
-        if (data.continuousDestination.HasValue)
+        if(
+                (BaseCursor.Movement == BaseCursor.CursorMovement.Free
+                || BaseCursor.Movement == BaseCursor.CursorMovement.FreeHidden)
+                && data.navigationMode != E_NavigationMode.Debug
+            )
         {
-            var delta = data.continuousDestination.Value - playerTransform.position;
-            data.Movement = delta.normalized;
-        }
-        else
-        {
-            data.Movement = concreteFPSNavigation.HandleUserInput();
+            data.playerMovement = Vector3.zero;
+            ComputeVerticalMovement();
+            playerTransform.position += data.playerMovement;
+            return;
         }
 
+        cameraManager.HandleView();
         ComputeHorizontalAndVerticalMovement();
 
         Func<bool> isNearDestination 
@@ -48,25 +53,23 @@ public sealed class UMI3DMovementManager
 
     void ComputeHorizontalAndVerticalMovement()
     {
-        playerWillMoveDelegate?.Invoke(data.Movement);
-        
-        switch (data.navigationMode)
-        {
-            case E_NavigationMode.Default:
-                Walk();
-                break;
-            case E_NavigationMode.Continuous:
-                Walk();
-                break;
-            case E_NavigationMode.Teleportation:
-                Teleport();
-                break;
-            case E_NavigationMode.Debug:
-                Fly();
-                break;
-            default:
-                break;
-        }
+        ComputeHorizontalMovement();
+
+        ComputeVerticalMovement();
+
+        // Get a desire direction relative to the player rotation.
+        data.playerMovement = playerTransform.rotation * new Vector3(
+            data.playerMovement.x,
+            data.playerMovement.y,
+            data.playerMovement.z
+        );
+
+        // Get a direction relative to the player that is possible (avoid collision).
+        data.playerMovement = collisionManager.GetPossibleDirection(data.playerMovement);
+
+        playerWillMoveDelegate?.Invoke(data.playerMovement);
+
+        playerTransform.position += data.playerMovement;
 
         // Update the skeleton position to reflect the squatting or stand up position.
         skeleton.transform.localPosition = new Vector3
@@ -81,14 +84,12 @@ public sealed class UMI3DMovementManager
             0
         );
 
-        ComputeVerticalMovement();
-
-        playerMovedDelegate?.Invoke(data.Movement);
+        playerMovedDelegate?.Invoke(data.playerMovement);
     }
 
     void Walk()
     {
-        if (data.Movement == Vector3.zero)
+        if (data.playerMovement == Vector3.zero)
         {
             return;
         }
@@ -143,23 +144,13 @@ public sealed class UMI3DMovementManager
             }
         };
 
-        data.Movement.z *= (data.Movement.z > 0) ? forwardSpeed() : backwardSpeed();
-        data.Movement.x *= lateralSpeed();
+        data.playerMovement.z *= (data.playerMovement.z > 0) ? forwardSpeed() : backwardSpeed();
+        data.playerMovement.x *= lateralSpeed();
 
         // Get a world desire direction.
-        data.Movement *= Time.deltaTime;
+        data.playerMovement *= Time.deltaTime;
 
-        // Get a desire direction relative to the player rotation.
-        data.Movement = playerTransform.rotation * new Vector3(
-            data.Movement.x,
-            data.Movement.y,
-            data.Movement.z
-        );
-
-        // Get a direction relative to the player that is possible (avoid collision).
-        data.Movement = collisionManager.GetPossibleDirection(data.Movement);
-
-        playerTransform.position += data.Movement;
+        
     }
 
     void Teleport()
@@ -169,27 +160,62 @@ public sealed class UMI3DMovementManager
 
     void Fly()
     {
-        data.Movement.z *= data.flyingSpeed;
-        data.Movement.x *= data.flyingSpeed;
-        //height += data.flyingSpeed * ((data.IsCrouching ? -1 : 0) + (data.WantToJump ? 1 : 0));
+        data.playerMovement.z *= data.flyingSpeed;
+        data.playerMovement.x *= data.flyingSpeed;
+    }
+
+    void ComputeHorizontalMovement()
+    {
+        if (data.continuousDestination.HasValue)
+        {
+            var delta = data.continuousDestination.Value - playerTransform.position;
+            data.playerMovement = delta.normalized;
+        }
+        else
+        {
+            concreteFPSNavigation.HandleUserInput();
+        }
+
+        switch (data.navigationMode)
+        {
+            case E_NavigationMode.Default:
+                Walk();
+                break;
+            case E_NavigationMode.Continuous:
+                Walk();
+                break;
+            case E_NavigationMode.Teleportation:
+                Teleport();
+                break;
+            case E_NavigationMode.Debug:
+                Fly();
+                break;
+            default:
+                break;
+        }
     }
 
     void ComputeVerticalMovement()
     {
-        //var height = playerTransform.position.y;
+        if (data.continuousDestination.HasValue)
+        {
+            return;
+        }
+
+        if (data.navigationMode == E_NavigationMode.Default)
+        {
+            data.playerMovement.y = data.flyingSpeed * ((data.IsCrouching ? -1 : 0) + (data.WantToJump ? 1 : 0));
+
+            return;
+        }
 
         if (data.WantToJump && collisionManager.CanJump())
         {
-            data.velocity = data.maxJumpVelocity;
+            data.playerVerticalVelocity = data.maxJumpVelocity;
         }
-        data.velocity += data.gravity * Time.deltaTime;
+        data.playerVerticalVelocity += data.gravity * Time.deltaTime;
 
-        data.Movement.y = data.velocity * Time.deltaTime;
-
-
-
-
-        playerTransform.Translate(0, height - playerTransform.position.y, 0);
+        data.playerMovement.y = data.playerVerticalVelocity * Time.deltaTime;
     }
 
 
@@ -203,28 +229,28 @@ public sealed class UMI3DMovementManager
     public void ComputeGravity(bool jumping, ref float height)
     {
         
-        if (height >= data.groundYAxis)
-        {
-            heightDelta = (height - lastHeight) * Time.deltaTime;
-            lastHeight = height;
-            return;
-        }
+        //if (height >= data.groundYAxis)
+        //{
+        //    heightDelta = (height - lastHeight) * Time.deltaTime;
+        //    lastHeight = height;
+        //    return;
+        //}
 
-        float offset = Mathf.Abs(height - groundHeight);
-        if
-        (
-            offset < data.maxStepHeight + stepEpsilon
-            && offset > data.stepEpsilon
-            && hasGroundHeightChangedLastFrame
-        ) height = Mathf.Lerp(height, groundHeight, .5f);
-        else
-        {
-            data.velocity = 0;
-            height = groundHeight;
-        }
+        //float offset = Mathf.Abs(height - groundHeight);
+        //if
+        //(
+        //    offset < data.maxStepHeight + stepEpsilon
+        //    && offset > data.stepEpsilon
+        //    && hasGroundHeightChangedLastFrame
+        //) height = Mathf.Lerp(height, groundHeight, .5f);
+        //else
+        //{
+        //    data.velocity = 0;
+        //    height = groundHeight;
+        //}
 
 
-        heightDelta = (height - lastHeight) * Time.deltaTime;
-        lastHeight = height;
+        //heightDelta = (height - lastHeight) * Time.deltaTime;
+        //lastHeight = height;
     }
 }

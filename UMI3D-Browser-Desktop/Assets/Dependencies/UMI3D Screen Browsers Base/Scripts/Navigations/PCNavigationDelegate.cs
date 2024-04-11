@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using umi3d.baseBrowser.Navigation;
+using umi3d.cdk;
 using umi3d.cdk.navigation;
 using umi3d.common;
 
@@ -25,6 +26,7 @@ public class PCNavigationDelegate : INavigationDelegate
     #region Dependencies
 
     public Transform playerTransform;
+    public Transform personalSkeletonContainer;
     public UMI3DCollisionManager collisionManager;
     public BaseFPSData data;
 
@@ -32,6 +34,7 @@ public class PCNavigationDelegate : INavigationDelegate
     /// Is player active ?
     /// </summary>
     public bool isActive = false;
+    public UMI3DNodeInstance globalFrame;
 
     #endregion
 
@@ -51,9 +54,9 @@ public class PCNavigationDelegate : INavigationDelegate
         {
             speed = new Vector3Dto()
             {
-                X = data.Movement.x / Time.deltaTime,
-                Y = data.Movement.y / Time.deltaTime,
-                Z = data.Movement.z / Time.deltaTime
+                X = data.playerMovement.x / Time.deltaTime,
+                Y = data.playerMovement.y / Time.deltaTime,
+                Z = data.playerMovement.z / Time.deltaTime
             },
             crouching = data.IsCrouching,
             jumping = data.IsJumping,
@@ -74,6 +77,37 @@ public class PCNavigationDelegate : INavigationDelegate
 
     public void UpdateFrame(ulong environmentId, FrameRequestDto data)
     {
-        throw new System.NotImplementedException();
+        if (data.FrameId == 0)
+        {
+            // bind the personalSkeletonContainer to the Scene.
+            personalSkeletonContainer.SetParent(
+                UMI3DLoadingHandler.Instance.transform,
+                true
+            );
+            globalFrame.Delete -= GlobalFrameDeleted;
+            globalFrame = null;
+        }
+        else
+        {
+            // bind the personalSkeletonContainer to the Frame.
+            UMI3DNodeInstance Frame = UMI3DEnvironmentLoader.GetNode(environmentId, data.FrameId);
+            if (Frame != null)
+            {
+                globalFrame = Frame;
+                personalSkeletonContainer.SetParent(
+                    Frame.transform,
+                    true
+                );
+                globalFrame.Delete += GlobalFrameDeleted;
+            }
+        }
+    }
+
+    void GlobalFrameDeleted()
+    {
+        personalSkeletonContainer.SetParent(
+            UMI3DLoadingHandler.Instance.transform,
+            true
+        );
     }
 }

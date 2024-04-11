@@ -39,12 +39,6 @@ public sealed class UMI3DCollisionManager
 
     #endregion
 
-    float lastObstacleHeight = .5f;
-    /// <summary>
-    /// Has <see cref="groundYAxis"/> changed last frame ?
-    /// </summary>
-    bool hasGroundHeightChangedLastFrame = false;
-
     #region Collision
 
     const int hitsLength = 10;

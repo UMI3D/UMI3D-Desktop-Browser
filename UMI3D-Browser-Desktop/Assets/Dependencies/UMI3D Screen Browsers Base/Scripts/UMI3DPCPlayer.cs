@@ -17,7 +17,6 @@ limitations under the License.
 using System.Collections.Generic;
 using umi3d.baseBrowser.Navigation;
 using umi3d.cdk.navigation;
-
 using UnityEngine;
 
 namespace umi3d.baseBrowser
@@ -25,15 +24,25 @@ namespace umi3d.baseBrowser
     public class UMI3DPCPlayer : MonoBehaviour
     {
         public BaseFPSData fpsData;
+        public Transform personalSkeletonContainer;
         public Transform playerTransform;
         public Transform skeleton;
+
+        [Header("Player Collision Component")]
         public Transform topHead;
         /// <summary>
         /// List of point which from rays will be created to check if there is a navmesh under player's feet
         /// </summary>
         public List<Transform> feetRaycastOrigin;
+
+        [Header("Collision layer")]
         public LayerMask obstacleLayer;
         public LayerMask navmeshLayer;
+
+        [Header("Camera")]
+        public Transform viewpoint;
+        public Transform neckPivot;
+        public Transform head;
 
         [HideInInspector] public UMI3DNavigation navigation = new();
 
@@ -58,12 +67,16 @@ namespace umi3d.baseBrowser
                 playerTransform = playerTransform,
                 skeleton = skeleton,
                 collisionManager = collisionManager,
-                concreteFPSNavigation = null // TODO replace that.
+                concreteFPSNavigation = new KeyboardAndMouseFpsNavigation()
+                {
+                    data = fpsData,
+                }
             };
             navigationDelegate = new()
             {
                 data = fpsData,
                 playerTransform = playerTransform,
+                personalSkeletonContainer = personalSkeletonContainer,
                 collisionManager = collisionManager,
             };
             navigation.Init(navigationDelegate);

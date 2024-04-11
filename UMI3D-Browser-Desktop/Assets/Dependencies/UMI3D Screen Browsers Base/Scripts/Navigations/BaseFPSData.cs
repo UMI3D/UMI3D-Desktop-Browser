@@ -14,23 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using UnityEngine;
-using static umi3d.baseBrowser.Navigation.BaseFPSNavigation;
 
 namespace umi3d.baseBrowser.Navigation
 {
     [CreateAssetMenu(fileName = "FPSData", menuName = "UMI3D/FPS Data", order = 1)]
     public class BaseFPSData : ScriptableObject
     {
-        [Header("View")]
-        [Tooltip("Range of the viewpoint x angle (down to up)")]
-        public Vector2 XAngleRange;
-        [Tooltip("Range of the head x angle (down to up). \n" +
-            "The head will follow the viewpoint bounded by this range")]
-        public Vector2 XDisplayAngleRange;
-        [Tooltip("Range of the viewpoint/head y angle (left to right)")]
-        public Vector2 YAngleRange;
-        [Tooltip("Angular speed of the viewpoint (up/down, left/right)")]
-        public Vector2 AngularViewSpeed;
+        [Header("View (Camera, Head, Neck)")]
+        [Tooltip("Max rotation angle for the head around x axis (down to up).")]
+        public Vector2 maxXHeadAngle = new Vector2(-60f, 70f);
+        [Tooltip("Max rotation angle for the viewpoint(camera) around the x axis (down to up)")]
+        public float maxXCameraAngle = 90f;
+        [Tooltip("Max rotation angle for the viewpoint(camera)/head around the y axis (left to right)")]
+        public float maxYCameraAngle = 90f;
+        [Tooltip("Max rotation angle for the neck.")]
+        public float maxNeckAngle = 50f;
+        [Tooltip("Angular speed of the viewpoint(camera) (up/down, left/right)")]
+        public Vector2 AngularViewSpeed = new Vector2(5f, 5f);
+
+        [Header("Vertical Movement")]
+        [Tooltip("gravity force")]
+        public float gravity;
+        [Tooltip("Max jump velocity")]
+        public float maxJumpVelocity => Mathf.Sqrt(2 * Mathf.Abs(gravity) * MaxJumpHeight);
 
         [Header("Walk")]
         [Tooltip("speed when moving forward (normal, squatting, running)")]
@@ -46,15 +52,7 @@ namespace umi3d.baseBrowser.Navigation
         [Tooltip("min jump height when short pressing jump action")]
         public float MinJumpHeight;
 
-        [Header("Vertical Movement")]
-        [Tooltip("gravity force")]
-        public float gravity;
-        [Tooltip("Current Vertical Velocity")]
-        public float velocity;
-        [Tooltip("Max jump velocity")]
-        public float maxJumpVelocity => Mathf.Sqrt(2 * Mathf.Abs(gravity) * MaxJumpHeight);
-
-        [Header("Squat")]
+        [Header("Crouch")]
         [Tooltip("player height while squatting")]
         public float squatHeight;
         [Tooltip("player height while standing")]
@@ -76,8 +74,6 @@ namespace umi3d.baseBrowser.Navigation
         [Tooltip("Maximum height for step.")]
         public float maxStepHeight = .2f;
         public float stepEpsilon = 0.05f;
-
-        [Header("Collision")]
         [Tooltip("Current ground height.")]
         public float groundYAxis = 0f;
 
@@ -86,18 +82,30 @@ namespace umi3d.baseBrowser.Navigation
         public bool WantToJump;
         [Tooltip("Whether or not the player is jumping.")]
         public bool IsJumping;
-        [Tooltip("Whether or not the player want to squat.")]
+        [Tooltip("Whether or not the player want to crouch.")]
         public bool WantToCrouch;
-        [Tooltip("Whether or not the player is squatting.")]
+        [Tooltip("Whether or not the player is crouching.")]
         public bool IsCrouching;
         [Tooltip("Whether or not the player want to Sprint.")]
         public bool WantToSprint;
         [Tooltip("Whether or not the player is Sprinting.")]
         public bool IsSprinting;
+        [Tooltip("Whether or not the player want to look around.")]
+        public bool WantToLookAround;
 
         [Header("Movement")]
         [Tooltip("Navigation mode")]
         public E_NavigationMode navigationMode;
+        [Tooltip("Camera mode")]
+        public E_CameraMode cameraMode;
+        [Tooltip("Cursor mode")]
+        public E_CursorMode cursorMode;
+
+        /// <summary>
+        /// Current Vertical Velocity of the player.
+        /// </summary>
+        [HideInInspector]
+        public float playerVerticalVelocity;
         /// <summary>
         /// Movement of the player.
         /// 
@@ -108,7 +116,7 @@ namespace umi3d.baseBrowser.Navigation
         /// </list>
         /// </summary>
         [HideInInspector]
-        public Vector3 Movement;
+        public Vector3 playerMovement;
         /// <summary>
         /// Destination for continuous navigation.<br/>
         /// If the value is null then there is no server navigation.<br/>
@@ -116,5 +124,15 @@ namespace umi3d.baseBrowser.Navigation
         /// </summary>
         [HideInInspector]
         public Vector3? continuousDestination;
+        /// <summary>
+        /// Movement of the camera according to axis.
+        /// 
+        /// <list type="bullet">
+        /// <item>x: Down to up (positive: up)</item>
+        /// <item>y: Left to right (positive: right)</item>
+        /// </list>
+        /// </summary>
+        [HideInInspector]
+        public Vector2 cameraMovement;
     }
 }
