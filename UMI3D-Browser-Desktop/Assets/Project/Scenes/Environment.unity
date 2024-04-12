@@ -967,12 +967,6 @@ PrefabInstance:
     - {fileID: 677918340405283886, guid: 29302a75356134040aac5a7d0d21d2f2, type: 3}
     - {fileID: 677918340405283883, guid: 29302a75356134040aac5a7d0d21d2f2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 29302a75356134040aac5a7d0d21d2f2, type: 3}
---- !u!4 &677918340615927782 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8526456778121594302, guid: 29302a75356134040aac5a7d0d21d2f2,
-    type: 3}
-  m_PrefabInstance: {fileID: 677918340615927781}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &677918340615927783 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8675927111129791007, guid: 29302a75356134040aac5a7d0d21d2f2,
@@ -994,60 +988,3 @@ MonoBehaviour:
   boneType: 58
   isActif: 1
   isOverrider: 1
---- !u!4 &677918340615927785 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8675927111129788418, guid: 29302a75356134040aac5a7d0d21d2f2,
-    type: 3}
-  m_PrefabInstance: {fileID: 677918340615927781}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &677918340615927786 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8675927111129788483, guid: 29302a75356134040aac5a7d0d21d2f2,
-    type: 3}
-  m_PrefabInstance: {fileID: 677918340615927781}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &677918340615927787 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8675927111129788482, guid: 29302a75356134040aac5a7d0d21d2f2,
-    type: 3}
-  m_PrefabInstance: {fileID: 677918340615927781}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &677918340615927788 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8675927111129789342, guid: 29302a75356134040aac5a7d0d21d2f2,
-    type: 3}
-  m_PrefabInstance: {fileID: 677918340615927781}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &677918340615927789 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 677918340405283885, guid: 29302a75356134040aac5a7d0d21d2f2,
-    type: 3}
-  m_PrefabInstance: {fileID: 677918340615927781}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &677918340615927790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 677918340615927789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae8000593a125114d802d76d0fd64b52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fpsData: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
-  personalSkeletonContainer: {fileID: 498482121}
-  playerTransform: {fileID: 498482121}
-  skeleton: {fileID: 677918340615927782}
-  topHead: {fileID: 677918340615927788}
-  feetRaycastOrigin: []
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 1536
-  navmeshLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  viewpoint: {fileID: 677918340615927787}
-  neckPivot: {fileID: 677918340615927785}
-  head: {fileID: 677918340615927786}

@@ -16,6 +16,7 @@ limitations under the License.
 
 using System.Collections.Generic;
 using umi3d.baseBrowser.Navigation;
+using umi3d.cdk.collaboration.userCapture;
 using umi3d.cdk.navigation;
 using UnityEngine;
 
@@ -47,6 +48,7 @@ namespace umi3d.baseBrowser
         [HideInInspector] public UMI3DNavigation navigation = new();
 
         UMI3DCollisionManager collisionManager;
+        UMI3DCameraManager cameraManager;
         UMI3DMovementManager movementManager;
         PCNavigationDelegate navigationDelegate;
 
@@ -61,12 +63,21 @@ namespace umi3d.baseBrowser
                 navmeshLayer = navmeshLayer,
                 obstacleLayer = obstacleLayer
             };
+            cameraManager = new()
+            {
+                data = fpsData,
+                playerTransform = playerTransform,
+                viewpoint = viewpoint,
+                neckPivot = neckPivot,
+                head = head
+            };
             movementManager = new()
             {
                 data = fpsData,
                 playerTransform = playerTransform,
                 skeleton = skeleton,
                 collisionManager = collisionManager,
+                cameraManager = cameraManager,
                 concreteFPSNavigation = new KeyboardAndMouseFpsNavigation()
                 {
                     data = fpsData,
@@ -80,6 +91,9 @@ namespace umi3d.baseBrowser
                 collisionManager = collisionManager,
             };
             navigation.Init(navigationDelegate);
+
+            // SKELETON SERVICE
+            CollaborationSkeletonsManager.Instance.navigation = navigationDelegate; //also use to init manager via Instance call
         }
 
         private void Update()
