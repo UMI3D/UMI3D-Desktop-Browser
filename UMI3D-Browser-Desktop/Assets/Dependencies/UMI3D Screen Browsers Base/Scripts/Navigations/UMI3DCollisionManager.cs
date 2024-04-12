@@ -172,7 +172,6 @@ public sealed class UMI3DCollisionManager
     /// <returns></returns>
     public bool CanJump()
     {
-        UnityEngine.Debug.Log($"IsGrounded {IsGrounded}");
         return data.WantToJump
             && IsGrounded
             && !WillCollide(

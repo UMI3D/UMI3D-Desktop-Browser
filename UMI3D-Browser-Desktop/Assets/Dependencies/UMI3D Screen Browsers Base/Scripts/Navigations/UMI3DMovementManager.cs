@@ -35,6 +35,7 @@ public sealed class UMI3DMovementManager
             data.playerMovement *= Time.deltaTime;
             data.playerMovement = collisionManager.GetPossibleDirection(data.playerMovement);
             playerTransform.position += data.playerMovement;
+            UpdateSkeletonHeight();
             return;
         }
 
@@ -56,6 +57,7 @@ public sealed class UMI3DMovementManager
     {
         ComputeHorizontalMovement();
         ComputeVerticalMovement();
+
         // Get a world desire direction.
         data.playerMovement *= Time.deltaTime;
 
@@ -72,22 +74,27 @@ public sealed class UMI3DMovementManager
 
         playerTransform.position += data.playerMovement;
 
-        // Update the skeleton position to reflect the squatting or stand up position.
-        //skeleton.localPosition = new Vector3
-        //(
-        //    0,
-        //    Mathf.Lerp
-        //    (
-        //        skeleton.localPosition.y,
-        //        (data.IsCrouching) ? data.crouchYAxis : 0f,
-        //        data.crouchSpeed == 0 ? 1000000 : Time.deltaTime / data.crouchSpeed
-        //    ),
-        //    0
-        //);
-
-        skeleton.localPosition = new Vector3(0f, (data.IsCrouching) ? data.crouchYAxis : 0f, 0f);
+        UpdateSkeletonHeight();
 
         playerMovedDelegate?.Invoke(data.playerMovement);
+    }
+
+    /// <summary>
+    /// Update the skeleton position to reflect the crouching or standing up position.
+    /// </summary>
+    void UpdateSkeletonHeight()
+    {
+        skeleton.localPosition = new Vector3
+        (
+            0,
+            Mathf.Lerp
+            (
+                skeleton.localPosition.y,
+                (data.IsCrouching) ? data.crouchYAxis : 0f,
+                data.crouchSpeed == 0 ? 1000000 : Time.deltaTime / data.crouchSpeed
+            ),
+            0
+        );
     }
 
     void Walk()
