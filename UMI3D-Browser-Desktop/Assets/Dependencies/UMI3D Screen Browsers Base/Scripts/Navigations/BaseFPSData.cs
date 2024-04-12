@@ -54,11 +54,9 @@ namespace umi3d.baseBrowser.Navigation
 
         [Header("Crouch")]
         [Tooltip("player height while squatting")]
-        public float squatHeight;
-        [Tooltip("player height while standing")]
-        public float standHeight;
+        public float crouchYAxis = -.3f;
         [Tooltip("time to switch between standing and squatting (both ways)")]
-        public float squatSpeed;
+        public float crouchSpeed = 0.2f;
         [Tooltip("Torso angle when squatting")]
         public float squatTorsoAngle;
 

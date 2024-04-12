@@ -157,11 +157,24 @@ public sealed class UMI3DCollisionManager
 
     /// <summary>
     /// Checks if player can jump.
+    /// <list type="bullet">
+    /// <item>
+    /// <see cref="BaseFPSData.WantToJump"/> is true.
+    /// </item>
+    /// <item>
+    /// <see cref="IsGrounded"/> is true.
+    /// </item>
+    /// <item>
+    /// The player will not collide with an obstacle.
+    /// </item>
+    /// </list>
     /// </summary>
     /// <returns></returns>
     public bool CanJump()
     {
-        return IsGrounded
+        UnityEngine.Debug.Log($"IsGrounded {IsGrounded}");
+        return data.WantToJump
+            && IsGrounded
             && !WillCollide(
                 playerTransform.up,
                 out var hit,

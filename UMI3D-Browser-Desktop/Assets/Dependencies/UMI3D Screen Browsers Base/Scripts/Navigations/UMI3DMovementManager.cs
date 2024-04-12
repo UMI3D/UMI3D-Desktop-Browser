@@ -25,14 +25,15 @@ public sealed class UMI3DMovementManager
 
     public void ComputeMovement()
     {
+        data.playerMovement = Vector3.zero;
         if(
                 (BaseCursor.Movement == BaseCursor.CursorMovement.Free
                 || BaseCursor.Movement == BaseCursor.CursorMovement.FreeHidden)
-                && data.navigationMode != E_NavigationMode.Debug
             )
         {
-            data.playerMovement = Vector3.zero;
             ComputeVerticalMovement();
+            data.playerMovement *= Time.deltaTime;
+            data.playerMovement = collisionManager.GetPossibleDirection(data.playerMovement);
             playerTransform.position += data.playerMovement;
             return;
         }
@@ -49,56 +50,52 @@ public sealed class UMI3DMovementManager
         {
             data.continuousDestination = null;
         }
-
-        UnityEngine.Debug.Log($"message end");
     }
 
     void ComputeHorizontalAndVerticalMovement()
     {
         ComputeHorizontalMovement();
-
         ComputeVerticalMovement();
+        // Get a world desire direction.
+        data.playerMovement *= Time.deltaTime;
 
         // Get a desire direction relative to the player rotation.
-        data.playerMovement = playerTransform.rotation * new Vector3(
-            data.playerMovement.x,
-            data.playerMovement.y,
-            data.playerMovement.z
-        );
+        data.playerMovement = playerTransform.rotation * data.playerMovement;
 
         // Get a direction relative to the player that is possible (avoid collision).
+        // TODO: collisionManager.GetPossibleDirection is wrong.
         data.playerMovement = collisionManager.GetPossibleDirection(data.playerMovement);
-        UnityEngine.Debug.Log($"player movement = {data.playerMovement}");
+        if (data.playerMovement != Vector3.zero)
+            UnityEngine.Debug.Log($"player movement = {data.playerMovement}");
 
         playerWillMoveDelegate?.Invoke(data.playerMovement);
 
         playerTransform.position += data.playerMovement;
 
         // Update the skeleton position to reflect the squatting or stand up position.
-        skeleton.transform.localPosition = new Vector3
-        (
-            0,
-            Mathf.Lerp
-            (
-                skeleton.transform.localPosition.y,
-                (data.IsCrouching) ? data.squatHeight : data.standHeight,
-                data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed
-            ),
-            0
-        );
+        //skeleton.localPosition = new Vector3
+        //(
+        //    0,
+        //    Mathf.Lerp
+        //    (
+        //        skeleton.localPosition.y,
+        //        (data.IsCrouching) ? data.crouchYAxis : 0f,
+        //        data.crouchSpeed == 0 ? 1000000 : Time.deltaTime / data.crouchSpeed
+        //    ),
+        //    0
+        //);
+
+        skeleton.localPosition = new Vector3(0f, (data.IsCrouching) ? data.crouchYAxis : 0f, 0f);
 
         playerMovedDelegate?.Invoke(data.playerMovement);
     }
 
     void Walk()
     {
-        UnityEngine.Debug.Log($"Walk start");
         if (data.playerMovement == Vector3.zero)
         {
             return;
         }
-
-        data.IsCrouching = collisionManager.ShouldSquat;
 
         Func<float> forwardSpeed = () =>
         {
@@ -150,11 +147,6 @@ public sealed class UMI3DMovementManager
 
         data.playerMovement.z *= (data.playerMovement.z > 0) ? forwardSpeed() : backwardSpeed();
         data.playerMovement.x *= lateralSpeed();
-
-        // Get a world desire direction.
-        data.playerMovement *= Time.deltaTime;
-
-        UnityEngine.Debug.Log($"Walk end {data.playerMovement}");
     }
 
     void Teleport()
@@ -206,55 +198,22 @@ public sealed class UMI3DMovementManager
             return;
         }
 
-        if (data.navigationMode == E_NavigationMode.Default)
+        if (data.navigationMode == E_NavigationMode.Debug)
         {
-            data.playerMovement.y = data.flyingSpeed * ((data.IsCrouching ? -1 : 0) + (data.WantToJump ? 1 : 0));
+            data.playerMovement.y = data.flyingSpeed * ((data.WantToCrouch ? -1 : 0) + (data.WantToJump ? 1 : 0));
 
             return;
         }
 
-        if (data.WantToJump && collisionManager.CanJump())
+        data.IsCrouching = collisionManager.ShouldSquat;
+
+        data.playerVerticalVelocity = 0f;
+        if (collisionManager.CanJump())
         {
-            data.playerVerticalVelocity = data.maxJumpVelocity;
+            data.playerVerticalVelocity += data.maxJumpVelocity;
         }
         data.playerVerticalVelocity += data.gravity * Time.deltaTime;
 
         data.playerMovement.y = data.playerVerticalVelocity * Time.deltaTime;
-    }
-
-
-
-
-    /// <summary>
-    /// Applies gravity to player and makes it jump.
-    /// </summary>
-    /// <param name="jumping"></param>
-    /// <param name="height"></param>
-    public void ComputeGravity(bool jumping, ref float height)
-    {
-        
-        //if (height >= data.groundYAxis)
-        //{
-        //    heightDelta = (height - lastHeight) * Time.deltaTime;
-        //    lastHeight = height;
-        //    return;
-        //}
-
-        //float offset = Mathf.Abs(height - groundHeight);
-        //if
-        //(
-        //    offset < data.maxStepHeight + stepEpsilon
-        //    && offset > data.stepEpsilon
-        //    && hasGroundHeightChangedLastFrame
-        //) height = Mathf.Lerp(height, groundHeight, .5f);
-        //else
-        //{
-        //    data.velocity = 0;
-        //    height = groundHeight;
-        //}
-
-
-        //heightDelta = (height - lastHeight) * Time.deltaTime;
-        //lastHeight = height;
     }
 }
