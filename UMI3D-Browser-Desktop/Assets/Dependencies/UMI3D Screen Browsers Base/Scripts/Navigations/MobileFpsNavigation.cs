@@ -40,10 +40,6 @@ namespace umi3d.mobileBrowser.Controller
                 joystickInput.y
             );
 
-            //data.WantToJump = KeyboardNavigation.IsPressed(NavigationEnum.Jump);
-            //data.WantToCrouch = KeyboardNavigation.IsPressed(NavigationEnum.Crouch);
-            //data.WantToSprint = KeyboardNavigation.IsPressed(NavigationEnum.sprint);
-
             // Camera movement
             Debug.Assert(CameraDirection != null, "CameraDirection must not be null.");
             joystickInput = CameraDirection?.Invoke() ?? Vector2.zero;

@@ -49,6 +49,9 @@ public sealed class UMI3DCameraManager
                     data.maxYCameraAngle
                 );
                 break;
+            case E_CameraMode.Free:
+                viewpointYAxis = (viewpointPivot.localRotation.eulerAngles.NormalizeAngle() + ((Vector3)angularSpeed).NormalizeAngle()).y;
+                break;
             default:
                 break;
         }
