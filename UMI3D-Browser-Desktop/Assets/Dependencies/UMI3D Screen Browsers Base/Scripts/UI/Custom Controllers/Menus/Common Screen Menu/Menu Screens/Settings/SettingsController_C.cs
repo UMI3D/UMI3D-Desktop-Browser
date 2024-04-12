@@ -228,7 +228,7 @@ namespace umi3d.commonScreen.menu
         protected override void InitElement()
         {
             base.InitElement();
-            fpsData = Resources.Load<BaseFPSData>("Scriptables/GamePanel/FPSData");
+            fpsData = Resources.Load<BaseFPSData>("FPSData");
 
             CamreraSensibility.LocaliseLabel = new LocalisationAttribute("Camera sensibility", "ControlsSettings", "CameraSensibility");
             CamreraSensibility.lowValue = 2f;

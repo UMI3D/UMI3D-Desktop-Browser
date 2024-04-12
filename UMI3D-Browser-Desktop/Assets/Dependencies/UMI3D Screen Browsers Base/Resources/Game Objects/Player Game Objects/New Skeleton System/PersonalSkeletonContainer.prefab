@@ -58,7 +58,7 @@ MonoBehaviour:
   navmeshLayer:
     serializedVersion: 2
     m_Bits: 512
-  viewpoint: {fileID: 8675927111129788482}
+  viewpointPivot: {fileID: 8675927111129788419}
   neckPivot: {fileID: 8675927111129788418}
   head: {fileID: 8675927111129788483}
 --- !u!1001 &5113404444379048072
@@ -299,6 +299,12 @@ Transform:
 --- !u!4 &8675927111129788418 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3620641808951043025, guid: 97f300c1a3f6d9b4b9d5c2f9cf0d5d0d,
+    type: 3}
+  m_PrefabInstance: {fileID: 5357048486819140563}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8675927111129788419 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3620641808951043024, guid: 97f300c1a3f6d9b4b9d5c2f9cf0d5d0d,
     type: 3}
   m_PrefabInstance: {fileID: 5357048486819140563}
   m_PrefabAsset: {fileID: 0}

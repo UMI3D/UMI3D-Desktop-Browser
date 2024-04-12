@@ -49,6 +49,8 @@ public sealed class UMI3DMovementManager
         {
             data.continuousDestination = null;
         }
+
+        UnityEngine.Debug.Log($"message end");
     }
 
     void ComputeHorizontalAndVerticalMovement()
@@ -66,6 +68,7 @@ public sealed class UMI3DMovementManager
 
         // Get a direction relative to the player that is possible (avoid collision).
         data.playerMovement = collisionManager.GetPossibleDirection(data.playerMovement);
+        UnityEngine.Debug.Log($"player movement = {data.playerMovement}");
 
         playerWillMoveDelegate?.Invoke(data.playerMovement);
 
@@ -89,6 +92,7 @@ public sealed class UMI3DMovementManager
 
     void Walk()
     {
+        UnityEngine.Debug.Log($"Walk start");
         if (data.playerMovement == Vector3.zero)
         {
             return;
@@ -150,7 +154,7 @@ public sealed class UMI3DMovementManager
         // Get a world desire direction.
         data.playerMovement *= Time.deltaTime;
 
-        
+        UnityEngine.Debug.Log($"Walk end {data.playerMovement}");
     }
 
     void Teleport()

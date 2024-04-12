@@ -41,7 +41,7 @@ namespace umi3d.baseBrowser
         public LayerMask navmeshLayer;
 
         [Header("Camera")]
-        public Transform viewpoint;
+        public Transform viewpointPivot;
         public Transform neckPivot;
         public Transform head;
 
@@ -67,7 +67,7 @@ namespace umi3d.baseBrowser
             {
                 data = fpsData,
                 playerTransform = playerTransform,
-                viewpoint = viewpoint,
+                viewpointPivot = viewpointPivot,
                 neckPivot = neckPivot,
                 head = head
             };
