@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using umi3d.baseBrowser.inputs.interactions;
 using UnityEngine;
 
@@ -24,19 +25,47 @@ namespace umi3d.baseBrowser.Navigation
 
         public void HandleUserInput()
         {
-            // Player movement
-            data.playerMovement = Vector3.zero;
-            if (KeyboardNavigation.IsPressed(NavigationEnum.Forward)) data.playerMovement.z += 1;
-            if (KeyboardNavigation.IsPressed(NavigationEnum.Backward)) data.playerMovement.z -= 1;
-            if (KeyboardNavigation.IsPressed(NavigationEnum.Right)) data.playerMovement.x += 1;
-            if (KeyboardNavigation.IsPressed(NavigationEnum.Left)) data.playerMovement.x -= 1;
+            // Player translation speed.
+            Func<float> xAxis = () =>
+            {
+                float result = 0f;
+                if (KeyboardNavigation.IsPressed(NavigationEnum.Right))
+                {
+                    result += 1f;
+                }
+                if (KeyboardNavigation.IsPressed(NavigationEnum.Left))
+                {
+                    result += -1f;
+                }
+                return result;
+            };
+
+            Func<float> zAxis = () =>
+            {
+                float result = 0f;
+                if (KeyboardNavigation.IsPressed(NavigationEnum.Forward)) 
+                {
+                    result += 1f;
+                }
+                if (KeyboardNavigation.IsPressed(NavigationEnum.Backward))
+                {
+                    result += -1f;
+                }
+                return result;
+            };
+
+            data.playerTranslationSpeed = new Vector3(
+                xAxis(),
+                0f,
+                zAxis()
+            );
 
             data.WantToJump = KeyboardNavigation.IsPressed(NavigationEnum.Jump);
             data.WantToCrouch = KeyboardNavigation.IsPressed(NavigationEnum.Crouch);
             data.WantToSprint = KeyboardNavigation.IsPressed(NavigationEnum.sprint);
 
             // Camera movement
-            data.cameraMovement = new Vector2( 
+            data.cameraRotation = new Vector2( 
                 -1 * Input.GetAxis("Mouse Y"),
                 Input.GetAxis("Mouse X")
             );

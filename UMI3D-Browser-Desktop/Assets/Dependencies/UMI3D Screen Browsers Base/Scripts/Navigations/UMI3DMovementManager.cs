@@ -25,22 +25,23 @@ public sealed class UMI3DMovementManager
 
     public void ComputeMovement()
     {
-        data.playerMovement = Vector3.zero;
-        if(
+        data.playerTranslationSpeed = Vector3.zero;
+        data.playerTranslation = Vector3.zero;
+        if (
                 (BaseCursor.Movement == BaseCursor.CursorMovement.Free
                 || BaseCursor.Movement == BaseCursor.CursorMovement.FreeHidden)
             )
         {
-            ComputeVerticalMovement();
-            data.playerMovement *= Time.deltaTime;
-            data.playerMovement = collisionManager.GetPossibleDirection(data.playerMovement);
-            playerTransform.position += data.playerMovement;
-            UpdateSkeletonHeight();
+            ComputeVerticalSpeed();
+            ComputeHorizontalAndVerticalTranslation();
+            UpdatePlayerPosition();
             return;
         }
 
-        cameraManager.HandleView();
-        ComputeHorizontalAndVerticalMovement();
+        ComputeHorizontalSpeed();
+        ComputeVerticalSpeed();
+        ComputeHorizontalAndVerticalTranslation();
+        UpdatePlayerPosition();
 
         Func<bool> isNearDestination 
             = () => Vector3.Distance(
@@ -51,32 +52,6 @@ public sealed class UMI3DMovementManager
         {
             data.continuousDestination = null;
         }
-    }
-
-    void ComputeHorizontalAndVerticalMovement()
-    {
-        ComputeHorizontalMovement();
-        ComputeVerticalMovement();
-
-        // Get a world desire direction.
-        data.playerMovement *= Time.deltaTime;
-
-        // Get a desire direction relative to the player rotation.
-        data.playerMovement = playerTransform.rotation * data.playerMovement;
-
-        // Get a direction relative to the player that is possible (avoid collision).
-        // TODO: collisionManager.GetPossibleDirection is wrong.
-        data.playerMovement = collisionManager.GetPossibleDirection(data.playerMovement);
-        if (data.playerMovement != Vector3.zero)
-            UnityEngine.Debug.Log($"player movement = {data.playerMovement}");
-
-        playerWillMoveDelegate?.Invoke(data.playerMovement);
-
-        playerTransform.position += data.playerMovement;
-
-        UpdateSkeletonHeight();
-
-        playerMovedDelegate?.Invoke(data.playerMovement);
     }
 
     /// <summary>
@@ -99,11 +74,6 @@ public sealed class UMI3DMovementManager
 
     void Walk()
     {
-        if (data.playerMovement == Vector3.zero)
-        {
-            return;
-        }
-
         Func<float> forwardSpeed = () =>
         {
             if (data.IsCrouching)
@@ -152,8 +122,8 @@ public sealed class UMI3DMovementManager
             }
         };
 
-        data.playerMovement.z *= (data.playerMovement.z > 0) ? forwardSpeed() : backwardSpeed();
-        data.playerMovement.x *= lateralSpeed();
+        data.playerTranslationSpeed.z *= (data.playerTranslationSpeed.z > 0) ? forwardSpeed() : backwardSpeed();
+        data.playerTranslationSpeed.x *= lateralSpeed();
     }
 
     void Teleport()
@@ -163,20 +133,25 @@ public sealed class UMI3DMovementManager
 
     void Fly()
     {
-        data.playerMovement.z *= data.flyingSpeed;
-        data.playerMovement.x *= data.flyingSpeed;
+        data.playerTranslationSpeed.z *= data.flyingSpeed;
+        data.playerTranslationSpeed.x *= data.flyingSpeed;
     }
 
-    void ComputeHorizontalMovement()
+    void ComputeHorizontalSpeed()
     {
         if (data.continuousDestination.HasValue)
         {
             var delta = data.continuousDestination.Value - playerTransform.position;
-            data.playerMovement = delta.normalized;
+            data.playerTranslationSpeed = delta.normalized; // TODO: add speed here.
         }
         else
         {
             concreteFPSNavigation.HandleUserInput();
+        }
+
+        if (data.playerTranslationSpeed == Vector3.zero)
+        {
+            return;
         }
 
         switch (data.navigationMode)
@@ -198,7 +173,7 @@ public sealed class UMI3DMovementManager
         }
     }
 
-    void ComputeVerticalMovement()
+    void ComputeVerticalSpeed()
     {
         if (data.continuousDestination.HasValue)
         {
@@ -207,20 +182,47 @@ public sealed class UMI3DMovementManager
 
         if (data.navigationMode == E_NavigationMode.Debug)
         {
-            data.playerMovement.y = data.flyingSpeed * ((data.WantToCrouch ? -1 : 0) + (data.WantToJump ? 1 : 0));
+            data.playerTranslationSpeed.y = data.flyingSpeed * ((data.WantToCrouch ? -1 : 0) + (data.WantToJump ? 1 : 0));
 
             return;
         }
 
         data.IsCrouching = collisionManager.ShouldSquat;
 
-        data.playerVerticalVelocity = 0f;
-        if (collisionManager.CanJump())
+        Func<float> verticalVelocity = () =>
         {
-            data.playerVerticalVelocity += data.maxJumpVelocity;
-        }
-        data.playerVerticalVelocity += data.gravity * Time.deltaTime;
+            float gravityVelocity = data.gravity * Time.deltaTime;
+            if (collisionManager.CanJump())
+            {
+                return data.maxJumpVelocity + gravityVelocity;
+            }
+            else
+            {
+                return gravityVelocity;
+            }
+        };
 
-        data.playerMovement.y = data.playerVerticalVelocity * Time.deltaTime;
+        data.playerTranslationSpeed.y = verticalVelocity();
+    }
+
+    void ComputeHorizontalAndVerticalTranslation()
+    {
+        // Get a world desire direction and distance.
+        data.playerTranslation = data.playerTranslationSpeed * Time.deltaTime;
+
+        // Get a desire direction and distance relative to the player rotation.
+        data.playerTranslation = playerTransform.rotation * data.playerTranslation;
+
+        // Get a direction and distance relative to the player that is possible (avoid collision).
+        // TODO: collisionManager.GetPossibleDirection is wrong.
+        data.playerTranslation = collisionManager.GetPossibleDirection(data.playerTranslation);
+    }
+
+    void UpdatePlayerPosition()
+    {
+        playerWillMoveDelegate?.Invoke(data.playerTranslation);
+        playerTransform.position += data.playerTranslation;
+        UpdateSkeletonHeight();
+        playerMovedDelegate?.Invoke(data.playerTranslation);
     }
 }

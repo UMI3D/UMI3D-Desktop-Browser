@@ -12,18 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdbf0d855aeab454d90f79dd1cf38cc4, type: 3}
   m_Name: FPSData
   m_EditorClassIdentifier: 
-  XAngleRange: {x: -90, y: 90}
-  XDisplayAngleRange: {x: -60, y: 70}
-  YAngleRange: {x: -90, y: 90}
+  maxXHeadAngle: {x: -60, y: 70}
+  maxXCameraAngle: 90
+  maxYCameraAngle: 90
+  maxNeckAngle: 50
+  AngularViewSpeed: {x: 5, y: 5}
+  gravity: -9.807
   forwardSpeed: {x: 3, y: 1, z: 10}
   lateralSpeed: {x: 1, y: 1, z: 7}
   backwardSpeed: {x: 3, y: 1, z: 10}
-  AngularViewSpeed: {x: 5, y: 5}
-  gravity: -9.807
   MaxJumpHeight: 1
   MinJumpHeight: 0.3
-  squatSpeed: 0.2
-  squatHeight: -0.3
-  standHeight: 0
+  crouchYAxis: -0.3
+  crouchSpeed: 0.2
   squatTorsoAngle: 30
   flyingSpeed: 5
+  playerRadius: 0.3
+  maxSlopeAngle: 45
+  maxStepHeight: 0.2
+  stepEpsilon: 0.05
+  groundYAxis: 0
+  WantToJump: 0
+  IsJumping: 0
+  WantToCrouch: 0
+  IsCrouching: 1
+  WantToSprint: 0
+  IsSprinting: 0
+  WantToLookAround: 0
+  navigationMode: 0
+  cameraMode: 2
+  cursorMode: 0
+  playerVerticalVelocity: -0.19043136
+  playerMovement: {x: 0, y: 0, z: 0}
+  cameraMovement: {x: -0, y: 0}

@@ -34,7 +34,7 @@ namespace umi3d.mobileBrowser.Controller
             // x: Left to right.
             // y: back to front. 
             Vector2 joystickInput = MoveDirection?.Invoke() ?? Vector2.zero;
-            data.playerMovement = new Vector3(
+            data.playerTranslationSpeed = new Vector3(
                 joystickInput.x, 
                 0f, 
                 joystickInput.y
@@ -43,7 +43,7 @@ namespace umi3d.mobileBrowser.Controller
             // Camera movement
             Debug.Assert(CameraDirection != null, "CameraDirection must not be null.");
             joystickInput = CameraDirection?.Invoke() ?? Vector2.zero;
-            data.cameraMovement = new Vector2(
+            data.cameraRotation = new Vector2(
                 -1 * joystickInput.y,
                 joystickInput.x
             );

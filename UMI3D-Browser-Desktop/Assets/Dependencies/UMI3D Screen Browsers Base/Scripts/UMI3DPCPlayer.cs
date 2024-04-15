@@ -94,6 +94,10 @@ namespace umi3d.baseBrowser
 
             // SKELETON SERVICE
             CollaborationSkeletonsManager.Instance.navigation = navigationDelegate; //also use to init manager via Instance call
+
+#if !UNITY_EDITOR
+            fpsData.navigationMode = E_NavigationMode.Default;
+#endif
         }
 
         private void Update()
@@ -103,6 +107,7 @@ namespace umi3d.baseBrowser
                 return; 
             }
 
+            cameraManager.HandleView();
             movementManager.ComputeMovement();
         }
     }

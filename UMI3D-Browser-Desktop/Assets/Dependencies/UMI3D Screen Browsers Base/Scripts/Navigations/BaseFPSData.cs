@@ -100,12 +100,8 @@ namespace umi3d.baseBrowser.Navigation
         public E_CursorMode cursorMode;
 
         /// <summary>
-        /// Current Vertical Velocity of the player.
-        /// </summary>
-        [HideInInspector]
-        public float playerVerticalVelocity;
-        /// <summary>
-        /// Movement of the player.
+        /// Translation of the player.<br/>
+        /// To be add to the player transform position to move the player.
         /// 
         /// <list type="bullet">
         /// <item>x: Left to right (positive: right)</item>
@@ -114,7 +110,18 @@ namespace umi3d.baseBrowser.Navigation
         /// </list>
         /// </summary>
         [HideInInspector]
-        public Vector3 playerMovement;
+        public Vector3 playerTranslation;
+        /// <summary>
+        /// Translation speed of the player.
+        /// 
+        /// <list type="bullet">
+        /// <item>x: Left to right (positive: right)</item>
+        /// <item>y: Down to up (positive: up)</item>
+        /// <item>z: back to front (positive: front)</item>
+        /// </list>
+        /// </summary>
+        [HideInInspector]
+        public Vector3 playerTranslationSpeed;
         /// <summary>
         /// Destination for continuous navigation.<br/>
         /// If the value is null then there is no server navigation.<br/>
@@ -123,7 +130,7 @@ namespace umi3d.baseBrowser.Navigation
         [HideInInspector]
         public Vector3? continuousDestination;
         /// <summary>
-        /// Movement of the camera according to axis.
+        /// Rotation of the camera according to x and y axis.
         /// 
         /// <list type="bullet">
         /// <item>x: Down to up (positive: up)</item>
@@ -131,6 +138,6 @@ namespace umi3d.baseBrowser.Navigation
         /// </list>
         /// </summary>
         [HideInInspector]
-        public Vector2 cameraMovement;
+        public Vector2 cameraRotation;
     }
 }

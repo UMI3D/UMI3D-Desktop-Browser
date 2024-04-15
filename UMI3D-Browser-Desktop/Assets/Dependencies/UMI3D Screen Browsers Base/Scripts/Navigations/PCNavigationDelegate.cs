@@ -54,9 +54,9 @@ public class PCNavigationDelegate : INavigationDelegate
         {
             speed = new Vector3Dto()
             {
-                X = data.playerMovement.x / Time.deltaTime,
-                Y = data.playerMovement.y / Time.deltaTime,
-                Z = data.playerMovement.z / Time.deltaTime
+                X = data.playerTranslationSpeed.x,
+                Y = data.playerTranslationSpeed.y,
+                Z = data.playerTranslationSpeed.z
             },
             crouching = data.IsCrouching,
             jumping = data.IsJumping,

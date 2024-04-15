@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.cursor;
 using umi3d.baseBrowser.Navigation;
 using UnityEngine;
 
@@ -18,6 +19,14 @@ public sealed class UMI3DCameraManager
     
     public void HandleView()
     {
+        if (
+                (BaseCursor.Movement == BaseCursor.CursorMovement.Free
+                || BaseCursor.Movement == BaseCursor.CursorMovement.FreeHidden)
+            )
+        {
+            return;
+        }
+
         data.cameraMode = E_CameraMode.Navigation; // Debug only.
         if (data.cameraMode != E_CameraMode.Locked)
         {
@@ -26,7 +35,7 @@ public sealed class UMI3DCameraManager
                 : E_CameraMode.Navigation;
         }
 
-        Vector2 angularSpeed = data.cameraMovement * data.AngularViewSpeed;
+        Vector2 angularSpeed = data.cameraRotation * data.AngularViewSpeed;
 
         // ------ Horizontal movement ------
         float viewpointYAxis = 0f;
