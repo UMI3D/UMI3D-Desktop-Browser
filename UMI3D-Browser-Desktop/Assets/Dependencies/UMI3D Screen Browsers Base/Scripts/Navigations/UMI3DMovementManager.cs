@@ -41,6 +41,7 @@ public sealed class UMI3DMovementManager
         ComputeVerticalSpeed();
         ComputeHorizontalAndVerticalTranslation();
         UpdatePlayerPosition();
+        collisionManager.ComputeGround();
 
         Func<bool> isNearDestination 
             = () => Vector3.Distance(

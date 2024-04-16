@@ -36,10 +36,6 @@ namespace umi3d.baseBrowser
         /// </summary>
         public List<Transform> feetRaycastOrigin;
 
-        [Header("Collision layer")]
-        public LayerMask obstacleLayer;
-        public LayerMask navmeshLayer;
-
         [Header("Camera")]
         public Transform viewpointPivot;
         public Transform neckPivot;
@@ -65,9 +61,7 @@ namespace umi3d.baseBrowser
             {
                 data = fpsData,
                 playerTransform = playerTransform,
-                colliderDelegate = colliderDelegate,
-                navmeshLayer = navmeshLayer,
-                obstacleLayer = obstacleLayer
+                colliderDelegate = colliderDelegate
             };
             cameraManager = new()
             {

@@ -27,9 +27,6 @@ public sealed class UMI3DCollisionManager
     public Transform playerTransform;
     public IPlayerColliderDelegate colliderDelegate;
 
-    public LayerMask obstacleLayer;
-    public LayerMask navmeshLayer;
-
     public BaseFPSData data;
 
     #endregion
@@ -44,13 +41,16 @@ public sealed class UMI3DCollisionManager
     /// </summary>
     public bool IsCrouched => data.WantToCrouch || !CanStandUp();
 
+    /// <summary>
+    /// Get the ground height position.
+    /// </summary>
     public void ComputeGround()
     {
         var isColliding = colliderDelegate.WillCollide(
             Vector3.down,
             out RaycastHit hit,
             100,
-            navmeshLayer
+            data.navmeshLayer
         );
 
         if (isColliding)
@@ -86,7 +86,7 @@ public sealed class UMI3DCollisionManager
             desiredTranslation,
             out var hit,
             IsGrounded ? desiredTranslation.magnitude * 1.01f : 1f,
-            obstacleLayer
+            data.obstacleLayer
         );
         if (!willCollide)
         {
@@ -107,7 +107,7 @@ public sealed class UMI3DCollisionManager
             projectedDirection,
             out hit,
             .2f,
-            obstacleLayer
+            data.obstacleLayer
         );
         return willCollide ? Vector3.zero : projectedDirection;
     }
@@ -124,7 +124,7 @@ public sealed class UMI3DCollisionManager
             Vector3.down,
             out RaycastHit hit,
             100,
-            navmeshLayer
+            data.navmeshLayer
         );
     }
 
@@ -151,7 +151,7 @@ public sealed class UMI3DCollisionManager
                 Vector3.up,
                 out var hit,
                 data.MaxJumpHeight,
-                obstacleLayer
+                data.obstacleLayer
             );
     }
 
@@ -167,7 +167,7 @@ public sealed class UMI3DCollisionManager
                 Vector3.zero,
                 out RaycastHit hit,
                 0f,
-                obstacleLayer
+                data.obstacleLayer
             );
         };
         return !data.IsCrouching || isCrouchingAndWillNotCollideIfStandUp();

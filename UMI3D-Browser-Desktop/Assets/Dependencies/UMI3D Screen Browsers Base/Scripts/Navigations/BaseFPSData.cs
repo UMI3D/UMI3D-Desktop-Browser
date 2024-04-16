@@ -65,6 +65,10 @@ namespace umi3d.baseBrowser.Navigation
         public float flyingSpeed;
 
         [Header("Collision")]
+        [Tooltip("Layers for obstacles.")]
+        public LayerMask obstacleLayer;
+        [Tooltip("Layers for navmesh.")]
+        public LayerMask navmeshLayer;
         [Tooltip("Center of the top sphere that compose the capsule collider.")]
         public Vector3 topSphereCenter;
         [Tooltip("Radius of the spheres that compose the capsule collider.")]

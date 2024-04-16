@@ -27,6 +27,12 @@ MonoBehaviour:
   crouchSpeed: 0.2
   squatTorsoAngle: 30
   flyingSpeed: 5
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1536
+  navmeshLayer:
+    serializedVersion: 2
+    m_Bits: 512
   topSphereCenter: {x: 0, y: 1.5, z: 0}
   capsuleRadius: 0.3
   maxSlopeAngle: 45
@@ -36,13 +42,13 @@ MonoBehaviour:
   WantToJump: 0
   IsJumping: 0
   WantToCrouch: 0
-  IsCrouching: 1
+  IsCrouching: 0
   WantToSprint: 0
   IsSprinting: 0
   WantToLookAround: 0
   navigationMode: 0
   cameraMode: 2
   cursorMode: 0
-  playerTranslation: {x: 0, y: 0, z: 0}
+  playerTranslation: {x: 0, y: 0, z: -0}
   playerTranslationSpeed: {x: 0, y: 0, z: 0}
   cameraRotation: {x: -0, y: 0}
