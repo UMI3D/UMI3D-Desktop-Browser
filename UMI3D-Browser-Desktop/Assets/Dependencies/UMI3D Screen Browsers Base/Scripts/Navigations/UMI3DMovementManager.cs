@@ -188,26 +188,33 @@ public sealed class UMI3DMovementManager
             return;
         }
 
-        data.IsCrouching = collisionManager.IsCrouched;
+        data.IsCrouching = data.WantToCrouch || !collisionManager.CanStandUp();
+        if (collisionManager.IsGrounded)
+        {
+            data.verticalVelocity = 0f;
+        }
 
         Func<float> verticalVelocity = () =>
         {
             float result = 0f;
-            float gravityVelocity = data.gravity * Time.deltaTime;
-            if (collisionManager.CanJump())
+            
+            if (data.WantToJump && collisionManager.CanJump())
             {
-                result = data.maxJumpVelocity;
+                data.IsJumping = true;
+                result = data.MaxJumpVelocity;
+            }
+            else
+            {
+                data.IsJumping = false;
             }
 
-            if (!collisionManager.IsGrounded)
-            {
-                result += gravityVelocity;
-            }
+            result += data.GravityVelocity;
 
             return result;
         };
 
-        data.playerTranslationSpeed.y = verticalVelocity();
+        data.verticalVelocity += verticalVelocity();
+        data.playerTranslationSpeed.y = data.verticalVelocity;
     }
 
     void ComputeHorizontalAndVerticalTranslation()

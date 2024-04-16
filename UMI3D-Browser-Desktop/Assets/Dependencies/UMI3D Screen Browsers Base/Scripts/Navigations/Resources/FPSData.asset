@@ -17,15 +17,13 @@ MonoBehaviour:
   maxYCameraAngle: 90
   maxNeckAngle: 50
   AngularViewSpeed: {x: 5, y: 5}
-  gravity: -9.807
   forwardSpeed: {x: 3, y: 1, z: 10}
   lateralSpeed: {x: 1, y: 1, z: 7}
   backwardSpeed: {x: 3, y: 1, z: 10}
-  MaxJumpHeight: 1
-  MinJumpHeight: 0.3
+  gravity: -9.807
+  maxJumpAltitude: 1
   crouchYAxis: -0.3
   crouchSpeed: 0.2
-  squatTorsoAngle: 30
   flyingSpeed: 5
   obstacleLayer:
     serializedVersion: 2

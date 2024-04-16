@@ -32,12 +32,6 @@ namespace umi3d.baseBrowser.Navigation
         [Tooltip("Angular speed of the viewpoint(camera) (up/down, left/right)")]
         public Vector2 AngularViewSpeed = new Vector2(5f, 5f);
 
-        [Header("Vertical Movement")]
-        [Tooltip("gravity force")]
-        public float gravity;
-        [Tooltip("Max jump velocity")]
-        public float maxJumpVelocity => Mathf.Sqrt(2 * Mathf.Abs(gravity) * MaxJumpHeight);
-
         [Header("Walk")]
         [Tooltip("speed when moving forward (normal, squatting, running)")]
         public Vector3 forwardSpeed;
@@ -45,20 +39,26 @@ namespace umi3d.baseBrowser.Navigation
         public Vector3 lateralSpeed;
         [Tooltip("speed when moving backward (normal, squatting, running)")]
         public Vector3 backwardSpeed;
-
-        [Header("Jump")]
-        [Tooltip("max jump height when long pressing jump action")]
-        public float MaxJumpHeight;
-        [Tooltip("min jump height when short pressing jump action")]
-        public float MinJumpHeight;
+       
+        [Header("Vertical Movement")]
+        [Tooltip("gravity force")]
+        public float gravity = -9.807f;
+        [Tooltip("Max jump altitude when long pressing jump action")]
+        public float maxJumpAltitude = 1f;
+        /// <summary>
+        /// Velocity resulting of the jump force.
+        /// </summary>
+        public float MaxJumpVelocity => Mathf.Sqrt(2 * Mathf.Abs(gravity) * maxJumpAltitude);
+        /// <summary>
+        /// Velocity resulting of the gravity.
+        /// </summary>
+        public float GravityVelocity => gravity * Time.deltaTime;
 
         [Header("Crouch")]
-        [Tooltip("player height while squatting")]
+        [Tooltip("player height while crouching")]
         public float crouchYAxis = -.3f;
-        [Tooltip("time to switch between standing and squatting (both ways)")]
+        [Tooltip("Time to switch between standing up and crouching (both ways)")]
         public float crouchSpeed = 0.2f;
-        [Tooltip("Torso angle when squatting")]
-        public float squatTorsoAngle;
 
         [Header("Fly")]
         [Tooltip("speed when moving in every direction while flying")]
@@ -106,17 +106,12 @@ namespace umi3d.baseBrowser.Navigation
         public E_CursorMode cursorMode;
 
         /// <summary>
-        /// Translation of the player.<br/>
-        /// To be add to the player transform position to move the player.
+        /// The vertical velocity of the player.<br/><br/>
         /// 
-        /// <list type="bullet">
-        /// <item>x: Left to right (positive: right)</item>
-        /// <item>y: Down to up (positive: up)</item>
-        /// <item>z: back to front (positive: front)</item>
-        /// </list>
+        /// This value is not necessary reset each frame.
         /// </summary>
         [HideInInspector]
-        public Vector3 playerTranslation;
+        public float verticalVelocity;
         /// <summary>
         /// Translation speed of the player.
         /// 
@@ -128,6 +123,18 @@ namespace umi3d.baseBrowser.Navigation
         /// </summary>
         [HideInInspector]
         public Vector3 playerTranslationSpeed;
+        /// <summary>
+        /// Translation of the player.<br/>
+        /// To be add to the player transform position to move the player.
+        /// 
+        /// <list type="bullet">
+        /// <item>x: Left to right (positive: right)</item>
+        /// <item>y: Down to up (positive: up)</item>
+        /// <item>z: back to front (positive: front)</item>
+        /// </list>
+        /// </summary>
+        [HideInInspector]
+        public Vector3 playerTranslation;
         /// <summary>
         /// Destination for continuous navigation.<br/>
         /// If the value is null then there is no server navigation.<br/>

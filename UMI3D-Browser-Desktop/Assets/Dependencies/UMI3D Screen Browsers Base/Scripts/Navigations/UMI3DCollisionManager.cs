@@ -35,11 +35,10 @@ public sealed class UMI3DCollisionManager
     /// Is player currently grounded ?
     /// </summary>
     public bool IsGrounded => Mathf.Abs(playerTransform.position.y - data.groundYAxis) < data.maxStepHeight;
-
     /// <summary>
-    /// Whether the user want to crouch or is crouching and cannot stand up.
+    /// Whether or not the player is below the ground.
     /// </summary>
-    public bool IsCrouched => data.WantToCrouch || !CanStandUp();
+    public bool IsBelowGround => playerTransform.position.y < data.groundYAxis;
 
     /// <summary>
     /// Get the ground height position.
@@ -82,34 +81,63 @@ public sealed class UMI3DCollisionManager
             return Vector3.zero;
         }
 
+        desiredTranslation = GetPossibleVerticalTranslation(desiredTranslation);
+
         bool willCollide = colliderDelegate.WillCollide(
             desiredTranslation,
             out var hit,
-            IsGrounded ? desiredTranslation.magnitude * 1.01f : 1f,
+            desiredTranslation.magnitude + .1f,
             data.obstacleLayer
         );
         if (!willCollide)
         {
             return desiredTranslation;
         }
-        UnityEngine.Debug.Log($"collide = {hit.transform?.name}");
+        UnityEngine.Debug.Log($"collide = {hit.transform?.name}, normal = {hit.normal}");
 
-
-        Vector3 normal = Vector3.ProjectOnPlane(
-            hit.normal,
-            Vector3.up
-        );
-        Vector3 projectedDirection = Vector3.Project(
+        Vector3 projection = Vector3.ProjectOnPlane(
             desiredTranslation,
-            Quaternion.Euler(0, 90, 0) * normal
+            hit.normal
         );
         willCollide = colliderDelegate.WillCollide(
-            projectedDirection,
+            projection,
             out hit,
             .2f,
             data.obstacleLayer
         );
-        return willCollide ? Vector3.zero : projectedDirection;
+        return willCollide ? Vector3.zero : projection;
+    }
+
+    public Vector3 GetPossibleVerticalTranslation(Vector3 desiredTranslation)
+    {
+        Vector3 horizontalDesiredTranslation = new()
+        {
+            x = desiredTranslation.x,
+            y = 0f,
+            z = 0f,
+        };
+        Vector3 verticalDesiredTranslation = Vector3.up * desiredTranslation.y;
+
+        bool willCollide = colliderDelegate.WillCollide(
+            horizontalDesiredTranslation,
+            verticalDesiredTranslation,
+            out var hit,
+            data.maxStepHeight + data.stepEpsilon,
+            data.obstacleLayer
+        );
+        if (!willCollide)
+        {
+            return desiredTranslation;
+        }
+
+        UnityEngine.Debug.Log($"hit = {hit.transform.position.y}");
+        var y = Mathf.Lerp(playerTransform.position.y, hit.transform.position.y, 2);
+        return new()
+        {
+            x = desiredTranslation.x,
+            y = y,
+            z = desiredTranslation.z,
+        };
     }
 
     /// <summary>
@@ -145,12 +173,11 @@ public sealed class UMI3DCollisionManager
     /// <returns></returns>
     public bool CanJump()
     {
-        return data.WantToJump
-            && IsGrounded
+        return IsGrounded
             && !colliderDelegate.WillCollide(
                 Vector3.up,
                 out var hit,
-                data.MaxJumpHeight,
+                data.maxJumpAltitude,
                 data.obstacleLayer
             );
     }
