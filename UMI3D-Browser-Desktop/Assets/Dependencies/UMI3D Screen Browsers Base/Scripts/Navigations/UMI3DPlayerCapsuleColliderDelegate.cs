@@ -46,22 +46,17 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
             this.radius = radius;
         }
 
-        public CapsuleCollider GetWorldPosition(Vector3 playerPosition)
+        /// <summary>
+        /// Project a collider toward <paramref name="direction"/>.
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public CapsuleCollider ProjectCollider(Vector3 direction)
         {
             return new()
             {
-                topSphereCenter = topSphereCenter + playerPosition,
-                bottomSphereCenter = bottomSphereCenter + playerPosition,
-                radius = radius
-            };
-        }
-
-        public CapsuleCollider ProjectCollider(Vector3 offset)
-        {
-            return new()
-            {
-                topSphereCenter = topSphereCenter + offset,
-                bottomSphereCenter = bottomSphereCenter + offset,
+                topSphereCenter = topSphereCenter + direction,
+                bottomSphereCenter = bottomSphereCenter + direction,
                 radius = radius
             };
         }
@@ -69,9 +64,8 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
 
     CapsuleCollider capsule;
     CapsuleCollider worldPositionCapsule;
-    CapsuleCollider worldPositionCapsuleWithOffset;
 #if UNITY_EDITOR
-    CapsuleCollider projectedCapsule;
+    CapsuleCollider debugCapsule;
 #endif
 
     public void Init()
@@ -90,22 +84,18 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
 
     public void UpdateWorldPositionCapsule()
     {
-        worldPositionCapsule = capsule.GetWorldPosition(playerTransform.position);
-    }
-
-    public void UpdateWorldPositionCapsule(Vector3 offset)
-    {
-        worldPositionCapsuleWithOffset = worldPositionCapsule.GetWorldPosition(offset);
+        worldPositionCapsule = capsule.ProjectCollider(playerTransform.position);
     }
 
     public bool WillCollide(
         Vector3 direction,
         out RaycastHit hit,
         float maxDistance,
-        LayerMask layer
+        LayerMask layer,
+        bool drawGizmo = false
     )
     {
-        UpdateProjectedCapsule(direction * maxDistance);
+        UpdateDebugCapsule(worldPositionCapsule, direction * maxDistance);
         return Physics.CapsuleCast(
                 worldPositionCapsule.bottomSphereCenter,
                 worldPositionCapsule.topSphereCenter,
@@ -122,11 +112,15 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
         Vector3 direction,
         out RaycastHit hit,
         float maxDistance,
-        LayerMask layer
+        LayerMask layer,
+        bool drawGizmo = false
     )
     {
-        UpdateWorldPositionCapsule(offset);
-        //UpdateProjectedCapsule(direction * maxDistance);
+        CapsuleCollider worldPositionCapsuleWithOffset = worldPositionCapsule.ProjectCollider(offset);
+        if (drawGizmo)
+        {
+            UpdateDebugCapsule(worldPositionCapsuleWithOffset, direction);
+        }
         return Physics.CapsuleCast(
                 worldPositionCapsuleWithOffset.bottomSphereCenter,
                 worldPositionCapsuleWithOffset.topSphereCenter,
@@ -138,10 +132,10 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
             );
     }
 
-    public void UpdateProjectedCapsule(Vector3 offset)
+    public void UpdateDebugCapsule(CapsuleCollider capsule, Vector3 direction)
     {
 #if UNITY_EDITOR
-        projectedCapsule = worldPositionCapsule.ProjectCollider(offset);
+        debugCapsule = capsule.ProjectCollider(direction);
 #endif
     }
 
@@ -156,8 +150,8 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
 
         // Projected capsule.
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(projectedCapsule.bottomSphereCenter, projectedCapsule.radius);
-        Gizmos.DrawWireSphere(projectedCapsule.topSphereCenter, projectedCapsule.radius);
+        Gizmos.DrawWireSphere(debugCapsule.bottomSphereCenter, debugCapsule.radius);
+        Gizmos.DrawWireSphere(debugCapsule.topSphereCenter, debugCapsule.radius);
 #endif
     }
 }

@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using MathNet.Numerics;
 using System;
 using System.Collections;
@@ -80,32 +81,58 @@ public sealed class UMI3DCollisionManager
             // No movement allowed that can ends up in the vacuum.
             return Vector3.zero;
         }
-
+        UnityEngine.Debug.Log($"message");
+        desiredTranslation = GetPossibleHorizontalTranslation(desiredTranslation);
         desiredTranslation = GetPossibleVerticalTranslation(desiredTranslation);
 
         bool willCollide = colliderDelegate.WillCollide(
             desiredTranslation,
-            out var hit,
-            desiredTranslation.magnitude + .1f,
+            out RaycastHit hit,
+            .2f,
             data.obstacleLayer
         );
+        return willCollide ? Vector3.zero : desiredTranslation;
+    }
+
+    public Vector3 GetPossibleHorizontalTranslation(Vector3 desiredTranslation)
+    {
+        Vector3 horizontalDesiredTranslation = new()
+        {
+            x = desiredTranslation.x,
+            y = 0f,
+            z = desiredTranslation.z,
+        };
+        bool willCollide = colliderDelegate.WillCollide(
+           horizontalDesiredTranslation,
+           out RaycastHit hit,
+           horizontalDesiredTranslation.magnitude + .1f,
+           data.obstacleLayer
+       );
         if (!willCollide)
         {
             return desiredTranslation;
         }
-        UnityEngine.Debug.Log($"collide = {hit.transform?.name}, normal = {hit.normal}");
 
         Vector3 projection = Vector3.ProjectOnPlane(
-            desiredTranslation,
+            horizontalDesiredTranslation,
             hit.normal
         );
+
         willCollide = colliderDelegate.WillCollide(
-            projection,
-            out hit,
-            .2f,
-            data.obstacleLayer
-        );
-        return willCollide ? Vector3.zero : projection;
+           projection,
+           out hit,
+           projection.magnitude + .1f,
+           data.obstacleLayer
+       );
+
+        UnityEngine.Debug.Log($"hozi hit = {hit.transform.name}, {hit.transform.position.y}");
+
+        return new()
+        {
+            x = willCollide ? 0f : projection.x,
+            y = desiredTranslation.y,
+            z = willCollide ? 0f : projection.z,
+        };
     }
 
     public Vector3 GetPossibleVerticalTranslation(Vector3 desiredTranslation)
@@ -114,14 +141,14 @@ public sealed class UMI3DCollisionManager
         {
             x = desiredTranslation.x,
             y = 0f,
-            z = 0f,
+            z = desiredTranslation.z,
         };
         Vector3 verticalDesiredTranslation = Vector3.up * desiredTranslation.y;
 
         bool willCollide = colliderDelegate.WillCollide(
             horizontalDesiredTranslation,
             verticalDesiredTranslation,
-            out var hit,
+            out RaycastHit hit,
             data.maxStepHeight + data.stepEpsilon,
             data.obstacleLayer
         );
@@ -130,12 +157,36 @@ public sealed class UMI3DCollisionManager
             return desiredTranslation;
         }
 
-        UnityEngine.Debug.Log($"hit = {hit.transform.position.y}");
-        var y = Mathf.Lerp(playerTransform.position.y, hit.transform.position.y, 2);
+        Vector3 projection = Vector3.ProjectOnPlane(
+            verticalDesiredTranslation,
+            hit.normal
+        );
+
+        willCollide = colliderDelegate.WillCollide(
+            horizontalDesiredTranslation,
+            projection,
+            out hit,
+            data.maxStepHeight + data.stepEpsilon,
+            data.obstacleLayer
+        );
+
+        if (!willCollide)
+        {
+            return new()
+            {
+                x = desiredTranslation.x,
+                y = projection.y,
+                z = desiredTranslation.z,
+            };
+        }
+
+        float delta = playerTransform.position.y - hit.transform.position.y;
+        UnityEngine.Debug.Log($"verti hit = {hit.transform.name}, {hit.transform.position.y}, {delta}");
+        //var y = Mathf.Lerp(0f, delta, 2);
         return new()
         {
             x = desiredTranslation.x,
-            y = y,
+            y = - delta,
             z = desiredTranslation.z,
         };
     }
@@ -152,7 +203,8 @@ public sealed class UMI3DCollisionManager
             Vector3.down,
             out RaycastHit hit,
             100,
-            data.navmeshLayer
+            data.navmeshLayer,
+            true
         );
     }
 

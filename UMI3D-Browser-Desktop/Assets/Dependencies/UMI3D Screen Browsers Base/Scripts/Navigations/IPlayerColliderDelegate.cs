@@ -22,7 +22,8 @@ public interface IPlayerColliderDelegate
         Vector3 direction,
         out RaycastHit hit,
         float maxDistance,
-        LayerMask layer
+        LayerMask layer,
+        bool drawGizmo = false
     );
 
     /// <summary>
@@ -41,7 +42,8 @@ public interface IPlayerColliderDelegate
         Vector3 direction,
         out RaycastHit hit,
         float maxDistance,
-        LayerMask layer
+        LayerMask layer,
+        bool drawGizmo = false
     );
 
     /// <summary>
