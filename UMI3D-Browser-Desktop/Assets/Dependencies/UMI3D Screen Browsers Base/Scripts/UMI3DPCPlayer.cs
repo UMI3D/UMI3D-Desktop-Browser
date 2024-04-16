@@ -51,13 +51,21 @@ namespace umi3d.baseBrowser
         UMI3DCameraManager cameraManager;
         UMI3DMovementManager movementManager;
         PCNavigationDelegate navigationDelegate;
+        UMI3DPlayerCapsuleColliderDelegate colliderDelegate;
 
         void Awake()
         {
+            colliderDelegate = new()
+            {
+                playerTransform = playerTransform,
+                data = fpsData
+            };
+            colliderDelegate.Init();
             collisionManager = new()
             {
                 data = fpsData,
                 playerTransform = playerTransform,
+                colliderDelegate = colliderDelegate,
                 topHead = topHead,
                 feetRaycastOrigin = feetRaycastOrigin,
                 navmeshLayer = navmeshLayer,
@@ -77,7 +85,6 @@ namespace umi3d.baseBrowser
                 playerTransform = playerTransform,
                 skeleton = skeleton,
                 collisionManager = collisionManager,
-                cameraManager = cameraManager,
                 concreteFPSNavigation = new KeyboardAndMouseFpsNavigation()
                 {
                     data = fpsData,
@@ -108,7 +115,13 @@ namespace umi3d.baseBrowser
             }
 
             cameraManager.HandleView();
+            colliderDelegate.ComputeCollider();
             movementManager.ComputeMovement();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            colliderDelegate.DrawGizmos();
         }
     }
 }

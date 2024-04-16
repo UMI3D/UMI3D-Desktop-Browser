@@ -65,8 +65,10 @@ namespace umi3d.baseBrowser.Navigation
         public float flyingSpeed;
 
         [Header("Collision")]
-        [Tooltip("Radius used from player center to raycast")]
-        public float playerRadius = .3f;
+        [Tooltip("Center of the top sphere that compose the capsule collider.")]
+        public Vector3 topSphereCenter;
+        [Tooltip("Radius of the spheres that compose the capsule collider.")]
+        public float capsuleRadius = .3f;
         [Tooltip("Maximum angle for slope.")]
         public float maxSlopeAngle = 45f;
         [Tooltip("Maximum height for step.")]

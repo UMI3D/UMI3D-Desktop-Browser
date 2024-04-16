@@ -14,7 +14,6 @@ public sealed class UMI3DMovementManager
     public Transform playerTransform;
     public Transform skeleton;
     public UMI3DCollisionManager collisionManager;
-    public UMI3DCameraManager cameraManager;
     public BaseFPSData data;
     public IConcreteFPSNavigation concreteFPSNavigation;
 
@@ -154,6 +153,8 @@ public sealed class UMI3DMovementManager
             return;
         }
 
+        data.IsSprinting = data.WantToSprint;
+
         switch (data.navigationMode)
         {
             case E_NavigationMode.Default:
@@ -183,23 +184,26 @@ public sealed class UMI3DMovementManager
         if (data.navigationMode == E_NavigationMode.Debug)
         {
             data.playerTranslationSpeed.y = data.flyingSpeed * ((data.WantToCrouch ? -1 : 0) + (data.WantToJump ? 1 : 0));
-
             return;
         }
 
-        data.IsCrouching = collisionManager.ShouldSquat;
+        data.IsCrouching = collisionManager.IsCrouched;
 
         Func<float> verticalVelocity = () =>
         {
+            float result = 0f;
             float gravityVelocity = data.gravity * Time.deltaTime;
             if (collisionManager.CanJump())
             {
-                return data.maxJumpVelocity + gravityVelocity;
+                result = data.maxJumpVelocity;
             }
-            else
+
+            if (!collisionManager.IsGrounded)
             {
-                return gravityVelocity;
+                result += gravityVelocity;
             }
+
+            return result;
         };
 
         data.playerTranslationSpeed.y = verticalVelocity();
@@ -215,7 +219,7 @@ public sealed class UMI3DMovementManager
 
         // Get a direction and distance relative to the player that is possible (avoid collision).
         // TODO: collisionManager.GetPossibleDirection is wrong.
-        data.playerTranslation = collisionManager.GetPossibleDirection(data.playerTranslation);
+        //data.playerTranslation = collisionManager.GetPossibleDirection(data.playerTranslation);
     }
 
     void UpdatePlayerPosition()

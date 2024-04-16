@@ -25,6 +25,7 @@ public sealed class UMI3DCollisionManager
     #region Dependencies
 
     public Transform playerTransform;
+    public IPlayerColliderDelegate colliderDelegate;
 
     public Transform topHead;
     /// <summary>
@@ -48,8 +49,8 @@ public sealed class UMI3DCollisionManager
     {
         return
         (
-            playerTransform.position + playerTransform.up * (data.playerRadius + data.maxStepHeight + data.stepEpsilon),
-            topHead.position - playerTransform.up * data.playerRadius
+            playerTransform.position + playerTransform.up * (data.capsuleRadius + data.maxStepHeight + data.stepEpsilon),
+            topHead.position - playerTransform.up * data.capsuleRadius
         );
     }
 
@@ -97,33 +98,6 @@ public sealed class UMI3DCollisionManager
         //return true;
     }
 
-    /// <summary>
-    /// Return true if the player will collide with something 
-    /// that has a layer [<paramref name="layer"/>] 
-    /// in the direction [<paramref name="direction"/>].<br/>
-    /// </summary>
-    /// <param name="direction"></param>
-    /// <param name="layer"></param>
-    /// <param name="hit"></param>
-    /// <returns></returns>
-    public bool WillCollide(
-        Vector3 direction,
-        out RaycastHit hit,
-        float maxDistance,
-        LayerMask layer
-    )
-    {
-        var capsule = GetCapsuleSphereCenters();
-        return !Physics.CapsuleCast(
-                capsule.Item1,
-                capsule.Item2,
-                data.playerRadius,
-                direction,
-                out hit,
-                maxDistance,
-                layer
-            );
-    }
 
     public void ComputeGround()
     {
@@ -132,7 +106,7 @@ public sealed class UMI3DCollisionManager
         int hitCount = Physics.CapsuleCastNonAlloc(
             capsule.Item1,
             capsule.Item2,
-            data.playerRadius,
+            data.capsuleRadius,
             Vector3.down,
             hits,
             100,
@@ -174,8 +148,8 @@ public sealed class UMI3DCollisionManager
     {
         return data.WantToJump
             && IsGrounded
-            && !WillCollide(
-                playerTransform.up,
+            && !colliderDelegate.WillCollide(
+                Vector3.up,
                 out var hit,
                 data.MaxJumpHeight,
                 obstacleLayer
@@ -184,16 +158,16 @@ public sealed class UMI3DCollisionManager
 
     public bool CanStandUp()
     {
-        Func<bool> isSquattingAndWillNotCollideIfStandUp 
-            = () => 
-            data.IsCrouching
-            && !WillCollide(
-                playerTransform.up,
-                out var hit,
-                data.MaxJumpHeight, // TODO: update this value.
+        Func<bool> isCrouchingAndWillNotCollideIfStandUp = () =>
+        {
+            return !colliderDelegate.WillCollide(
+                Vector3.zero,
+                out RaycastHit hit,
+                0f,
                 obstacleLayer
             );
-        return !data.IsCrouching || isSquattingAndWillNotCollideIfStandUp();
+        };
+        return !data.IsCrouching || isCrouchingAndWillNotCollideIfStandUp();
     }
 
     #endregion
@@ -221,7 +195,7 @@ public sealed class UMI3DCollisionManager
             return Vector3.zero;
         }
 
-        bool willCollide = WillCollide(
+        bool willCollide = colliderDelegate.WillCollide(
             desiredDirection,
             out var hit,
             IsGrounded ? desiredDirection.magnitude * 1.01f : 1f,
@@ -238,7 +212,7 @@ public sealed class UMI3DCollisionManager
             desiredDirection,
             Quaternion.Euler(0, 90, 0) * normal
         );
-        willCollide = WillCollide(
+        willCollide = colliderDelegate.WillCollide(
             projectedDirection,
             out hit,
             .2f,
@@ -252,5 +226,8 @@ public sealed class UMI3DCollisionManager
     /// </summary>
     public bool IsGrounded => Mathf.Abs(playerTransform.position.y - data.groundYAxis) < data.maxStepHeight;
 
-    public bool ShouldSquat => data.WantToCrouch || !CanStandUp();
+    /// <summary>
+    /// Whether the user want to crouch or is crouching and cannot stand up.
+    /// </summary>
+    public bool IsCrouched => data.WantToCrouch || !CanStandUp();
 }

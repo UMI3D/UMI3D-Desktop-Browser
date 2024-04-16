@@ -27,7 +27,8 @@ MonoBehaviour:
   crouchSpeed: 0.2
   squatTorsoAngle: 30
   flyingSpeed: 5
-  playerRadius: 0.3
+  topSphereCenter: {x: 0, y: 1.5, z: 0}
+  capsuleRadius: 0.3
   maxSlopeAngle: 45
   maxStepHeight: 0.2
   stepEpsilon: 0.05
@@ -42,6 +43,6 @@ MonoBehaviour:
   navigationMode: 0
   cameraMode: 2
   cursorMode: 0
-  playerVerticalVelocity: -0.19043136
-  playerMovement: {x: 0, y: 0, z: 0}
-  cameraMovement: {x: -0, y: 0}
+  playerTranslation: {x: 0, y: 0, z: 0}
+  playerTranslationSpeed: {x: 0, y: 0, z: 0}
+  cameraRotation: {x: -0, y: 0}
