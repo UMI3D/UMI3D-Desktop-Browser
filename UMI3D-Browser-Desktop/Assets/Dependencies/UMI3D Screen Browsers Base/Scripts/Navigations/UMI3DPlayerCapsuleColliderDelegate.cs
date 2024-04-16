@@ -46,12 +46,12 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
             this.radius = radius;
         }
 
-        public CapsuleCollider GetWorldPosition(Transform playerTransform)
+        public CapsuleCollider GetWorldPosition(Vector3 playerPosition)
         {
             return new()
             {
-                topSphereCenter = topSphereCenter + playerTransform.position,
-                bottomSphereCenter = bottomSphereCenter + playerTransform.position,
+                topSphereCenter = topSphereCenter + playerPosition,
+                bottomSphereCenter = bottomSphereCenter + playerPosition,
                 radius = radius
             };
         }
@@ -69,6 +69,7 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
 
     CapsuleCollider capsule;
     CapsuleCollider worldPositionCapsule;
+    CapsuleCollider worldPositionCapsuleWithOffset;
 #if UNITY_EDITOR
     CapsuleCollider projectedCapsule;
 #endif
@@ -89,18 +90,14 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
 
     public void UpdateWorldPositionCapsule()
     {
-        worldPositionCapsule = capsule.GetWorldPosition(playerTransform);
+        worldPositionCapsule = capsule.GetWorldPosition(playerTransform.position);
     }
 
-    /// <summary>
-    /// Return true if the player will collide with something 
-    /// that has a layer [<paramref name="layer"/>] 
-    /// in the direction [<paramref name="direction"/>].<br/>
-    /// </summary>
-    /// <param name="direction"></param>
-    /// <param name="layer"></param>
-    /// <param name="hit"></param>
-    /// <returns></returns>
+    public void UpdateWorldPositionCapsule(Vector3 offset)
+    {
+        worldPositionCapsuleWithOffset = worldPositionCapsule.GetWorldPosition(offset);
+    }
+
     public bool WillCollide(
         Vector3 direction,
         out RaycastHit hit,
@@ -120,7 +117,27 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
             );
     }
 
-    
+    public bool WillCollide(
+        Vector3 offset,
+        Vector3 direction,
+        out RaycastHit hit,
+        float maxDistance,
+        LayerMask layer
+    )
+    {
+        UpdateWorldPositionCapsule(offset);
+        //UpdateProjectedCapsule(direction * maxDistance);
+        return Physics.CapsuleCast(
+                worldPositionCapsuleWithOffset.bottomSphereCenter,
+                worldPositionCapsuleWithOffset.topSphereCenter,
+                worldPositionCapsuleWithOffset.radius,
+                direction,
+                out hit,
+                maxDistance,
+                layer
+            );
+    }
+
     public void UpdateProjectedCapsule(Vector3 offset)
     {
 #if UNITY_EDITOR

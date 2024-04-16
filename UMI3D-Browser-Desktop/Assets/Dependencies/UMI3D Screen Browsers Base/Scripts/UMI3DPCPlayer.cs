@@ -66,8 +66,6 @@ namespace umi3d.baseBrowser
                 data = fpsData,
                 playerTransform = playerTransform,
                 colliderDelegate = colliderDelegate,
-                topHead = topHead,
-                feetRaycastOrigin = feetRaycastOrigin,
                 navmeshLayer = navmeshLayer,
                 obstacleLayer = obstacleLayer
             };

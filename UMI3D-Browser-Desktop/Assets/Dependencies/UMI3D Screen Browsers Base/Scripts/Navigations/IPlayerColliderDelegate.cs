@@ -26,6 +26,25 @@ public interface IPlayerColliderDelegate
     );
 
     /// <summary>
+    /// Return true if the player will collide with something 
+    /// that has a layer [<paramref name="layer"/>] 
+    /// in the direction [<paramref name="direction"/>].<br/>
+    /// <br/>
+    /// The collider is first projected with an offset of <paramref name="offset"/> before computing collisiton.
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <param name="layer"></param>
+    /// <param name="hit"></param>
+    /// <returns></returns>
+    public bool WillCollide(
+        Vector3 offset,
+        Vector3 direction,
+        out RaycastHit hit,
+        float maxDistance,
+        LayerMask layer
+    );
+
+    /// <summary>
     /// Draw gizmos to debug collider.
     /// </summary>
     void DrawGizmos();

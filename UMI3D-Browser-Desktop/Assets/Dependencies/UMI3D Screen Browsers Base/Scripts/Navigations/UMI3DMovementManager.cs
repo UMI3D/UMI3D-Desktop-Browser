@@ -218,8 +218,7 @@ public sealed class UMI3DMovementManager
         data.playerTranslation = playerTransform.rotation * data.playerTranslation;
 
         // Get a direction and distance relative to the player that is possible (avoid collision).
-        // TODO: collisionManager.GetPossibleDirection is wrong.
-        //data.playerTranslation = collisionManager.GetPossibleDirection(data.playerTranslation);
+        data.playerTranslation = collisionManager.GetPossibleTranslation(data.playerTranslation);
     }
 
     void UpdatePlayerPosition()
