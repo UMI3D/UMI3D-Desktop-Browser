@@ -35,7 +35,7 @@ public sealed class UMI3DCollisionManager
     /// <summary>
     /// Is player close to ground ?
     /// </summary>
-    public bool IsCloseToGround => Mathf.Abs(playerTransform.position.y - data.groundYAxis) < data.maxStepHeight;
+    public bool IsCloseToGround => Mathf.Abs(playerTransform.position.y - data.groundYAxis) <= data.maxStepHeight + data.stepEpsilon + .1f;
     /// <summary>
     /// Whether or not the player is below the ground.
     /// </summary>
@@ -153,7 +153,6 @@ public sealed class UMI3DCollisionManager
         }
 
         float delta = GetVerticalTranslationToGround(hit.point.y + data.maxStepHeight + data.stepEpsilon);
-        UnityEngine.Debug.Log($"Collide vertical = {hit.transform.name}");
         return new()
         {
             x = desiredTranslation.x,
@@ -166,9 +165,6 @@ public sealed class UMI3DCollisionManager
     {
         float delta = playerTransform.position.y - hitYAxis;
         return -delta;
-
-        //Double delta = System.Math.Round(playerTransform.position.y - hitYAxis, 2);
-        //return delta == 0d ? 0f : (float)-delta;
     }
 
     /// <summary>
