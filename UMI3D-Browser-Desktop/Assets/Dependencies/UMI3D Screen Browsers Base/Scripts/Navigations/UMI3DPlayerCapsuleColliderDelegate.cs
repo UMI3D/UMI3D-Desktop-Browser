@@ -84,6 +84,7 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
     CapsuleCollider worldPositionCapsule;
 #if UNITY_EDITOR
     CapsuleCollider debugCapsule;
+    Vector3 collisionPoint;
 #endif
 
     public void Init()
@@ -114,19 +115,24 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
     )
     {
         var capsule = worldPositionCapsule;
+        var hasCollided = Physics.CapsuleCast(
+            capsule.bottomSphereCenter,
+            capsule.topSphereCenter,
+            capsule.radius,
+            direction,
+            out hit,
+            maxDistance,
+            layer
+        );
         if (drawGizmo)
         {
             UpdateDebugCapsule(capsule, direction * maxDistance);
+            if (hasCollided)
+            {
+                collisionPoint = hit.point;
+            }
         }
-        return Physics.CapsuleCast(
-                capsule.bottomSphereCenter,
-                capsule.topSphereCenter,
-                capsule.radius,
-                direction,
-                out hit,
-                maxDistance,
-                layer
-            );
+        return hasCollided;
     }
 
     public bool WillCollide(
@@ -139,19 +145,24 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
     )
     {
         CapsuleCollider capsule = worldPositionCapsule.ProjectCollider(offset);
+        var hasCollided = Physics.CapsuleCast(
+            capsule.bottomSphereCenter,
+            capsule.topSphereCenter,
+            capsule.radius,
+            direction,
+            out hit,
+            maxDistance,
+            layer
+        );
         if (drawGizmo)
         {
             UpdateDebugCapsule(capsule, direction * maxDistance);
+            if (hasCollided)
+            {
+                collisionPoint = hit.point;
+            }
         }
-        return Physics.CapsuleCast(
-                capsule.bottomSphereCenter,
-                capsule.topSphereCenter,
-                capsule.radius,
-                direction,
-                out hit,
-                maxDistance,
-                layer
-            );
+        return hasCollided;
     }
 
     public void UpdateDebugCapsule(CapsuleCollider capsule, Vector3 direction)
@@ -173,6 +184,9 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(debugCapsule.bottomSphereCenter, debugCapsule.radius);
         Gizmos.DrawWireSphere(debugCapsule.topSphereCenter, debugCapsule.radius);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(collisionPoint, .05f);
 #endif
     }
 }
