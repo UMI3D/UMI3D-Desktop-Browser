@@ -15,7 +15,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    Vector2 Movement => BaseFPSNavigation.Instance.Movement;
+    Vector2 Movement => /*BaseFPSNavigation.Instance.Movement*/ Vector2.zero;
 
     private Animator anim;
     private IKControl IKControl;
@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Move();
 
-        IKControl.feetIkActive = IKControl.overrideFeetIk || BaseFPSNavigation.Instance.IsCrouching;
+        IKControl.feetIkActive = IKControl.overrideFeetIk /*|| BaseFPSNavigation.Instance.IsCrouching*/;
     }
 
     private void Move()

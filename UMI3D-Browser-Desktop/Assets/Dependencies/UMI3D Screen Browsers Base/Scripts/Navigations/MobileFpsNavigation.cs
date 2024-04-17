@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using umi3d.baseBrowser.inputs.interactions;
 using umi3d.baseBrowser.Navigation;
 using UnityEngine;
 
@@ -21,63 +22,31 @@ namespace umi3d.mobileBrowser.Controller
 {
     public class MobileFpsNavigation : IConcreteFPSNavigation
     {
-        public BaseFPSNavigation FPSNavigation;
         public BaseFPSData data;
 
         public Func<Vector2> CameraDirection;
         public Func<Vector2> MoveDirection;
 
-        public void HandleView()
+        public void HandleUserInput()
         {
-            Vector3 angleView = FPSNavigation.viewpoint.rotation.eulerAngles.NormalizeAngle();
-
-            Debug.Assert(CameraDirection != null, "CameraDirection must not be null.");
-
-            var direction = CameraDirection.Invoke();
-            Vector2 angularSpeed = new Vector2
-            (
-                -1 * direction.y * data.AngularViewSpeed.y,
-                direction.x * data.AngularViewSpeed.x
+            // Player movement
+            Debug.Assert(MoveDirection != null, "MoveDirection must not be null.");
+            // x: Left to right.
+            // y: back to front. 
+            Vector2 joystickInput = MoveDirection?.Invoke() ?? Vector2.zero;
+            data.playerTranslationSpeed = new Vector3(
+                joystickInput.x, 
+                0f, 
+                joystickInput.y
             );
 
-            FPSNavigation.BaseHandleView(angleView, angularSpeed);
-        }
-
-        public bool Update()
-        {
-            if (!FPSNavigation.OnUpdate()) return false;
-
-            FPSNavigation.HandleMovement();
-            HandleView();
-
-            return true;
-        }
-
-        public void UpdateMovement(ref Vector2 move)
-        {
-            Debug.Assert(MoveDirection != null, "CameraDirection must not be null.");
-            Vector2 joystickInput = MoveDirection();
-            FPSNavigation.Movement = new Vector2(joystickInput.y, joystickInput.x);
-            if (FPSNavigation.Movement != Vector2.zero) FPSNavigation.OnPlayerMoved();
-        }
-
-        public void Walk(ref Vector2 move, ref float height)
-        {
-            FPSNavigation.IsCrouching = FPSNavigation.WantToCrouch || (FPSNavigation.IsCrouching && !FPSNavigation.CanJump());
-            if (FPSNavigation.IsCrouching)
-            {
-                move.x *= (move.x > 0) ? data.forwardSpeed.y : data.backwardSpeed.y;
-                move.y *= data.lateralSpeed.z;
-            }
-            else
-            {
-                move.x *= (move.x > 0) ? data.forwardSpeed.z : data.backwardSpeed.z;
-                move.y *= data.lateralSpeed.z;
-            }
-
-            FPSNavigation.skeleton.transform.localPosition = new Vector3(0, Mathf.Lerp(FPSNavigation.skeleton.transform.localPosition.y, (FPSNavigation.IsCrouching) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed), 0);
-
-            FPSNavigation.ComputeGravity(FPSNavigation.WantToJump, ref height);
+            // Camera movement
+            Debug.Assert(CameraDirection != null, "CameraDirection must not be null.");
+            joystickInput = CameraDirection?.Invoke() ?? Vector2.zero;
+            data.cameraRotation = new Vector2(
+                -1 * joystickInput.y,
+                joystickInput.x
+            );
         }
     }
 }

@@ -9,8 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 677918340405283884}
-  - component: {fileID: 677918340405283886}
-  - component: {fileID: 677918340405283883}
+  - component: {fileID: 6029136091791176344}
   m_Layer: 0
   m_Name: PersonalSkeletonContainer
   m_TagString: Untagged
@@ -35,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &677918340405283886
+--- !u!114 &6029136091791176344
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,54 +43,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 677918340405283885}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9fd653fe43dae194889de9f50bd73baa, type: 3}
+  m_Script: {fileID: 11500000, guid: ae8000593a125114d802d76d0fd64b52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navigations:
-  - {fileID: 677918340405283883}
---- !u!114 &677918340405283883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 677918340405283885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a4c551e3678feb4c979adeebe131355, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  fpsData: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
+  personalSkeletonContainer: {fileID: 677918340405283884}
+  playerTransform: {fileID: 677918340405283884}
   skeleton: {fileID: 8526456778121594302}
-  viewpoint: {fileID: 8675927111129788419}
-  neckPivot: {fileID: 8675927111129788418}
-  head: {fileID: 8675927111129788483}
-  maxNeckAngle: 50
-  state: 0
-  changeToDefault: 0
+  topHead: {fileID: 8675927111129789342}
+  feetRaycastOrigin: []
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1536
   navmeshLayer:
     serializedVersion: 2
     m_Bits: 512
-  topHead: {fileID: 8675927111129789342}
-  feetRaycastOrigin:
-  - {fileID: 2547753941164990369}
-  - {fileID: 2547753941089560961}
-  - {fileID: 2547753939778856477}
-  - {fileID: 2547753939617169905}
-  - {fileID: 2547753940605043022}
-  playerRadius: 0.2
-  maxSlopeAngle: 45
-  maxStepHeight: 0.3
-  WantToJump: 0
-  IsCrouching: 0
-  WantToCrouch: 0
-  Movement: {x: 0, y: 0}
-  heightDelta: 0
-  lastHeight: 0
-  data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
-  navigation: 0
+  viewpointPivot: {fileID: 8675927111129788419}
+  neckPivot: {fileID: 8675927111129788418}
+  head: {fileID: 8675927111129788483}
 --- !u!1001 &5113404444379048072
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -321,36 +290,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97f300c1a3f6d9b4b9d5c2f9cf0d5d0d, type: 3}
---- !u!4 &2547753939617169905 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7567031999070589474, guid: 97f300c1a3f6d9b4b9d5c2f9cf0d5d0d,
-    type: 3}
-  m_PrefabInstance: {fileID: 5357048486819140563}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2547753939778856477 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7567031999244334542, guid: 97f300c1a3f6d9b4b9d5c2f9cf0d5d0d,
-    type: 3}
-  m_PrefabInstance: {fileID: 5357048486819140563}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2547753940605043022 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7567031997814248093, guid: 97f300c1a3f6d9b4b9d5c2f9cf0d5d0d,
-    type: 3}
-  m_PrefabInstance: {fileID: 5357048486819140563}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2547753941089560961 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7567031998403361362, guid: 97f300c1a3f6d9b4b9d5c2f9cf0d5d0d,
-    type: 3}
-  m_PrefabInstance: {fileID: 5357048486819140563}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2547753941164990369 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7567031998378380402, guid: 97f300c1a3f6d9b4b9d5c2f9cf0d5d0d,
-    type: 3}
-  m_PrefabInstance: {fileID: 5357048486819140563}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8526456778121594302 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4326833844403492461, guid: 97f300c1a3f6d9b4b9d5c2f9cf0d5d0d,
