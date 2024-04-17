@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using umi3d.baseBrowser.Navigation;
 using umi3d.cdk;
 using umi3d.cdk.navigation;
@@ -50,12 +51,19 @@ public class PCNavigationDelegate : INavigationDelegate
 
     public NavigationData GetNavigationData()
     {
+        Func<float> yVelocity = () =>
+        {
+            return collisionManager.IsCloseToGround 
+            ? 0f 
+            : data.playerTranslation.y / Time.deltaTime;
+        };
+
         return new NavigationData()
         {
             speed = new Vector3Dto()
             {
                 X = data.playerTranslation.x / Time.deltaTime,
-                Y = data.playerTranslation.y / Time.deltaTime,
+                Y = yVelocity(),
                 Z = data.playerTranslation.z / Time.deltaTime
             },
             crouching = data.IsCrouching,
