@@ -14,12 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using umi3d.baseBrowser.cursor;
-using umi3d.baseBrowser.inputs.interactions;
 using umi3d.baseBrowser.Navigation;
-using umi3d.common;
 using UnityEngine;
 
 public sealed class UMI3DMovementManager
@@ -204,33 +200,25 @@ public sealed class UMI3DMovementManager
         }
 
         data.IsCrouching = data.WantToCrouch || !collisionManager.CanStandUp();
+
         if (collisionManager.IsGrounded)
         {
-            data.verticalVelocity = 0f;
-        }
-
-        Func<float> verticalVelocity = () =>
-        {
-            float result = 0f;
-            
             if (data.WantToJump && collisionManager.CanJump())
             {
-                UnityEngine.Debug.Log($"message");
                 data.IsJumping = true;
-                result = data.MaxJumpVelocity;
+                data.verticalVelocity = data.MaxJumpVelocity;
             }
             else
             {
                 data.IsJumping = false;
+                data.verticalVelocity = 0f;
             }
+        }
+        else
+        {
+            data.verticalVelocity += data.GravityVelocity;
+        }
 
-            result += data.GravityVelocity;
-            //result = Mathf.Clamp(result, 2 * data.GravityVelocity, 2 * data.MaxJumpVelocity);
-
-            return result;
-        };
-
-        data.verticalVelocity += verticalVelocity();
         data.playerTranslationSpeed.y = data.verticalVelocity;
     }
 

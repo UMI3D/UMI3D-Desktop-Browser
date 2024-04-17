@@ -78,15 +78,10 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
     }
 
     /// <summary>
-    /// Capsule that excludes feet.
+    /// Capsule that excludes feet to avoid step.
     /// </summary>
     CapsuleCollider capsule;
-    /// <summary>
-    /// Capsule that includes all the player (heat to feet).
-    /// </summary>
-    CapsuleCollider verticalCapsule;
     CapsuleCollider worldPositionCapsule;
-    CapsuleCollider worldPositionVerticalCapsule;
 #if UNITY_EDITOR
     CapsuleCollider debugCapsule;
 #endif
@@ -96,11 +91,6 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
         capsule = new(
             data.topSphereCenter,
             data.maxStepHeight + data.stepEpsilon,
-            data.capsuleRadius
-        );
-        verticalCapsule = new(
-            data.topSphereCenter,
-            data.stepEpsilon,
             data.capsuleRadius
         );
     }
@@ -113,7 +103,6 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
     public void UpdateWorldPositionCapsule()
     {
         worldPositionCapsule = capsule.ProjectCollider(playerTransform.position);
-        worldPositionVerticalCapsule = verticalCapsule.ProjectCollider(playerTransform.position);
     }
 
     public bool WillCollide(
@@ -121,11 +110,10 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
         out RaycastHit hit,
         float maxDistance,
         LayerMask layer,
-        bool includeFeet,
         bool drawGizmo = false
     )
     {
-        var capsule = includeFeet ? worldPositionVerticalCapsule : worldPositionCapsule;
+        var capsule = worldPositionCapsule;
         if (drawGizmo)
         {
             UpdateDebugCapsule(capsule, direction * maxDistance);
@@ -147,20 +135,18 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
         out RaycastHit hit,
         float maxDistance,
         LayerMask layer,
-        bool includeFeet,
         bool drawGizmo = false
     )
     {
-        var capsule = includeFeet ? worldPositionVerticalCapsule : worldPositionCapsule;
-        CapsuleCollider worldPositionCapsuleWithOffset = capsule.ProjectCollider(offset);
+        CapsuleCollider capsule = worldPositionCapsule.ProjectCollider(offset);
         if (drawGizmo)
         {
-            UpdateDebugCapsule(worldPositionCapsuleWithOffset, direction * maxDistance);
+            UpdateDebugCapsule(capsule, direction * maxDistance);
         }
         return Physics.CapsuleCast(
-                worldPositionCapsuleWithOffset.bottomSphereCenter,
-                worldPositionCapsuleWithOffset.topSphereCenter,
-                worldPositionCapsuleWithOffset.radius,
+                capsule.bottomSphereCenter,
+                capsule.topSphereCenter,
+                capsule.radius,
                 direction,
                 out hit,
                 maxDistance,
@@ -182,17 +168,6 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(worldPositionCapsule.bottomSphereCenter, worldPositionCapsule.radius);
         Gizmos.DrawWireSphere(worldPositionCapsule.topSphereCenter, worldPositionCapsule.radius);
-
-        // World position vertical capsule.
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(
-            worldPositionVerticalCapsule.bottomSphereCenter,
-            worldPositionVerticalCapsule.radius
-        );
-        Gizmos.DrawWireSphere(
-            worldPositionVerticalCapsule.topSphereCenter,
-            worldPositionVerticalCapsule.radius
-        );
 
         // Projected capsule.
         Gizmos.color = Color.blue;

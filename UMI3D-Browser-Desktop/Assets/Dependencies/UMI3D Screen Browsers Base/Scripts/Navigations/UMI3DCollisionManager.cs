@@ -13,11 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using inetum.unityUtils;
-using MathNet.Numerics;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using umi3d.baseBrowser.Navigation;
 using UnityEngine;
 
@@ -54,13 +50,12 @@ public sealed class UMI3DCollisionManager
             Vector3.down,
             out RaycastHit hit,
             100,
-            data.obstacleLayer,
-            true
+            data.obstacleLayer
         );
 
         if (isColliding)
         {
-            data.groundYAxis = hit.transform.position.y;
+            data.groundYAxis = hit.point.y;
         }
     }
 
@@ -86,7 +81,6 @@ public sealed class UMI3DCollisionManager
         if (!willEndUpAboveNavMesh)
         {
             // No movement allowed that can ends up in the vacuum.
-            UnityEngine.Debug.Log($"Will not end up above navmesh.");
             float delta = GetVerticalTranslationToGround(data.groundYAxis);
             desiredTranslation = Vector3.up * delta;
         }
@@ -114,7 +108,6 @@ public sealed class UMI3DCollisionManager
             return desiredTranslation;
         }
 
-        UnityEngine.Debug.Log($"Collide horizontal {hit.transform.name}");
         Vector3 projection = Vector3.ProjectOnPlane(
             horizontalDesiredTranslation,
             hit.normal
@@ -152,16 +145,14 @@ public sealed class UMI3DCollisionManager
             out RaycastHit hit,
             desiredTranslation.y + .1f,
             data.obstacleLayer,
-            true,
             true
         );
         if (!willCollide)
         {
-            UnityEngine.Debug.Log($"will not collide +  is grounded: {IsGrounded}");
             return desiredTranslation;
         }
 
-        float delta = GetVerticalTranslationToGround(hit.transform.position.y);
+        float delta = GetVerticalTranslationToGround(hit.point.y + data.maxStepHeight + data.stepEpsilon);
         UnityEngine.Debug.Log($"Collide vertical = {hit.transform.name}");
         return new()
         {

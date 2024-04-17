@@ -38,7 +38,6 @@ public interface IPlayerColliderDelegate
         out RaycastHit hit,
         float maxDistance,
         LayerMask layer,
-        bool includeFeet,
         bool drawGizmo = false
     );
 
@@ -47,7 +46,7 @@ public interface IPlayerColliderDelegate
     /// that has a layer [<paramref name="layer"/>] 
     /// in the direction [<paramref name="direction"/>].<br/>
     /// <br/>
-    /// The collider is first projected with an offset of <paramref name="offset"/> before computing collisiton.
+    /// The collider is first projected with an offset of <paramref name="offset"/> before computing collision.
     /// </summary>
     /// <param name="direction"></param>
     /// <param name="layer"></param>
@@ -59,7 +58,6 @@ public interface IPlayerColliderDelegate
         out RaycastHit hit,
         float maxDistance,
         LayerMask layer,
-        bool includeFeet,
         bool drawGizmo = false
     );
 
