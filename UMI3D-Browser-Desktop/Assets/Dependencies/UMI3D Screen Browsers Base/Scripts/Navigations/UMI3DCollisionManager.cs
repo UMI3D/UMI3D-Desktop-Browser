@@ -35,7 +35,11 @@ public sealed class UMI3DCollisionManager
     /// <summary>
     /// Is player currently grounded ?
     /// </summary>
-    public bool IsGrounded => Mathf.Abs(playerTransform.position.y - data.groundYAxis) < data.maxStepHeight;
+    public bool IsGrounded => Mathf.Abs(playerTransform.position.y - data.groundYAxis) < data.stepEpsilon;
+    /// <summary>
+    /// Is player close to ground ?
+    /// </summary>
+    public bool IsCloseToGround => Mathf.Abs(playerTransform.position.y - data.groundYAxis) < data.maxStepHeight;
     /// <summary>
     /// Whether or not the player is below the ground.
     /// </summary>
@@ -50,7 +54,8 @@ public sealed class UMI3DCollisionManager
             Vector3.down,
             out RaycastHit hit,
             100,
-            data.navmeshLayer
+            data.obstacleLayer,
+            true
         );
 
         if (isColliding)
@@ -75,23 +80,18 @@ public sealed class UMI3DCollisionManager
             return desiredTranslation;
         }
 
+        desiredTranslation = GetPossibleHorizontalTranslation(desiredTranslation);
+        desiredTranslation = GetPossibleVerticalTranslation(desiredTranslation);
         bool willEndUpAboveNavMesh = WillTranslationEndUpAboveNavMesh(desiredTranslation);
         if (!willEndUpAboveNavMesh)
         {
             // No movement allowed that can ends up in the vacuum.
-            return Vector3.zero;
+            UnityEngine.Debug.Log($"Will not end up above navmesh.");
+            float delta = GetVerticalTranslationToGround(data.groundYAxis);
+            desiredTranslation = Vector3.up * delta;
         }
-        UnityEngine.Debug.Log($"message");
-        desiredTranslation = GetPossibleHorizontalTranslation(desiredTranslation);
-        desiredTranslation = GetPossibleVerticalTranslation(desiredTranslation);
 
-        bool willCollide = colliderDelegate.WillCollide(
-            desiredTranslation,
-            out RaycastHit hit,
-            .2f,
-            data.obstacleLayer
-        );
-        return willCollide ? Vector3.zero : desiredTranslation;
+        return desiredTranslation;
     }
 
     public Vector3 GetPossibleHorizontalTranslation(Vector3 desiredTranslation)
@@ -106,13 +106,15 @@ public sealed class UMI3DCollisionManager
            horizontalDesiredTranslation,
            out RaycastHit hit,
            horizontalDesiredTranslation.magnitude + .1f,
-           data.obstacleLayer
+           data.obstacleLayer,
+           false
        );
         if (!willCollide)
         {
             return desiredTranslation;
         }
 
+        UnityEngine.Debug.Log($"Collide horizontal {hit.transform.name}");
         Vector3 projection = Vector3.ProjectOnPlane(
             horizontalDesiredTranslation,
             hit.normal
@@ -122,10 +124,9 @@ public sealed class UMI3DCollisionManager
            projection,
            out hit,
            projection.magnitude + .1f,
-           data.obstacleLayer
+           data.obstacleLayer,
+           false
        );
-
-        UnityEngine.Debug.Log($"hozi hit = {hit.transform.name}, {hit.transform.position.y}");
 
         return new()
         {
@@ -149,46 +150,34 @@ public sealed class UMI3DCollisionManager
             horizontalDesiredTranslation,
             verticalDesiredTranslation,
             out RaycastHit hit,
-            data.maxStepHeight + data.stepEpsilon,
-            data.obstacleLayer
+            desiredTranslation.y + .1f,
+            data.obstacleLayer,
+            true,
+            true
         );
         if (!willCollide)
         {
+            UnityEngine.Debug.Log($"will not collide +  is grounded: {IsGrounded}");
             return desiredTranslation;
         }
 
-        Vector3 projection = Vector3.ProjectOnPlane(
-            verticalDesiredTranslation,
-            hit.normal
-        );
-
-        willCollide = colliderDelegate.WillCollide(
-            horizontalDesiredTranslation,
-            projection,
-            out hit,
-            data.maxStepHeight + data.stepEpsilon,
-            data.obstacleLayer
-        );
-
-        if (!willCollide)
-        {
-            return new()
-            {
-                x = desiredTranslation.x,
-                y = projection.y,
-                z = desiredTranslation.z,
-            };
-        }
-
-        float delta = playerTransform.position.y - hit.transform.position.y;
-        UnityEngine.Debug.Log($"verti hit = {hit.transform.name}, {hit.transform.position.y}, {delta}");
-        //var y = Mathf.Lerp(0f, delta, 2);
+        float delta = GetVerticalTranslationToGround(hit.transform.position.y);
+        UnityEngine.Debug.Log($"Collide vertical = {hit.transform.name}");
         return new()
         {
             x = desiredTranslation.x,
-            y = - delta,
+            y = delta,
             z = desiredTranslation.z,
         };
+    }
+
+    float GetVerticalTranslationToGround(float hitYAxis)
+    {
+        float delta = playerTransform.position.y - hitYAxis;
+        return -delta;
+
+        //Double delta = System.Math.Round(playerTransform.position.y - hitYAxis, 2);
+        //return delta == 0d ? 0f : (float)-delta;
     }
 
     /// <summary>
@@ -199,10 +188,15 @@ public sealed class UMI3DCollisionManager
     public bool WillTranslationEndUpAboveNavMesh(Vector3 desiredTranslation)
     {
         return colliderDelegate.WillCollide(
-            desiredTranslation,
+            new()
+            {
+                x = desiredTranslation.x,
+                y = 0f,
+                z = desiredTranslation.z,
+            },
             Vector3.down,
             out RaycastHit hit,
-            100,
+            100f,
             data.navmeshLayer,
             true
         );
@@ -230,7 +224,8 @@ public sealed class UMI3DCollisionManager
                 Vector3.up,
                 out var hit,
                 data.maxJumpAltitude,
-                data.obstacleLayer
+                data.obstacleLayer,
+                false
             );
     }
 
@@ -246,7 +241,8 @@ public sealed class UMI3DCollisionManager
                 Vector3.zero,
                 out RaycastHit hit,
                 0f,
-                data.obstacleLayer
+                data.obstacleLayer,
+                false
             );
         };
         return !data.IsCrouching || isCrouchingAndWillNotCollideIfStandUp();

@@ -26,6 +26,7 @@ public sealed class UMI3DMovementManager
     {
         data.playerTranslationSpeed = Vector3.zero;
         data.playerTranslation = Vector3.zero;
+        collisionManager.ComputeGround();
         if (
                 (BaseCursor.Movement == BaseCursor.CursorMovement.Free
                 || BaseCursor.Movement == BaseCursor.CursorMovement.FreeHidden)
@@ -41,7 +42,6 @@ public sealed class UMI3DMovementManager
         ComputeVerticalSpeed();
         ComputeHorizontalAndVerticalTranslation();
         UpdatePlayerPosition();
-        collisionManager.ComputeGround();
 
         Func<bool> isNearDestination 
             = () => Vector3.Distance(
@@ -200,6 +200,7 @@ public sealed class UMI3DMovementManager
             
             if (data.WantToJump && collisionManager.CanJump())
             {
+                UnityEngine.Debug.Log($"message");
                 data.IsJumping = true;
                 result = data.MaxJumpVelocity;
             }
@@ -209,6 +210,7 @@ public sealed class UMI3DMovementManager
             }
 
             result += data.GravityVelocity;
+            //result = Mathf.Clamp(result, 2 * data.GravityVelocity, 2 * data.MaxJumpVelocity);
 
             return result;
         };

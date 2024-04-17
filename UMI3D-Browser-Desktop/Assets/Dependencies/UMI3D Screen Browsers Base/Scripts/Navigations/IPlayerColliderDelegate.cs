@@ -23,6 +23,7 @@ public interface IPlayerColliderDelegate
         out RaycastHit hit,
         float maxDistance,
         LayerMask layer,
+        bool includeFeet,
         bool drawGizmo = false
     );
 
@@ -43,6 +44,7 @@ public interface IPlayerColliderDelegate
         out RaycastHit hit,
         float maxDistance,
         LayerMask layer,
+        bool includeFeet,
         bool drawGizmo = false
     );
 
