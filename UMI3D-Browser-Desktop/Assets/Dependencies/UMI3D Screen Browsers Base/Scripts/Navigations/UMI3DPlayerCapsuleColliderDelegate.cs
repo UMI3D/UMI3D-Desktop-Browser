@@ -85,6 +85,9 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
 #if UNITY_EDITOR
     CapsuleCollider debugCapsule;
     Vector3 collisionPoint;
+
+    Func<CapsuleCollider> capsuleRef;
+    Vector3 projection;
 #endif
 
     public void Init()
@@ -99,11 +102,20 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
     public void ComputeCollider()
     {
         UpdateWorldPositionCapsule();
+        UpdateDebugCapsule();
     }
 
     public void UpdateWorldPositionCapsule()
     {
         worldPositionCapsule = capsule.ProjectCollider(playerTransform.position);
+    }
+
+    public void UpdateDebugCapsule()
+    {
+#if UNITY_EDITOR
+        var capsule = capsuleRef?.Invoke() ?? worldPositionCapsule;
+        debugCapsule = capsule.ProjectCollider(projection);
+#endif
     }
 
     public bool WillCollide(
@@ -126,9 +138,15 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
         );
         if (drawGizmo)
         {
-            UpdateDebugCapsule(capsule, direction * maxDistance);
             if (hasCollided)
             {
+                SetDebugCapsule(
+                    () =>
+                    {
+                        return worldPositionCapsule;
+                    },
+                    direction * maxDistance
+                );
                 collisionPoint = hit.point;
             }
         }
@@ -156,19 +174,26 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
         );
         if (drawGizmo)
         {
-            UpdateDebugCapsule(capsule, direction * maxDistance);
             if (hasCollided)
             {
+                SetDebugCapsule(
+                    () =>
+                    {
+                        return worldPositionCapsule.ProjectCollider(offset);
+                    }, 
+                    direction * maxDistance
+                );
                 collisionPoint = hit.point;
             }
         }
         return hasCollided;
     }
 
-    public void UpdateDebugCapsule(CapsuleCollider capsule, Vector3 direction)
+    public void SetDebugCapsule(Func<CapsuleCollider> capsule, Vector3 direction)
     {
 #if UNITY_EDITOR
-        debugCapsule = capsule.ProjectCollider(direction);
+        capsuleRef = capsule;
+        projection = direction;
 #endif
     }
 

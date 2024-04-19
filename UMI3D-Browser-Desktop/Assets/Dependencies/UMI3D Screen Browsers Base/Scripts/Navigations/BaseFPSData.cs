@@ -21,6 +21,10 @@ namespace umi3d.baseBrowser.Navigation
     public class BaseFPSData : ScriptableObject
     {
         [Header("View (Camera, Head, Neck)")]
+        [Tooltip("Camera mode")]
+        public E_CameraMode cameraMode = E_CameraMode.Navigation;
+        [Tooltip("Cursor mode")]
+        public E_CursorMode cursorMode = E_CursorMode.NavigationLocked;
         [Tooltip("Max rotation angle for the head around x axis (down to up).")]
         public Vector2 maxXHeadAngle = new Vector2(-60f, 70f);
         [Tooltip("Max rotation angle for the viewpoint(camera) around the x axis (down to up)")]
@@ -31,19 +35,29 @@ namespace umi3d.baseBrowser.Navigation
         public float maxNeckAngle = 50f;
         [Tooltip("Angular speed of the viewpoint(camera) (up/down, left/right)")]
         public Vector2 AngularViewSpeed = new Vector2(5f, 5f);
+        /// <summary>
+        /// Rotation of the camera according to x and y axis.
+        /// 
+        /// <list type="bullet">
+        /// <item>x: Down to up (positive: up)</item>
+        /// <item>y: Left to right (positive: right)</item>
+        /// </list>
+        /// </summary>
+        [HideInInspector]
+        public Vector2 cameraRotation;
 
         [Header("Walk")]
         [Tooltip("speed when moving forward (normal, squatting, running)")]
-        public Vector3 forwardSpeed;
+        public Vector3 forwardSpeed = new(3f, 1f, 10f);
         [Tooltip("speed when moving sideway (normal, squatting, running)")]
-        public Vector3 lateralSpeed;
+        public Vector3 lateralSpeed = new(1.5f, 1f, 7f);
         [Tooltip("speed when moving backward (normal, squatting, running)")]
-        public Vector3 backwardSpeed;
+        public Vector3 backwardSpeed = new(3f, 1f, 10f);
        
         [Header("Vertical Movement")]
         [Tooltip("gravity force")]
         public float gravity = -9.807f;
-        [Tooltip("Max jump altitude when long pressing jump action")]
+        [Tooltip("Max jump altitude relative to the player when long pressing jump action")]
         public float maxJumpAltitude = 1f;
         /// <summary>
         /// Velocity resulting of the jump force.
@@ -56,13 +70,9 @@ namespace umi3d.baseBrowser.Navigation
 
         [Header("Crouch")]
         [Tooltip("player height while crouching")]
-        public float crouchYAxis = -.3f;
+        public float crouchYAxis = -.35f;
         [Tooltip("Time to switch between standing up and crouching (both ways)")]
         public float crouchSpeed = 0.2f;
-
-        [Header("Fly")]
-        [Tooltip("speed when moving in every direction while flying")]
-        public float flyingSpeed;
 
         [Header("Collision")]
         [Tooltip("Layers for obstacles.")]
@@ -70,15 +80,20 @@ namespace umi3d.baseBrowser.Navigation
         [Tooltip("Layers for navmesh.")]
         public LayerMask navmeshLayer;
         [Tooltip("Center of the top sphere that compose the capsule collider.")]
-        public Vector3 topSphereCenter;
+        public Vector3 topSphereCenter = new(0f, 1.5f, 0f);
         [Tooltip("Radius of the spheres that compose the capsule collider.")]
         public float capsuleRadius = .3f;
+        [Tooltip("Max altitude relative to the player to check ground.")]
+        public float maxAltitudeToCheckGround = 50f;
         [Tooltip("Maximum angle for slope.")]
         public float maxSlopeAngle = 45f;
         [Tooltip("Maximum height for step.")]
         public float maxStepHeight = .2f;
         public float stepEpsilon = 0.05f;
-        [Tooltip("Current ground height.")]
+        /// <summary>
+        /// Current ground altitude (world space).
+        /// </summary>
+        [HideInInspector]
         public float groundYAxis = 0f;
 
         [Header("Input")]
@@ -99,12 +114,7 @@ namespace umi3d.baseBrowser.Navigation
 
         [Header("Movement")]
         [Tooltip("Navigation mode")]
-        public E_NavigationMode navigationMode;
-        [Tooltip("Camera mode")]
-        public E_CameraMode cameraMode;
-        [Tooltip("Cursor mode")]
-        public E_CursorMode cursorMode;
-
+        public E_NavigationMode navigationMode = E_NavigationMode.Default;
         /// <summary>
         /// The vertical velocity of the player.<br/><br/>
         /// 
@@ -142,15 +152,9 @@ namespace umi3d.baseBrowser.Navigation
         /// </summary>
         [HideInInspector]
         public Vector3? continuousDestination;
-        /// <summary>
-        /// Rotation of the camera according to x and y axis.
-        /// 
-        /// <list type="bullet">
-        /// <item>x: Down to up (positive: up)</item>
-        /// <item>y: Left to right (positive: right)</item>
-        /// </list>
-        /// </summary>
-        [HideInInspector]
-        public Vector2 cameraRotation;
+
+        [Header("Debug")]
+        [Tooltip("Speed when moving in every direction while flying")]
+        public float flyingSpeed = 5f;
     }
 }
