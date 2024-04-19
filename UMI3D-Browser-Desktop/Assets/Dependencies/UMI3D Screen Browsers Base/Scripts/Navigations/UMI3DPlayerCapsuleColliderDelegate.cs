@@ -84,6 +84,10 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
     CapsuleCollider worldPositionCapsule;
 #if UNITY_EDITOR
     CapsuleCollider debugCapsule;
+    Vector3 collisionPoint;
+
+    Func<CapsuleCollider> capsuleRef;
+    Vector3 projection;
 #endif
 
     public void Init()
@@ -98,11 +102,20 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
     public void ComputeCollider()
     {
         UpdateWorldPositionCapsule();
+        UpdateDebugCapsule();
     }
 
     public void UpdateWorldPositionCapsule()
     {
         worldPositionCapsule = capsule.ProjectCollider(playerTransform.position);
+    }
+
+    public void UpdateDebugCapsule()
+    {
+#if UNITY_EDITOR
+        var capsule = capsuleRef?.Invoke() ?? worldPositionCapsule;
+        debugCapsule = capsule.ProjectCollider(projection);
+#endif
     }
 
     public bool WillCollide(
@@ -114,19 +127,30 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
     )
     {
         var capsule = worldPositionCapsule;
+        var hasCollided = Physics.CapsuleCast(
+            capsule.bottomSphereCenter,
+            capsule.topSphereCenter,
+            capsule.radius,
+            direction,
+            out hit,
+            maxDistance,
+            layer
+        );
         if (drawGizmo)
         {
-            UpdateDebugCapsule(capsule, direction * maxDistance);
+            if (hasCollided)
+            {
+                SetDebugCapsule(
+                    () =>
+                    {
+                        return worldPositionCapsule;
+                    },
+                    direction * maxDistance
+                );
+                collisionPoint = hit.point;
+            }
         }
-        return Physics.CapsuleCast(
-                capsule.bottomSphereCenter,
-                capsule.topSphereCenter,
-                capsule.radius,
-                direction,
-                out hit,
-                maxDistance,
-                layer
-            );
+        return hasCollided;
     }
 
     public bool WillCollide(
@@ -139,25 +163,37 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
     )
     {
         CapsuleCollider capsule = worldPositionCapsule.ProjectCollider(offset);
+        var hasCollided = Physics.CapsuleCast(
+            capsule.bottomSphereCenter,
+            capsule.topSphereCenter,
+            capsule.radius,
+            direction,
+            out hit,
+            maxDistance,
+            layer
+        );
         if (drawGizmo)
         {
-            UpdateDebugCapsule(capsule, direction * maxDistance);
+            if (hasCollided)
+            {
+                SetDebugCapsule(
+                    () =>
+                    {
+                        return worldPositionCapsule.ProjectCollider(offset);
+                    }, 
+                    direction * maxDistance
+                );
+                collisionPoint = hit.point;
+            }
         }
-        return Physics.CapsuleCast(
-                capsule.bottomSphereCenter,
-                capsule.topSphereCenter,
-                capsule.radius,
-                direction,
-                out hit,
-                maxDistance,
-                layer
-            );
+        return hasCollided;
     }
 
-    public void UpdateDebugCapsule(CapsuleCollider capsule, Vector3 direction)
+    public void SetDebugCapsule(Func<CapsuleCollider> capsule, Vector3 direction)
     {
 #if UNITY_EDITOR
-        debugCapsule = capsule.ProjectCollider(direction);
+        capsuleRef = capsule;
+        projection = direction;
 #endif
     }
 
@@ -173,6 +209,9 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(debugCapsule.bottomSphereCenter, debugCapsule.radius);
         Gizmos.DrawWireSphere(debugCapsule.topSphereCenter, debugCapsule.radius);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(collisionPoint, .05f);
 #endif
     }
 }

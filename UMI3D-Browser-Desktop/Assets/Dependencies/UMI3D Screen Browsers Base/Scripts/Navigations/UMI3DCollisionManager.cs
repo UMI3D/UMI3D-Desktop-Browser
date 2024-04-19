@@ -26,31 +26,68 @@ public sealed class UMI3DCollisionManager
 
     public BaseFPSData data;
 
+    public Func<CollisionDebugger> collisionDebugger = () => new();
+
     #endregion
 
+    public struct CollisionDebugger
+    {
+        [Flags]
+        public enum E_Collision
+        {
+            None = 0,
+            Ground = 1,
+            HorizontalFirstCollision = 1 << 1,
+            HorizontalSecondCollision = 1 << 2,
+            VerticalCollision = 1 << 3,
+            JumpCollision = 1 << 4,
+            StandUpCollision = 1 << 5,
+        }
+
+        public E_Collision collision;
+
+        public bool DebugGround => collision.HasFlag(E_Collision.Ground);
+
+        public bool DebugHorizontalFirstCollision => collision.HasFlag(E_Collision.HorizontalFirstCollision);
+
+        public bool DebugHorizontalSecondCollision => collision.HasFlag(E_Collision.HorizontalSecondCollision);
+
+        public bool DebugVerticalCollision => collision.HasFlag(E_Collision.VerticalCollision);
+
+        public bool DebugJumpCollision => collision.HasFlag(E_Collision.JumpCollision);
+
+        public bool DebugStandUpCollision => collision.HasFlag(E_Collision.StandUpCollision);
+    }
+
+    /// <summary>
+    /// Feet altitude - ground altitude
+    /// </summary>
+    float feetGroundDelta => playerTransform.position.y - data.groundYAxis;
     /// <summary>
     /// Is player currently grounded ?
     /// </summary>
-    public bool IsGrounded => Mathf.Abs(playerTransform.position.y - data.groundYAxis) < data.stepEpsilon;
+    public bool IsGrounded => Mathf.Abs(feetGroundDelta) < data.stepEpsilon;
     /// <summary>
     /// Is player close to ground ?
     /// </summary>
-    public bool IsCloseToGround => Mathf.Abs(playerTransform.position.y - data.groundYAxis) <= data.maxStepHeight + data.stepEpsilon + .1f;
+    public bool IsCloseToGround => Mathf.Abs(feetGroundDelta) <= data.maxStepHeight + data.stepEpsilon + .1f;
     /// <summary>
     /// Whether or not the player is below the ground.
     /// </summary>
-    public bool IsBelowGround => playerTransform.position.y < data.groundYAxis;
+    public bool IsBelowGround => feetGroundDelta < 0f;
 
     /// <summary>
-    /// Get the ground height position.
+    /// Get the ground altitude.<br/>
+    /// Ground can be navemash or obstacle.
     /// </summary>
     public void ComputeGround()
     {
         var isColliding = colliderDelegate.WillCollide(
             Vector3.down,
             out RaycastHit hit,
-            100,
-            data.obstacleLayer
+            data.maxAltitudeToCheckGround,
+            data.obstacleLayer,
+            collisionDebugger().DebugGround
         );
 
         if (isColliding)
@@ -76,8 +113,19 @@ public sealed class UMI3DCollisionManager
         }
 
         desiredTranslation = GetPossibleHorizontalTranslation(desiredTranslation);
-        desiredTranslation = GetPossibleVerticalTranslation(desiredTranslation);
         bool willEndUpAboveNavMesh = WillTranslationEndUpAboveNavMesh(desiredTranslation);
+        if (!willEndUpAboveNavMesh)
+        {
+            // No movement allowed that can ends up in the vacuum.
+            desiredTranslation = new()
+            {
+                x = 0f,
+                y = desiredTranslation.y,
+                z = 0f
+            };
+        }
+        desiredTranslation = GetPossibleVerticalTranslation(desiredTranslation);
+        willEndUpAboveNavMesh = WillTranslationEndUpAboveNavMesh(desiredTranslation);
         if (!willEndUpAboveNavMesh)
         {
             // No movement allowed that can ends up in the vacuum.
@@ -101,11 +149,15 @@ public sealed class UMI3DCollisionManager
            out RaycastHit hit,
            horizontalDesiredTranslation.magnitude + .1f,
            data.obstacleLayer,
-           false
+           collisionDebugger().DebugHorizontalFirstCollision
        );
         if (!willCollide)
         {
             return desiredTranslation;
+        }
+        if (collisionDebugger().DebugHorizontalFirstCollision)
+        {
+            UnityEngine.Debug.Log($"Horizontal first collision: {hit.transform.name}, hitPoint= {hit.point}, horizontal translation= {horizontalDesiredTranslation}");
         }
 
         Vector3 projection = Vector3.ProjectOnPlane(
@@ -118,15 +170,22 @@ public sealed class UMI3DCollisionManager
            out hit,
            projection.magnitude + .1f,
            data.obstacleLayer,
-           false
+           collisionDebugger().DebugHorizontalSecondCollision
        );
-
-        return new()
+        if (!willCollide)
         {
-            x = willCollide ? 0f : projection.x,
-            y = desiredTranslation.y,
-            z = willCollide ? 0f : projection.z,
-        };
+            return new()
+            {
+                x = projection.x,
+                y = desiredTranslation.y,
+                z = projection.z,
+            };
+        }
+        if (collisionDebugger().DebugHorizontalSecondCollision)
+        {
+            UnityEngine.Debug.Log($"Horizontal second collision: {hit.transform.name}, hitPoint= {hit.point}, projection= {projection}");
+        }
+        return Vector3.up * desiredTranslation.y;
     }
 
     public Vector3 GetPossibleVerticalTranslation(Vector3 desiredTranslation)
@@ -145,14 +204,18 @@ public sealed class UMI3DCollisionManager
             out RaycastHit hit,
             desiredTranslation.y + .1f,
             data.obstacleLayer,
-            true
+            collisionDebugger().DebugVerticalCollision
         );
         if (!willCollide)
         {
             return desiredTranslation;
         }
-
         float delta = GetVerticalTranslationToGround(hit.point.y + data.maxStepHeight + data.stepEpsilon);
+        if (collisionDebugger().DebugVerticalCollision)
+        {
+            UnityEngine.Debug.Log($"Vertical collision: {hit.transform.name}, hitPoint= {hit.point.y}, delta= {delta}");
+            UnityEngine.Debug.Log($"z= {desiredTranslation.z}, delta= {delta}");
+        }
         return new()
         {
             x = desiredTranslation.x,
@@ -183,9 +246,9 @@ public sealed class UMI3DCollisionManager
             },
             Vector3.down,
             out RaycastHit hit,
-            100f,
+            data.maxAltitudeToCheckGround,
             data.navmeshLayer,
-            true
+            false
         );
     }
 
@@ -206,14 +269,24 @@ public sealed class UMI3DCollisionManager
     /// <returns></returns>
     public bool CanJump()
     {
-        return IsGrounded
-            && !colliderDelegate.WillCollide(
-                Vector3.up,
-                out var hit,
-                data.maxJumpAltitude,
-                data.obstacleLayer,
-                false
-            );
+        if (!IsGrounded)
+        {
+            return false;
+        }
+
+        bool willCollide = colliderDelegate.WillCollide(
+            Vector3.up,
+            out var hit,
+            data.maxJumpAltitude,
+            data.obstacleLayer,
+            collisionDebugger().DebugJumpCollision
+        );
+        if (willCollide && collisionDebugger().DebugJumpCollision)
+        {
+            UnityEngine.Debug.Log($"Jump collision: {hit.transform.name}, hitPoint= {hit.point}");
+        }
+
+        return !willCollide;
     }
 
     /// <summary>
@@ -222,16 +295,30 @@ public sealed class UMI3DCollisionManager
     /// <returns></returns>
     public bool CanStandUp()
     {
-        Func<bool> isCrouchingAndWillNotCollideIfStandUp = () =>
+        // If the player does not want to stand.
+        if (data.WantToCrouch)
         {
-            return !colliderDelegate.WillCollide(
-                Vector3.zero,
-                out RaycastHit hit,
-                0f,
-                data.obstacleLayer,
-                false
-            );
-        };
-        return !data.IsCrouching || isCrouchingAndWillNotCollideIfStandUp();
+            return false;
+        }
+        // If the player is not crouching.
+        if (!data.IsCrouching)
+        {
+            return true;
+        }
+
+        // The player want to stand up and is crouching.
+        bool willCollide = colliderDelegate.WillCollide(
+            Vector3.zero,
+            out RaycastHit hit,
+            0f, // TODO: change this value
+            data.obstacleLayer,
+            collisionDebugger().DebugStandUpCollision
+        );
+        if (willCollide && collisionDebugger().DebugStandUpCollision)
+        {
+            UnityEngine.Debug.Log($"Stand up collision: {hit.transform.name}, hitPoint= {hit.point}");
+        }
+
+        return !willCollide;
     }
 }

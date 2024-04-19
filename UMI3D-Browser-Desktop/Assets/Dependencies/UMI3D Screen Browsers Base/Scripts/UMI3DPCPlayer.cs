@@ -29,17 +29,13 @@ namespace umi3d.baseBrowser
         public Transform playerTransform;
         public Transform skeleton;
 
-        [Header("Player Collision Component")]
-        public Transform topHead;
-        /// <summary>
-        /// List of point which from rays will be created to check if there is a navmesh under player's feet
-        /// </summary>
-        public List<Transform> feetRaycastOrigin;
-
         [Header("Camera")]
         public Transform viewpointPivot;
         public Transform neckPivot;
         public Transform head;
+
+        [Header("Player Collision Debugger")]
+        public UMI3DCollisionManager.CollisionDebugger.E_Collision collisionToDebug;
 
         [HideInInspector] public UMI3DNavigation navigation = new();
 
@@ -61,7 +57,8 @@ namespace umi3d.baseBrowser
             {
                 data = fpsData,
                 playerTransform = playerTransform,
-                colliderDelegate = colliderDelegate
+                colliderDelegate = colliderDelegate,
+                collisionDebugger = () => new() { collision = collisionToDebug}
             };
             cameraManager = new()
             {
