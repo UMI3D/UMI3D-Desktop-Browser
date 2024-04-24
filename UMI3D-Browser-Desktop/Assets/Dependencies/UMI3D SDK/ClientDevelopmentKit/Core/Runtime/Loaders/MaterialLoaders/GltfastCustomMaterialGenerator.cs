@@ -33,6 +33,8 @@ namespace umi3d.cdk
         {
             UnityEngine.Material material;
 
+            UnityEngine.Debug.Log($"new Mat {url} {gltfMaterial?.name} {gltfMaterial?.extensions} {gltfMaterial?.extensions?.KHR_materials_pbrSpecularGlossiness != null} {gltfMaterial?.extensions?.KHR_materials_unlit != null}");
+
             if (gltfMaterial?.extensions != null && gltfMaterial.extensions.KHR_materials_pbrSpecularGlossiness != null)
             {
                 material = GetPbrSpecularGlossinessMaterial(gltfMaterial.doubleSided);
@@ -41,10 +43,13 @@ namespace umi3d.cdk
             if (gltfMaterial?.extensions?.KHR_materials_unlit != null)
             {
                 material = GetUnlitMaterial(gltfMaterial.doubleSided);
+                material.ApplyShaderProperty(MRTKShaderUtils.MainColor, new Color(0.1f, 0.8f, 0.5f, 0.4f));
             }
             else
             {
                 material = GetPbrMetallicRoughnessMaterial(gltfMaterial.doubleSided);
+                UnityEngine.Debug.Log($"new Mat !!!!!!!!!!!!!!!");
+                material.ApplyShaderProperty(MRTKShaderUtils.MainColor, new Color(0.1f,0.8f,0.5f,0.4f));
             }
 
             if (string.IsNullOrEmpty(gltfMaterial.name))
@@ -63,6 +68,7 @@ namespace umi3d.cdk
                 GLTFast.Schema.PbrSpecularGlossiness specGloss = gltfMaterial.extensions.KHR_materials_pbrSpecularGlossiness;
                 if (specGloss != null)
                 {
+                    UnityEngine.Debug.LogError($"Pas OK");
                     material.color = specGloss.diffuseColor.gamma;
                     material.SetVector(specColorPropId, specGloss.specularColor);
                     material.SetFloat(glossinessPropId, specGloss.glossinessFactor);
@@ -78,6 +84,7 @@ namespace umi3d.cdk
 
             if (gltfMaterial.pbrMetallicRoughness != null)
             {
+                UnityEngine.Debug.LogError($"OK {gltfMaterial.pbrMetallicRoughness.baseColor.gamma}");
                 material.ApplyShaderProperty(MRTKShaderUtils.MainColor, gltfMaterial.pbrMetallicRoughness.baseColor.gamma);
                 material.ApplyShaderProperty(MRTKShaderUtils.Metallic, gltfMaterial.pbrMetallicRoughness.metallicFactor);
                 material.ApplyShaderProperty(MRTKShaderUtils.Smoothness, 1 - gltfMaterial.pbrMetallicRoughness.roughnessFactor);

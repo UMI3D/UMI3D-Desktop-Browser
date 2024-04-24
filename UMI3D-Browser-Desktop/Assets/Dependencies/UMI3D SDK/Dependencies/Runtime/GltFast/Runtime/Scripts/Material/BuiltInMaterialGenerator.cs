@@ -192,6 +192,9 @@ namespace GLTFast.Materials {
             string url, 
             int id
         ) {
+
+            UnityEngine.Debug.Log($"New Material");
+
             Material material;
             
             if (gltfMaterial.extensions?.KHR_materials_pbrSpecularGlossiness != null) {
@@ -352,6 +355,8 @@ namespace GLTFast.Materials {
                     SetOpaqueMode(material);
                     break;
             }
+
+            UnityEngine.Debug.Log($"SetColor {baseColorLinear} {baseColorLinear.gamma}");
 
             material.color = baseColorLinear.gamma;
             
