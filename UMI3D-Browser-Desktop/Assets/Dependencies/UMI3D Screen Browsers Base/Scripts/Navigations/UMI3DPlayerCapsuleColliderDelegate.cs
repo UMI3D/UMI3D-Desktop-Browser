@@ -145,9 +145,9 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
                     {
                         return worldPositionCapsule;
                     },
-                    direction * maxDistance
+                    direction * maxDistance,
+                    hit.point
                 );
-                collisionPoint = hit.point;
             }
         }
         return hasCollided;
@@ -181,19 +181,20 @@ public class UMI3DPlayerCapsuleColliderDelegate : IPlayerColliderDelegate
                     {
                         return worldPositionCapsule.ProjectCollider(offset);
                     }, 
-                    direction * maxDistance
+                    direction * maxDistance,
+                    hit.point
                 );
-                collisionPoint = hit.point;
             }
         }
         return hasCollided;
     }
 
-    public void SetDebugCapsule(Func<CapsuleCollider> capsule, Vector3 direction)
+    public void SetDebugCapsule(Func<CapsuleCollider> capsule, Vector3 direction, Vector3 hitPoint)
     {
 #if UNITY_EDITOR
         capsuleRef = capsule;
         projection = direction;
+        collisionPoint = hitPoint;
 #endif
     }
 
