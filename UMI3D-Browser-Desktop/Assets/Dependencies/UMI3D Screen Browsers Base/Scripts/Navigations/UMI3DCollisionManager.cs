@@ -113,17 +113,19 @@ public sealed class UMI3DCollisionManager
         }
 
         desiredTranslation = GetPossibleHorizontalTranslation(desiredTranslation);
-        bool willEndUpAboveNavMesh = WillTranslationEndUpAboveNavMesh(desiredTranslation);
-        if (!willEndUpAboveNavMesh)
-        {
-            // No movement allowed that can ends up in the vacuum.
-            desiredTranslation = new()
+        bool willEndUpAboveNavMesh = WillTranslationEndUpAboveNavMesh(
+            new()
             {
-                x = 0f,
-                y = desiredTranslation.y,
-                z = 0f
-            };
-        }
+                x = desiredTranslation.x,
+                y = 0f,
+                z = desiredTranslation.z
+            }
+        );
+        // No movement allowed that can ends up in the vacuum.
+        desiredTranslation = willEndUpAboveNavMesh 
+            ? desiredTranslation
+            : Vector3.up * desiredTranslation.y;
+
         desiredTranslation = GetPossibleVerticalTranslation(desiredTranslation);
         willEndUpAboveNavMesh = WillTranslationEndUpAboveNavMesh(desiredTranslation);
         if (!willEndUpAboveNavMesh)
