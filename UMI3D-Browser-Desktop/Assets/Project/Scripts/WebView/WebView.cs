@@ -57,6 +57,9 @@ namespace BrowserDesktop
         private RectTransform homeRectTransform = null;
 
         [SerializeField]
+        private RectTransform synchronizeRectTransform = null;
+
+        [SerializeField]
         private RectTransform fullScreenRectTransform = null;
 
         [SerializeField]
@@ -80,9 +83,29 @@ namespace BrowserDesktop
         [SerializeField]
         private InputField urlText = null;
 
+        [Space]
+        [SerializeField, Tooltip("Delay to send current url and scroll offset when user synchronizes his content. In seconds")]
+        float synchronizationDelay = 2f;
+
+        [SerializeField, Tooltip("A feedback to show user he's currently sharing its content")]
+        GameObject syncFeedback;
+
         private string previousUrl;
 
         private UMI3DWebViewDto dto;
+
+        private bool isSynchronizing;
+        private bool IsSynchronizing
+        {
+            get => isSynchronizing;
+            set
+            {
+                isSynchronizing = value;
+                syncFeedback.SetActive(value);
+            }
+        }
+
+        private int currentScrollPosition;
 
         #endregion
 
@@ -95,12 +118,56 @@ namespace BrowserDesktop
             canvas.transform.localPosition = Vector3.zero;
 
             canvas.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 3;
+            canvas.sortingOrder = 1;
 
             browser.browserClient.OnUrlChanged += OnUrlLoaded;
 
             autoRefreshCoroutine = StartCoroutine(AutoRefresh());
+
+            synchronizeRectTransform.gameObject.SetActive(false);
+
+            StartCoroutine(SynchronizationCoroutine());
+
+            IsSynchronizing = false;
         }
 
+        /// <summary>
+        /// If user is synchronizing his view, send his current url and scroll offset.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator SynchronizationCoroutine()
+        {
+            var wait = new WaitForSeconds(synchronizationDelay);
+
+            while (true)
+            {
+                if (isAdmin && IsSynchronizing && browser.browserClient.ReadySignalReceived && browser.browserClient.IsConnected)
+                {
+                    int scroll = (int) browser.browserClient.GetScrollPosition().y;
+
+                    if (currentScrollPosition != scroll)
+                    {
+                        currentScrollPosition = scroll;
+
+                        var request = new WebViewUrlChangedRequestDto
+                        {
+                            url = previousUrl,
+                            webViewId = dto.id,
+                            scrollOffset = new() { X = 0, Y = currentScrollPosition }
+                        };
+
+                        UMI3DClientServer.SendRequest(request, true);
+                    }
+                }
+
+                yield return wait;
+            }
+        }
+
+        /// <summary>
+        /// Called when web browser loads a new url.
+        /// </summary>
+        /// <param name="url"></param>
         private void OnUrlLoaded(string url)
         {
             if (autoRefreshCoroutine is not null)
@@ -113,6 +180,7 @@ namespace BrowserDesktop
                 return;
             }
 
+            //Check if url is authorized.
             if (CheckIfUrlValid(url))
             {
                 if (url.StartsWith("data:"))
@@ -120,11 +188,13 @@ namespace BrowserDesktop
                     string title = Regex.Match(url, @"\<title\b[^>]*\>\s*(?<Title>[\s\S]*?)\</title\>", RegexOptions.IgnoreCase).Groups["Title"].Value;
 
                     urlText.text = "HTML data:Title : " + title;
-                } else
+                }
+                else
                 {
                     previousUrl = url;
-
                     urlText.text = url;
+
+                    // If true send to server url loaded.
 
                     var request = new WebViewUrlChangedRequestDto
                     {
@@ -191,6 +261,9 @@ namespace BrowserDesktop
                 homeRectTransform.localScale = new Vector3(homeRectTransform.localScale.x / container.localScale.x,
                     homeRectTransform.localScale.y, homeRectTransform.localScale.z);
 
+                synchronizeRectTransform.localScale = new Vector3(synchronizeRectTransform.localScale.x / container.localScale.x,
+                    synchronizeRectTransform.localScale.y, synchronizeRectTransform.localScale.z);
+
                 fullScreenRectTransform.localScale = new Vector3(fullScreenRectTransform.localScale.x / container.localScale.x,
                     fullScreenRectTransform.localScale.y, fullScreenRectTransform.localScale.z);
 
@@ -201,6 +274,11 @@ namespace BrowserDesktop
             {
                 UMI3DLogger.LogException(e, DebugScope.CDK);
             }
+        }
+
+        protected override void OnAdminStatusChanged(bool status)
+        {
+            synchronizeRectTransform.gameObject.SetActive(status);
         }
 
         protected override async void OnTextureSizeChanged(Vector2 size)
@@ -225,6 +303,8 @@ namespace BrowserDesktop
 
         protected override async void OnUrlChanged(string url)
         {
+            IsSynchronizing = false;
+
             while (!browser.browserClient.ReadySignalReceived && !browser.browserClient.IsConnected)
             {
                 await UMI3DAsyncManager.Yield();
@@ -242,6 +322,34 @@ namespace BrowserDesktop
             catch (Exception ex)
             {
                 Debug.LogError("Impossible to load url " + url);
+                Debug.LogException(ex);
+
+                await UMI3DAsyncManager.Delay(5000);
+
+                browser.browserClient.LoadUrl(url);
+            }
+        }
+
+        protected override async void OnScrollOffsetChanged(Vector2 scroll)
+        {
+            while (!browser.browserClient.ReadySignalReceived && !browser.browserClient.IsConnected)
+            {
+                await UMI3DAsyncManager.Yield();
+            }
+
+            await UMI3DAsyncManager.Yield();
+
+            try
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    browser.browserClient.SendMouseScroll(Vector2.one, (int)(browser.browserClient.GetScrollPosition().y - scroll.y));
+                    await UMI3DAsyncManager.Yield();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Impossible to set offset url " + url);
                 Debug.LogException(ex);
 
                 await UMI3DAsyncManager.Delay(5000);
@@ -284,7 +392,9 @@ namespace BrowserDesktop
 
             try
             {
-                Uri uriToCheck = new Uri(url);
+                Uri uriToCheck = new(url);
+
+                Debug.Log(url + " " + uriToCheck.Host);
 
                 if (useBlackList)
                 {
@@ -314,12 +424,12 @@ namespace BrowserDesktop
         }
 
         /// <summary>
-        /// Displays a web page explaining that a <paramref name="notAuhtorizedUrl"/> was loaded but it was not allowed.
+        /// Displays a web page explaining that a <paramref name="notAuthorizedUrl"/> was loaded but it was not allowed.
         /// </summary>
-        /// <param name="notAuhtorizedUrl"></param>
-        public void LoadNotAccessibleWebPage(string notAuhtorizedUrl)
+        /// <param name="notAuthorizedUrl"></param>
+        public void LoadNotAccessibleWebPage(string notAuthorizedUrl)
         {
-            browser.LoadHtml("<html><head><meta charset=\"utf-8\"><title>Not authorized</title></head><body>Impossible to load " + notAuhtorizedUrl + ", this url is either blacklisted or not white listed. Contact your administrator.</body></html>");
+            browser.LoadHtml("<html><head><meta charset=\"utf-8\"><title>Not authorized</title></head><body>Impossible to load " + notAuthorizedUrl + ", this url is either blacklisted or not white listed. Contact your administrator.</body></html>");
         }
 
         private Coroutine autoRefreshCoroutine;
@@ -337,6 +447,18 @@ namespace BrowserDesktop
                 yield return wait;
                 browser.Refresh();
             }
+        }
+
+        public void ToggleSynchronization()
+        {
+            IsSynchronizing = !IsSynchronizing;
+
+            var request = new WebViewSynchronizationRequestDto
+            {
+                webViewId = dto.id
+            };
+
+            UMI3DClientServer.SendRequest(request, true);
         }
 
         #endregion

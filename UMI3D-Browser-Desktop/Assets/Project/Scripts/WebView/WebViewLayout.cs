@@ -32,7 +32,6 @@ namespace BrowserDesktop
         [SerializeField]
         private Canvas canvas;
 
-
         [SerializeField]
         private List<RectTransform> containerToStrech = new();
 
