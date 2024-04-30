@@ -58,9 +58,10 @@ public class BrowserBuilder : InitedWindow<BrowserBuilder>
     protected override void Init()
     {
         version = new VersionGUI(
+            "VersionData",
             Application.dataPath + browserVersionPath,
             "I.I.I.yyMMdd",
-            () => BrowserVersion.Version,
+            (text) => BrowserVersion.Version,
             ("major",(s) => BrowserVersion.major),
             ("minor", (s) => BrowserVersion.minor),
             ("buildCount", (s) => BrowserVersion.buildCount),

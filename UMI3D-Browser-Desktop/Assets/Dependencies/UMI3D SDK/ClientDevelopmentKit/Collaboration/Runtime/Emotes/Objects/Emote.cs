@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using umi3d.common;
 using umi3d.common.collaboration.dto.emotes;
 using UnityEngine;
 
@@ -23,8 +24,26 @@ namespace umi3d.cdk.collaboration.emotes
     /// Describes an emote from the client side
     /// </summary>
     [System.Serializable]
-    public class Emote
+    public class Emote : IBrowserEntity
     {
+        public Emote(UMI3DEmoteDto dto, Sprite icon, ulong environmentId = UMI3DGlobalID.EnvironmentId)
+        {
+            this.dto = dto ?? throw new System.ArgumentNullException(nameof(dto));
+            this.icon = icon;
+            this.available = dto.available;
+            this.AnimationId = dto.animationId;
+            this.EnvironmentId = environmentId;
+        }
+
+        /// <summary>
+        /// Emote dto
+        /// </summary>
+        private readonly UMI3DEmoteDto dto;
+
+        public ulong Id => dto.id;
+
+        public ulong EnvironmentId { get; private set; }
+
         /// <summary>
         /// Emote's label
         /// </summary>
@@ -33,21 +52,16 @@ namespace umi3d.cdk.collaboration.emotes
         /// <summary>
         /// Emote's animation
         /// </summary>
-        public virtual ulong AnimationId => dto.animationId;
+        public virtual ulong AnimationId { get; internal set; }
 
         /// <summary>
         /// Icon of the emote in the UI
         /// </summary>
-        public Sprite icon;
+        public Sprite icon { get; private set; }
 
         /// <summary>
         /// Should the emote be available or not
         /// </summary>
-        public bool available;
-
-        /// <summary>
-        /// Emote dto
-        /// </summary>
-        public UMI3DEmoteDto dto;
+        public bool available { get; internal set; }
     }
 }

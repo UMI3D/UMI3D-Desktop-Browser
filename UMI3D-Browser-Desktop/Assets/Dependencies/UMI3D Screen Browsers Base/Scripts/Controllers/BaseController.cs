@@ -187,7 +187,7 @@ namespace umi3d.baseBrowser.Controller
         }
         protected void UnequipeForceProjection()
         {
-            InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
+            InteractionMapper.ReleaseTool(currentTool.environmentId,currentTool.id, new RequestedByUser());
             mouseData.ForceProjection = false;
             mouseData.CurrentHovered = null;
             mouseData.CurrentHoveredTransform = null;
@@ -196,7 +196,7 @@ namespace umi3d.baseBrowser.Controller
         }
         private void SetAutoProjection()
         {
-            InteractionMapper.SelectTool(mouseData.CurrentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
+            InteractionMapper.SelectTool(mouseData.CurrentHovered.environmentId, mouseData.CurrentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
             mouseData.HoverState = HoverState.AutoProjected;
             BaseCursor.State = BaseCursor.CursorState.Hover;
             mouseData.LastProjected = mouseData.CurrentHovered;
@@ -204,7 +204,7 @@ namespace umi3d.baseBrowser.Controller
         private void ReleaseAutoProjection()
         {
             if (mouseData.HoverState == HoverState.AutoProjected && currentTool != null)
-                InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
+                InteractionMapper.ReleaseTool(currentTool.environmentId, currentTool.id, new RequestedByUser());
             mouseData.HoverState = HoverState.None;
             BaseCursor.State = BaseCursor.CursorState.Default;
             mouseData.LastProjected = null;
@@ -469,19 +469,21 @@ namespace umi3d.baseBrowser.Controller
                 .HoverExit(hoverBoneType,hoverBoneTransform.position,v, lastHoverId, mouseData.LastPosition, mouseData.LastNormal, mouseData.LastDirection);
 
             ulong hoverExitAnimationId = mouseData.OldHovered.dto.HoverExitAnimationId;
+            ulong hoverExitAnimationEnvId = mouseData.OldHovered.environmentId;
             if (hoverExitAnimationId != 0)
             {
-                cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverExitAnimationId);
+                cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverExitAnimationEnvId, hoverExitAnimationId);
 
                 await anim.SetUMI3DProperty(
-                    new SetUMI3DPropertyData( 
+                    new SetUMI3DPropertyData(
+                        mouseData.OldHovered.environmentId,
                         new SetEntityPropertyDto()
                             {
                                 entityId = hoverExitAnimationId,
                                 property = UMI3DPropertyKeys.AnimationPlaying,
                                 value = true
                             },
-                        UMI3DEnvironmentLoader.GetEntity(hoverExitAnimationId)
+                        UMI3DEnvironmentLoader.GetEntity(hoverExitAnimationEnvId, hoverExitAnimationId)
                         )
                     );
 
@@ -502,17 +504,18 @@ namespace umi3d.baseBrowser.Controller
             ulong hoverEnterAnimationId = mouseData.CurrentHovered.dto.HoverEnterAnimationId;
             if (hoverEnterAnimationId != 0)
             {
-                cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverEnterAnimationId);
+                cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(mouseData.OldHovered.environmentId, hoverEnterAnimationId);
 
                 await anim.SetUMI3DProperty(
                     new SetUMI3DPropertyData(
+                        mouseData.OldHovered.environmentId,
                         new SetEntityPropertyDto()
                         {
                             entityId = hoverEnterAnimationId,
                             property = UMI3DPropertyKeys.AnimationPlaying,
                             value = true
                         },
-                        UMI3DEnvironmentLoader.GetEntity(hoverEnterAnimationId)
+                        UMI3DEnvironmentLoader.GetEntity(mouseData.OldHovered.environmentId, hoverEnterAnimationId)
                         )
                     );
 

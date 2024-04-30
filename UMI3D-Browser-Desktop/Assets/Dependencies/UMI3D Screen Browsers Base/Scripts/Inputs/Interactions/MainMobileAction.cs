@@ -46,9 +46,9 @@ namespace umi3d.mobileBrowser.interactions
         private void OnDown() => BaseCursor.State = BaseCursor.CursorState.Clicked;
         private void OnUp() => BaseCursor.State = BaseCursor.CursorState.Default;
 
-        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
+        public override void Associate(ulong environmentId, AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
-            StartCoroutine(_Associate(interaction, toolId, hoveredObjectId));
+            StartCoroutine(_Associate(environmentId, interaction, toolId, hoveredObjectId));
         }
 
         public override void Dissociate()
@@ -69,10 +69,10 @@ namespace umi3d.mobileBrowser.interactions
             }
         }
 
-        private System.Collections.IEnumerator _Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
+        private System.Collections.IEnumerator _Associate(ulong environmentId, AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (m_down) yield return new WaitUntil(() => !m_down);
-            base.Associate(interaction, toolId, hoveredObjectId);
+            base.Associate(environmentId, interaction, toolId, hoveredObjectId);
             Down += DownClicked;
             Up += UpClicked;
         }

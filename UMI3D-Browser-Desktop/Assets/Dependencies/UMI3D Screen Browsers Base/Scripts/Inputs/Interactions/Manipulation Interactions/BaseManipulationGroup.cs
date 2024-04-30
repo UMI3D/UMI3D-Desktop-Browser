@@ -147,10 +147,10 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public Func<DofGroupEnum, float, FrameIndicator, Transform, BaseManipulation> InstanciateManipulation;
 
-        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
+        public override void Associate(ulong environmentId, AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
             => throw new System.NotImplementedException();
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
+        public override void Associate(ulong environmentId, ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
             if (!IsAvailableFor(manipulation)) throw new System.Exception($"This input is not available for {manipulation}");
 
@@ -161,11 +161,12 @@ namespace umi3d.baseBrowser.inputs.interactions
             this.hoveredObjectId = hoveredObjectId;
             this.toolId = toolId;
             associatedInteraction = manipulation;
+            this.environmentId = environmentId;
 
             BaseManipulation input = InstanciateManipulation(dofs, strength, frameIndicator, manipulationCursor);
             input.Menu = Menu;
             input.bone = bone;
-            input.Associate(manipulation, dofs, toolId, hoveredObjectId);
+            input.Associate(environmentId,manipulation, dofs, toolId, hoveredObjectId);
             input.Deactivate();
             AddManipulation(input);
 

@@ -21,6 +21,9 @@ namespace umi3d.baseBrowser.inputs.interactions
     public abstract class BaseInteraction<InteractionType> : cdk.interaction.AbstractUMI3DInput, IInteractionWithBone
         where InteractionType : common.interaction.AbstractInteractionDto
     {
+
+        public ulong environmentId { get; protected set; }
+
         /// <summary>
         /// Associtated interaction (if any).
         /// </summary>
@@ -41,7 +44,7 @@ namespace umi3d.baseBrowser.inputs.interactions
         protected ulong toolId, hoveredObjectId;
         public override void UpdateHoveredObjectId(ulong hoveredObjectId) => this.hoveredObjectId = hoveredObjectId;
 
-        public override void Associate(common.interaction.ManipulationDto manipulation, common.interaction.DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
+        public override void Associate(ulong environmnetId, common.interaction.ManipulationDto manipulation, common.interaction.DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
             => throw new System.Exception("This input is can not be associated with a manipulation");
         public override bool IsAvailable() => associatedInteraction == null;
         public override bool IsCompatibleWith(common.interaction.AbstractInteractionDto interaction) => interaction is InteractionType;

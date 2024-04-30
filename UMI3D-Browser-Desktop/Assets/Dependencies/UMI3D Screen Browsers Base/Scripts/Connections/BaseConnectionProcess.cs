@@ -16,11 +16,11 @@ limitations under the License.
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.common;
 using UnityEngine;
 using umi3d.baseBrowser.cursor;
+using umi3d.cdk;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -401,7 +401,7 @@ namespace umi3d.baseBrowser.connection
                     (bool, bool) lc = await DisplayPopUp("Loading error", $"{le.Message}");
                     rememberLe = lc.Item2;
                     return lc.Item1;
-                case Umi3dException ue:
+                case common.Umi3dException ue:
                     if (rememberUe) return true;
                     (bool, bool) uc = await DisplayPopUp("Error", $"{ue.Message}");
                     rememberUe = uc.Item2;
