@@ -84,8 +84,6 @@ namespace umi3d.cdk.collaboration
             if (dto == null)
                 return;
 
-            UnityEngine.Debug.Log($"ReadUMI3DExtension {environmentId}");
-
             if (userList != null)
             {
                 if (userList.ContainsKey(environmentId))
@@ -368,15 +366,12 @@ namespace umi3d.cdk.collaboration
             {
                 if (userList.ContainsKey(environmentId))
                 {
-                    UnityEngine.Debug.Log($"ReplaceAllUser {environmentId}");
                     userList[environmentId].ForEach(u => DeleteEntityInstance(u.EnvironmentId, u.id, null));
                     userList.Remove(environmentId);
                 }
             }
             else
                 userList = new();
-
-            UnityEngine.Debug.Log($"ReplaceAllUser {environmentId} {usersNew.Select(u => u.id.ToString()).ToString<string>()}");
 
             var users = usersNew.Select(u => (dto: u, entity: new UMI3DUser(environmentId, u)));
             userList[environmentId] = users.Select(u => u.entity).ToList();

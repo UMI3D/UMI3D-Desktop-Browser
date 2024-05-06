@@ -445,7 +445,6 @@ namespace umi3d.cdk.collaboration
                 mumbleClient = null;
             }
 
-            UnityEngine.Debug.Log($"Mumble connect to {identity.hostName} {identity.port}");
             mumbleClient = new MumbleClient(identity.hostName, identity.port, CreateMumbleAudioPlayerFromPrefab,
                    DestroyMumbleAudioPlayer, OnOtherUserStateChange, true,
                    SpeakerCreationMode.ALL, debuggingVariables, posLength);

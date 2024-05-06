@@ -154,7 +154,6 @@ namespace umi3d.cdk.collaboration.userCapture
         {
             if (canClearSkeletons)
             {
-                UnityEngine.Debug.Log("Clear skeletons");
                 skeletons.Clear();
                 canClearSkeletons = false;
             }
@@ -187,7 +186,6 @@ namespace umi3d.cdk.collaboration.userCapture
                 {
                     if (Skeletons.TryGetValue(userId, out var skeleton) && skeleton is CollaborativeSkeleton collabSkeleton)
                     {
-                        UnityEngine.Debug.Log($"Remove skeleton {userId.Item1} {userId.Item2}");
                         UnityEngine.Object.Destroy(collabSkeleton.gameObject);
                         skeletons.Remove(userId);
                     }
@@ -243,8 +241,6 @@ namespace umi3d.cdk.collaboration.userCapture
                 else
                     cs.Bones[bone] = new ISkeleton.Transformation() { Rotation = Quaternion.identity };
             }
-
-            UnityEngine.Debug.Log($"Create skeleton {environmentId}[{UMI3DGlobalID.EnvironmentId}] {userId}");
 
             skeletons[(environmentId, userId)] = cs;
             CollaborativeSkeletonCreated?.Invoke(userId);
