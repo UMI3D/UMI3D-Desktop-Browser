@@ -558,7 +558,7 @@ namespace umi3d.cdk.collaboration
                 case ValidateEnvironmentPoseConditionDto validateEnvironmentPoseCondition:
                     MainThreadManager.Run(() =>
                     {
-                        PoseManager.Instance.ChangeEnvironmentPoseCondition(operation.environmentId, validateEnvironmentPoseCondition.Id, validateEnvironmentPoseCondition.ShouldBeValidated);
+                        PoseService.Instance.ChangeEnvironmentPoseCondition(operation.environmentId, validateEnvironmentPoseCondition.Id, validateEnvironmentPoseCondition.ShouldBeValidated);
                     });
                     break;
                 default:
@@ -714,9 +714,9 @@ namespace umi3d.cdk.collaboration
                         MainThreadManager.Run(() =>
                         {
                             if (shouldActivate)
-                                PoseManager.Instance.TryActivatePoseAnimator(container.environmentId, poseOverriderId);
+                                PoseService.Instance.TryActivatePoseAnimator(container.environmentId, poseOverriderId);
                             else
-                                PoseManager.Instance.TryDeactivatePoseAnimator(container.environmentId, poseOverriderId);
+                                PoseService.Instance.TryDeactivatePoseAnimator(container.environmentId, poseOverriderId);
                         });
                         break;
                     }
@@ -732,7 +732,7 @@ namespace umi3d.cdk.collaboration
 
                         MainThreadManager.Run(() =>
                         {
-                            PoseManager.Instance.ChangeEnvironmentPoseCondition(UMI3DGlobalID.EnvironmentId, validateEnvironmentPoseConditionDto.Id, validateEnvironmentPoseConditionDto.ShouldBeValidated);
+                            PoseService.Instance.ChangeEnvironmentPoseCondition(UMI3DGlobalID.EnvironmentId, validateEnvironmentPoseConditionDto.Id, validateEnvironmentPoseConditionDto.ShouldBeValidated);
                         });
                         break;
                     }
