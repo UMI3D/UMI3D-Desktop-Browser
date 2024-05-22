@@ -47,6 +47,11 @@ namespace umi3d.baseBrowser
 
         void Awake()
         {
+            KeyboardAndMouseFpsNavigation concreteFPSNavigation = new KeyboardAndMouseFpsNavigation()
+            {
+                data = fpsData,
+            };
+
             colliderDelegate = new()
             {
                 playerTransform = playerTransform,
@@ -66,7 +71,8 @@ namespace umi3d.baseBrowser
                 playerTransform = playerTransform,
                 viewpointPivot = viewpointPivot,
                 neckPivot = neckPivot,
-                head = head
+                head = head,
+                concreteFPSNavigation = concreteFPSNavigation
             };
             movementManager = new()
             {
@@ -74,10 +80,7 @@ namespace umi3d.baseBrowser
                 playerTransform = playerTransform,
                 skeleton = skeleton,
                 collisionManager = collisionManager,
-                concreteFPSNavigation = new KeyboardAndMouseFpsNavigation()
-                {
-                    data = fpsData,
-                }
+                concreteFPSNavigation = concreteFPSNavigation
             };
             navigationDelegate = new()
             {
@@ -98,12 +101,11 @@ namespace umi3d.baseBrowser
 
         private void Update()
         {
-            if (!navigationDelegate.isActive)
-            {
-                return; 
-            }
-
             cameraManager.HandleView();
+
+            if (!navigationDelegate.isActive)
+                return; 
+
             colliderDelegate.ComputeCollider();
             movementManager.ComputeMovement();
         }

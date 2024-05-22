@@ -22,19 +22,25 @@ namespace umi3d.baseBrowser.Navigation
     public interface IConcreteFPSNavigation
     {
         /// <summary>
-        /// Handle user input for movement and camera.<br/>
+        /// Handle user input for camera.<br/>
+        /// <br/>
+        /// Modify a {0;1} <see cref="Vector2"/> representing a camera movement.<br/>
+        /// <list type="bullet">
+        /// <item>x: Left to right (positive: right)</item>
+        /// <item>y: Down to up (positive: up)</item>
+        /// </list>
+        /// </summary>
+        /// <returns></returns>
+        void HandleUserCamera();
+
+        /// <summary>
+        /// Handle user input for movement.<br/>
         /// <br/>
         /// Modify a {0;1} <see cref="Vector3"/> representing a player movement.<br/>
         /// <list type="bullet">
         /// <item>x: Left to right (positive: right)</item>
         /// <item>y: Down to up (positive: up)</item>
         /// <item>z: back to front (positive: front)</item>
-        /// </list>
-        /// <br/>
-        /// Modify a {0;1} <see cref="Vector2"/> representing a camera movement.<br/>
-        /// <list type="bullet">
-        /// <item>x: Left to right (positive: right)</item>
-        /// <item>y: Down to up (positive: up)</item>
         /// </list>
         /// </summary>
         /// <returns></returns>

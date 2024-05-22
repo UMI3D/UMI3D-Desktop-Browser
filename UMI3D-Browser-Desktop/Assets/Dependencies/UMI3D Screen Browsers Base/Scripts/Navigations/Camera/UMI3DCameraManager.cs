@@ -27,6 +27,7 @@ public sealed class UMI3DCameraManager
     public Transform viewpointPivot;
     public Transform neckPivot;
     public Transform head;
+    public IConcreteFPSNavigation concreteFPSNavigation;
 
     public BaseFPSData data;
 
@@ -41,6 +42,8 @@ public sealed class UMI3DCameraManager
         {
             return;
         }
+
+        concreteFPSNavigation.HandleUserCamera();
 
         data.cameraMode = E_CameraMode.Navigation; // Debug only.
         if (data.cameraMode != E_CameraMode.Locked)

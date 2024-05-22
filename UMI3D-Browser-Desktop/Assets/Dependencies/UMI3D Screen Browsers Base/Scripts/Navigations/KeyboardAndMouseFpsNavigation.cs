@@ -23,6 +23,17 @@ namespace umi3d.baseBrowser.Navigation
     {
         public BaseFPSData data;
 
+        public void HandleUserCamera()
+        {
+            // Camera movement
+            data.cameraRotation = new Vector2(
+                -1 * Input.GetAxis("Mouse Y"),
+                Input.GetAxis("Mouse X")
+            );
+
+            data.WantToLookAround = KeyboardNavigation.IsPressed(NavigationEnum.FreeView);
+        }
+
         public void HandleUserInput()
         {
             // Player translation speed.
@@ -64,13 +75,6 @@ namespace umi3d.baseBrowser.Navigation
             data.WantToCrouch = KeyboardNavigation.IsPressed(NavigationEnum.Crouch);
             data.WantToSprint = KeyboardNavigation.IsPressed(NavigationEnum.sprint);
 
-            // Camera movement
-            data.cameraRotation = new Vector2( 
-                -1 * Input.GetAxis("Mouse Y"),
-                Input.GetAxis("Mouse X")
-            );
-
-            data.WantToLookAround =  KeyboardNavigation.IsPressed(NavigationEnum.FreeView);
         }
     }
 }
