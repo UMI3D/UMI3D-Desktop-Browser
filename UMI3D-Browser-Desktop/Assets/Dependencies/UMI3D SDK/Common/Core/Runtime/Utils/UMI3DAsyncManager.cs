@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,24 +32,36 @@ public static class UMI3DAsyncManager
     /// Similar to <see cref="Task.Yield()"/> with security if the app is quitted in the meanwhile.
     /// </summary>
     /// <returns></returns>
-    public static async Task Yield(List<CancellationToken> tokens = null)
+    public static async Task Yield(List<CancellationToken> tokens, bool isMainThread)
     {
-        ErrorIfQuitting(tokens);
+        ErrorIfQuitting(tokens, isMainThread);
         await Task.Yield();
     }
+
+    public static async Task Yield(List<CancellationToken> tokens = null)
+    {
+        await Yield(tokens, true);
+    }
+
 
     /// <summary>
     /// Similar to <see cref="Task.Delay(int)"/> with security if the app is quitted in the meanwhile.
     /// </summary>
     /// <param name="milliseconds"></param>
     /// <returns></returns>
-    public static async Task Delay(int milliseconds, List<CancellationToken> tokens = null)
+    public static async Task Delay(int milliseconds, List<CancellationToken> tokens, bool isMainThread)
     {
-        ErrorIfQuitting(tokens);
+        ErrorIfQuitting(tokens, isMainThread);
         await Task.Delay(milliseconds);
-        ErrorIfQuitting(tokens);
+        ErrorIfQuitting(tokens, isMainThread);
 
     }
+
+    public static async Task Delay(int milliseconds, List<CancellationToken> tokens = null)
+    {
+        await Delay(milliseconds, tokens, true);
+    }
+
 
     public static void TestTokens(this List<CancellationToken> tokens)
     {
@@ -57,23 +70,23 @@ public static class UMI3DAsyncManager
                 token.ThrowIfCancellationRequested();
     }
 
-    private static void ErrorIfQuitting(List<CancellationToken> tokens)
+    private static void ErrorIfQuitting(List<CancellationToken> tokens, bool isMainThread = true)
     {
         if (QuittingManager.ApplicationIsQuitting)
-            throw new UMI3DAsyncManagerException("Application is quitting");
-#if UNITY_EDITOR
-        try
-        {
-            if (!Application.isPlaying)
+                throw new UMI3DAsyncManagerException("Application is quitting");
+    #if UNITY_EDITOR
+            try
             {
-                throw new UMI3DAsyncManagerException("Application is not playing");
+                if (isMainThread && !Application.isPlaying)
+                {
+                    throw new UMI3DAsyncManagerException("Application is not playing");
+                }
             }
-        }
-        catch (UnityException e)
-        {
-            UnityEngine.Debug.LogException(e);
-        }
-#endif
+            catch(UnityException e)
+            {
+                UnityEngine.Debug.LogException(e);
+            }
+    #endif
         TestTokens(tokens);
     }
 }

@@ -44,14 +44,21 @@ namespace umi3d.cdk
             text.fontSize = dto.fontSize;
             text.fontStyle = dto.fontStyle.Convert();
 
-            string fontName = dto.font + ".ttf";
-            if (fontName == "Arial.ttf") fontName = "LegacyRuntime.ttf";
-            var font = Resources.GetBuiltinResource<Font>(fontName);
-            if (font != default && font != null)
-                text.font = font;
-            else
+            try
             {
-                text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                string fontName = dto.font + ".ttf";
+                if (fontName == "Arial.ttf") fontName = "LegacyRuntime.ttf"; //to avoid any the use of the deprecated unity font in old UMI3D experiences
+                var font = Resources.GetBuiltinResource<Font>(fontName);
+                if (font != default && font != null)
+                    text.font = font;
+                else
+                {
+                    text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                }
+            }
+            catch(Exception e)
+            {
+                Debug.LogError(e);
             }
 
             text.horizontalOverflow = dto.horizontalOverflow.Convert();

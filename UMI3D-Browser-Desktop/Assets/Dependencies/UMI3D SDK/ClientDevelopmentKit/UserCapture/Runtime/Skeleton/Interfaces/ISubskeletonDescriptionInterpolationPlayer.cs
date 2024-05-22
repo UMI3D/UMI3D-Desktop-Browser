@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using umi3d.common.userCapture.description;
 
 namespace umi3d.cdk.userCapture
@@ -24,7 +27,7 @@ namespace umi3d.cdk.userCapture
         /// True if the player is currently applying a pose.
         /// </summary>
         /// Note that this value is still true after some time 
-        /// after calling <see cref="End()"/> because of end of application handling.
+        /// after calling <see cref="End(bool=false)"/> because of end of application handling.
         bool IsPlaying { get; }
 
         /// <summary>
@@ -60,10 +63,14 @@ namespace umi3d.cdk.userCapture
         /// <param name="shouldStopImmediate">If true, the subskeleton displacement is ended immediately with no ending interpolation phase.</param>
         void End(bool shouldStopImmediate = false);
 
+        event System.Action SwitchTransitionFinished;
+
+        event Action Stopped;
+
         /// <summary>
         /// Parameters used to request a specific application of the pose.
         /// </summary>
-        public class PlayingParameters
+        public record PlayingParameters
         {
             /// <summary>
             /// Duration (in seconds) of the transition when pose is starting to be applied.
@@ -74,6 +81,8 @@ namespace umi3d.cdk.userCapture
             /// Duration (in seconds) of the transition when pose is ending to be applied.
             /// </summary>
             public float endTransitionDuration = DEFAULT_TRANSITION_DURATION;
+
+            public ISubskeletonDescriptor previousDescriptor;
         }
 
         public const float DEFAULT_TRANSITION_DURATION = 0.25f;
