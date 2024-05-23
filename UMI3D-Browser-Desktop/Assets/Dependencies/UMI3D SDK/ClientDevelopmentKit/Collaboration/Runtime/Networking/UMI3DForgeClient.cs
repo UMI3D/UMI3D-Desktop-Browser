@@ -456,6 +456,18 @@ namespace umi3d.cdk.collaboration
         {
             switch (operation.operation)
             {
+                case FPSModeRequestDto:
+                    MainThreadManager.Run(() =>
+                    {
+                        UMI3DNavigation.currentNav.Activate();
+                    });
+                    break;
+                case LockedModeRequestDto:
+                    MainThreadManager.Run(() =>
+                    {
+                        UMI3DNavigation.currentNav.Disable();
+                    });
+                    break;
                 case NavigationModeRequestDto navigationMode:
                     MainThreadManager.Run(() =>
                     {
@@ -562,10 +574,15 @@ namespace umi3d.cdk.collaboration
                 case UMI3DOperationKeys.FlyingNavigationMode:
                 case UMI3DOperationKeys.LayeredFlyingNavigationMode:
                 case UMI3DOperationKeys.FpsNavigationMode:
+                    MainThreadManager.Run(() =>
+                    {
+                        UMI3DNavigation.currentNav.Activate();
+                    });
+                    break;
                 case UMI3DOperationKeys.LockedNavigationMode:
                     MainThreadManager.Run(() =>
                     {
-                        UnityEngine.Debug.Log("TODO : update Navigation mode");
+                        UMI3DNavigation.currentNav.Disable();
                     });
                     break;
                 case UMI3DOperationKeys.NavigationRequest:
