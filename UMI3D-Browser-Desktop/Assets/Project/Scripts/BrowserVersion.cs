@@ -31,7 +31,7 @@ namespace BrowserDesktop
         /// <summary>
         /// Year-Month-Day.
         /// </summary>
-        public readonly static string date = "240426";
+        public readonly static string date = "240523";
     }
 }
 
