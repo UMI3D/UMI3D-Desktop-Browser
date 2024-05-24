@@ -75,6 +75,10 @@ public sealed class UMI3DCollisionManager
     /// Whether or not the player is below the ground.
     /// </summary>
     public bool IsBelowGround => feetGroundDelta < 0f;
+    /// <summary>
+    /// Whether or not the player is above the ground.
+    /// </summary>
+    public bool IsAboveGround => feetGroundDelta > 0f;
 
     /// <summary>
     /// Get the ground altitude.<br/>
@@ -86,12 +90,13 @@ public sealed class UMI3DCollisionManager
             Vector3.down,
             out RaycastHit hit,
             data.maxAltitudeToCheckGround,
-            data.obstacleLayer,
+            data.navmeshLayer,
             collisionDebugger().DebugGround
         );
 
         if (isColliding)
         {
+            data.previousGroundYAxis = data.groundYAxis;
             data.groundYAxis = hit.point.y;
         }
     }
@@ -113,6 +118,7 @@ public sealed class UMI3DCollisionManager
         }
 
         desiredTranslation = GetPossibleHorizontalTranslation(desiredTranslation);
+        // Check if the horizontal translation (without the vertical translation) end up above nav mesh).
         bool willEndUpAboveNavMesh = WillTranslationEndUpAboveNavMesh(
             new()
             {
@@ -212,11 +218,10 @@ public sealed class UMI3DCollisionManager
         {
             return desiredTranslation;
         }
-        float delta = GetVerticalTranslationToGround(hit.point.y + data.maxStepHeight + data.stepEpsilon);
+        float delta = GetVerticalTranslationToGround(hit.point.y + data.stepEpsilon);
         if (collisionDebugger().DebugVerticalCollision)
         {
-            UnityEngine.Debug.Log($"Vertical collision: {hit.transform.name}, hitPoint= {hit.point.y}, delta= {delta}");
-            UnityEngine.Debug.Log($"z= {desiredTranslation.z}, delta= {delta}");
+            UnityEngine.Debug.Log($"Vertical collision: {hit.transform.name}, player = {playerTransform.position.y}, hitPoint= {hit.point.y}, delta= {delta}");
         }
         return new()
         {

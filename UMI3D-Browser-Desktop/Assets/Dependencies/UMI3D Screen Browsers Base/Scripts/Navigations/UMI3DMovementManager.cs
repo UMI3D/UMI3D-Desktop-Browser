@@ -200,7 +200,6 @@ public sealed class UMI3DMovementManager
         }
 
         data.IsCrouching = data.WantToCrouch || !collisionManager.CanStandUp();
-
         if (collisionManager.IsGrounded)
         {
             if (data.WantToJump && collisionManager.CanJump())
@@ -216,7 +215,10 @@ public sealed class UMI3DMovementManager
         }
         else
         {
-            data.verticalVelocity += data.GravityVelocity;
+            if (collisionManager.IsAboveGround)
+            {
+                data.verticalVelocity += data.GravityVelocity;
+            }
         }
 
         data.playerTranslationSpeed.y = data.verticalVelocity;
@@ -232,6 +234,11 @@ public sealed class UMI3DMovementManager
 
         // Get a direction and distance relative to the player that is possible (avoid collision).
         data.playerTranslation = collisionManager.GetPossibleTranslation(data.playerTranslation);
+        if (data.playerTranslation.y == 0 && collisionManager.IsBelowGround)
+        {
+            var delta = playerTransform.position.y - data.groundYAxis;
+            data.playerTranslation.y = Mathf.Lerp(0, -delta, 0.4f);
+        }
     }
 
     void UpdatePlayerPosition()
