@@ -37,7 +37,7 @@ MonoBehaviour:
   capsuleRadius: 0.3
   maxAltitudeToCheckGround: 25
   maxSlopeAngle: 45
-  maxStepHeight: 0.1
+  maxStepHeight: 0.4
   stepEpsilon: 0.05
   groundYAxis: -6.452239
   previousGroundYAxis: -6.452239
