@@ -87,6 +87,7 @@ namespace umi3d.baseBrowser
                 data = fpsData,
                 playerTransform = playerTransform,
                 personalSkeletonContainer = personalSkeletonContainer,
+                cameraTransform = viewpointPivot.GetChild(0),
                 collisionManager = collisionManager,
             };
             navigation.Init(navigationDelegate);
