@@ -373,9 +373,9 @@ namespace umi3d.cdk.collaboration
         /// <inheritdoc/>
         protected override void OnDataFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
         {
-            if(UMI3DClientServer.Exists && UMI3DClientServer.transactionDispatcher == null)
+            if (UMI3DClientServer.Exists && UMI3DClientServer.transactionDispatcher == null)
             {
-                UMI3DClientServer.transactionDispatcher = new UMI3DTransactionDispatcher((dto) => PerformOperation(dto),(id,c)=>PerformOperation(id,c));
+                UMI3DClientServer.transactionDispatcher = new UMI3DTransactionDispatcher((dto) => PerformOperation(dto), (id, c) => PerformOperation(id, c));
 
             }
 
@@ -482,7 +482,7 @@ namespace umi3d.cdk.collaboration
                         await UMI3DAsyncManager.Yield();
                         waitforreparenting = false;
                     });
-                    while(waitforreparenting)
+                    while (waitforreparenting)
                         await UMI3DAsyncManager.Yield();
                     break;
                 case NavigateDto navigate:
@@ -535,7 +535,7 @@ namespace umi3d.cdk.collaboration
                     MainThreadManager.Run(() =>
                     {
                         CollaborationSkeletonsManager.Instance.SetStreamedBones(streamedBones.streamedBones);
-                    }); 
+                    });
                     break;
                 case SetSendingCameraPropertiesDto sendingCamera:
                     MainThreadManager.Run(() =>
