@@ -43,11 +43,13 @@ public class PCNavigationDelegate : INavigationDelegate
     public void Activate()
     {
         isActive = true;
+        data.cameraMode = E_CameraMode.Navigation;
     }
 
     public void Disable()
     {
         isActive = false;
+        data.cameraMode = E_CameraMode.Free;
     }
 
     public NavigationData GetNavigationData()
