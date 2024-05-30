@@ -39,8 +39,8 @@ MonoBehaviour:
   maxSlopeAngle: 45
   maxStepHeight: 0.4
   stepEpsilon: 0.05
-  groundYAxis: -6.452239
-  previousGroundYAxis: -6.452239
+  groundYAxis: 0.031572223
+  previousGroundYAxis: 0.031572223
   WantToJump: 0
   IsJumping: 0
   WantToCrouch: 0
