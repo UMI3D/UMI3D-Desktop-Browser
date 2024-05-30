@@ -16,8 +16,9 @@ MonoBehaviour:
     type: 3}
   m_TargetTexture: {fileID: 0}
   m_ScaleMode: 1
+  m_ReferenceSpritePixelsPerUnit: 100
   m_Scale: 1
-  m_ReferenceDpi: 170
+  m_ReferenceDpi: 150
   m_FallbackDpi: 120
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0

@@ -28,6 +28,7 @@ public class PCNavigationDelegate : INavigationDelegate
 
     public Transform playerTransform;
     public Transform personalSkeletonContainer;
+    public Transform cameraTransform;
     public UMI3DCollisionManager collisionManager;
     public BaseFPSData data;
 
@@ -41,12 +42,19 @@ public class PCNavigationDelegate : INavigationDelegate
 
     public void Activate()
     {
+        // Activating navigation and changing camera mode to Navigation
         isActive = true;
+        data.cameraMode = E_CameraMode.Navigation;
     }
 
     public void Disable()
     {
+        // Disabling navigation, changing camera mode to Free, resetting speed values
         isActive = false;
+        data.crouchSpeed = 0;
+        data.IsJumping = false;
+        data.forwardSpeed = data.lateralSpeed = data.backwardSpeed = Vector3.zero;
+        data.cameraMode = E_CameraMode.Free;
     }
 
     public NavigationData GetNavigationData()
@@ -82,6 +90,31 @@ public class PCNavigationDelegate : INavigationDelegate
     {
         playerTransform.localPosition = data.position.Struct();
         playerTransform.localRotation = data.rotation.Quaternion();
+    }
+
+    public void ViewpointTeleport(ulong environmentId, ViewpointTeleportDto data)
+    {
+        personalSkeletonContainer.rotation = data.rotation.Quaternion();
+        if (cameraTransform != null)
+        {
+            cameraTransform.parent.localRotation = Quaternion.identity;
+            float angle = Vector3.SignedAngle(
+                personalSkeletonContainer.forward,
+                Vector3.ProjectOnPlane(
+                    cameraTransform.forward,
+                    Vector3.up
+                ),
+                Vector3.up
+            );
+            personalSkeletonContainer.Rotate(0, -angle, 0);
+        }
+
+        playerTransform.position = data.position.Struct();
+        if (cameraTransform != null)
+        {
+            Vector3 translation = playerTransform.position - cameraTransform.position;
+            playerTransform.Translate(translation, Space.World);
+        }
     }
 
     public void UpdateFrame(ulong environmentId, FrameRequestDto data)
