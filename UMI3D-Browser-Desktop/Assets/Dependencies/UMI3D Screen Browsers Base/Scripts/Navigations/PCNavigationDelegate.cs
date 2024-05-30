@@ -51,9 +51,7 @@ public class PCNavigationDelegate : INavigationDelegate
     {
         // Disabling navigation, changing camera mode to Free, resetting speed values
         isActive = false;
-        data.crouchSpeed = 0;
-        data.IsJumping = false;
-        data.forwardSpeed = data.lateralSpeed = data.backwardSpeed = Vector3.zero;
+        data.IsJumping = data.IsCrouching = data.IsSprinting = false;
         data.cameraMode = E_CameraMode.Free;
     }
 
