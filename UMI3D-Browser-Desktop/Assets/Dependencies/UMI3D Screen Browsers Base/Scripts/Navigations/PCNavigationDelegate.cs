@@ -59,20 +59,21 @@ public class PCNavigationDelegate : INavigationDelegate
 
     public NavigationData GetNavigationData()
     {
+        var translation = data.playerTranslationSpeed * Time.deltaTime;
         Func<float> yVelocity = () =>
         {
             return collisionManager.IsCloseToGround 
             ? 0f 
-            : data.playerTranslation.y / Time.deltaTime;
+            : translation.y / Time.deltaTime;
         };
 
         return new NavigationData()
         {
             speed = new Vector3Dto()
             {
-                X = data.playerTranslation.x / Time.deltaTime,
+                X = translation.x / Time.deltaTime,
                 Y = yVelocity(),
-                Z = data.playerTranslation.z / Time.deltaTime
+                Z = translation.z / Time.deltaTime
             },
             crouching = data.IsCrouching,
             jumping = data.IsJumping,

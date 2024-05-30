@@ -95,6 +95,11 @@ namespace umi3d.baseBrowser.Navigation
         /// </summary>
         [HideInInspector]
         public float groundYAxis = 0f;
+        /// <summary>
+        /// Previous ground altitude (world space).
+        /// </summary>
+        [HideInInspector]
+        public float previousGroundYAxis = 0f;
 
         [Header("Input")]
         [Tooltip("Whether or not the player want to jump.")]
