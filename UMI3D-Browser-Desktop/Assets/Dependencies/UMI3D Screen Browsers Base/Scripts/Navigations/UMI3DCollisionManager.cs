@@ -170,7 +170,7 @@ public sealed class UMI3DCollisionManager
 
         Vector3 projection = Vector3.ProjectOnPlane(
             horizontalDesiredTranslation,
-            hit.normal
+            Vector3.ProjectOnPlane(hit.normal, Vector3.up)
         );
 
         willCollide = colliderDelegate.WillCollide(
