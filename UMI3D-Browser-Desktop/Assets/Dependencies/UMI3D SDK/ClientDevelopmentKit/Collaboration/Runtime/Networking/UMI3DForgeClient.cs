@@ -416,7 +416,7 @@ namespace umi3d.cdk.collaboration
             }
             else
             {
-                var container = new ByteContainer(UMI3DGlobalID.EnvironmentId, frame);
+                var container = new ByteContainer(UMI3DGlobalID.EnvironmentId, frame, UMI3DClientServer.Instance.version);
                 uint TransactionId = UMI3DSerializer.Read<uint>(container);
                 switch (TransactionId)
                 {
@@ -707,10 +707,12 @@ namespace umi3d.cdk.collaboration
                     {
                         ulong poseId = UMI3DSerializer.Read<ulong>(container);
                         bool stopPose = UMI3DSerializer.Read<bool>(container);
+                        float transitionDuration = UMI3DSerializer.Read<float>(container);
                         PlayPoseClipDto playPoseDto = new PlayPoseClipDto
                         {
                             poseId = poseId,
-                            stopPose = stopPose
+                            stopPose = stopPose,
+                            transitionDuration = transitionDuration
                         };
 
                         MainThreadManager.Run(() =>
@@ -809,7 +811,7 @@ namespace umi3d.cdk.collaboration
             }
             else
             {
-                var container = new ByteContainer(UMI3DGlobalID.EnvironmentId, frame);
+                var container = new ByteContainer(UMI3DGlobalID.EnvironmentId, frame, UMI3DVersion.ComputedVersion);
                 try
                 {
                     System.Collections.Generic.List<UserTrackingFrameDto> frames = UMI3DSerializer.ReadList<UserTrackingFrameDto>(container);
