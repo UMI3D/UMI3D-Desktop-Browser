@@ -218,7 +218,10 @@ public sealed class UMI3DCollisionManager
         {
             return desiredTranslation;
         }
-        float delta = GetVerticalTranslationToGround(hit.point.y + data.stepEpsilon);
+        //float delta = GetVerticalTranslationToGround(hit.point.y + data.stepEpsilon);
+        Debug.Log("To discuss with Romain why previous was added");
+        float delta = hit.point.y - (playerTransform.position.y + data.topSphereCenter.y + data.capsuleRadius);
+
         if (collisionDebugger().DebugVerticalCollision)
         {
             UnityEngine.Debug.Log($"Vertical collision: {hit.transform.name}, player = {playerTransform.position.y}, hitPoint= {hit.point.y}, delta= {delta}");
