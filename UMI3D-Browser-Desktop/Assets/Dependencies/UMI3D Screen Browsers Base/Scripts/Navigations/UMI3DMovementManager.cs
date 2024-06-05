@@ -229,6 +229,10 @@ public sealed class UMI3DMovementManager
         // Get a world desire direction and distance.
         data.playerTranslation = data.playerTranslationSpeed * Time.deltaTime;
 
+        // Don't add too much gravity
+        if ((data.playerTranslation.y != 0) && playerTransform.transform.position.y + data.playerTranslation.y < data.groundYAxis)
+            data.playerTranslation.y = data.groundYAxis - playerTransform.transform.position.y;
+
         // Get a desire direction and distance relative to the player rotation.
         data.playerTranslation = playerTransform.rotation * data.playerTranslation;
 
@@ -236,7 +240,7 @@ public sealed class UMI3DMovementManager
         data.playerTranslation = collisionManager.GetPossibleTranslation(data.playerTranslation);
         if (data.playerTranslation.y == 0 && collisionManager.IsBelowGround)
         {
-            var delta = playerTransform.position.y - data.groundYAxis;
+            float delta = playerTransform.position.y - data.groundYAxis;
             data.playerTranslation.y = Mathf.Lerp(0, -delta, 0.4f);
         }
     }
