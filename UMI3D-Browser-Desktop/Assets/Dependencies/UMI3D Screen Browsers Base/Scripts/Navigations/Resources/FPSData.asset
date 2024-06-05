@@ -33,14 +33,14 @@ MonoBehaviour:
   navmeshLayer:
     serializedVersion: 2
     m_Bits: 512
-  topSphereCenter: {x: 0, y: 1.5, z: 0}
+  topSphereCenter: {x: 0, y: 1.4, z: 0}
   capsuleRadius: 0.3
   maxAltitudeToCheckGround: 25
   maxSlopeAngle: 45
-  maxStepHeight: 0.4
+  maxStepHeight: 0.3
   stepEpsilon: 0.05
-  groundYAxis: 0.031572223
-  previousGroundYAxis: 0.031572223
+  groundYAxis: 0.036349237
+  previousGroundYAxis: 0.036349237
   WantToJump: 0
   IsJumping: 0
   WantToCrouch: 0
