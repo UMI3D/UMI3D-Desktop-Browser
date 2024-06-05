@@ -74,11 +74,11 @@ public sealed class UMI3DCollisionManager
     /// <summary>
     /// Whether or not the player is below the ground.
     /// </summary>
-    public bool IsBelowGround => feetGroundDelta < 0f;
+    public bool IsBelowGround => feetGroundDelta < data.groundYAxis;
     /// <summary>
     /// Whether or not the player is above the ground.
     /// </summary>
-    public bool IsAboveGround => feetGroundDelta > 0f;
+    public bool IsAboveGround => feetGroundDelta > data.groundYAxis;
 
     /// <summary>
     /// Get the ground altitude.<br/>
