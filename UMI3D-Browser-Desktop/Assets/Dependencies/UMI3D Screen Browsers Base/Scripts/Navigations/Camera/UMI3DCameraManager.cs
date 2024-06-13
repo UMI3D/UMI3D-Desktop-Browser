@@ -94,14 +94,14 @@ public sealed class UMI3DCameraManager
         viewpointPivot.localRotation = Quaternion.Euler(viewpointXAxis, viewpointYAxis, 0f);
 
         Vector3 headAngle = new Vector3(
-            Mathf.Clamp(viewpointXAxis, data.maxXHeadAngle.x, data.maxXHeadAngle.y),
+            Mathf.Clamp(viewpointXAxis, data.maxXHeadAngle.x, data.maxXHeadAngle.y) / 2,
             viewpointYAxis / 2,
             0f
         );
         head.localRotation = Quaternion.Euler(headAngle);
 
         Vector3 neckAngle = new Vector3(
-            Mathf.Clamp(viewpointXAxis, -data.maxNeckAngle, data.maxNeckAngle),
+            Mathf.Clamp(viewpointXAxis, -data.maxNeckAngle, data.maxNeckAngle) / 2,
             viewpointYAxis / 2,
             0f
         );
