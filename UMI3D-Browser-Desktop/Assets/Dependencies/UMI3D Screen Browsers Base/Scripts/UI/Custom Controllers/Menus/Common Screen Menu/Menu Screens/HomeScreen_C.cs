@@ -372,7 +372,7 @@ namespace umi3d.commonScreen.menu
             {
                 callback?.Invoke(b);
                 if (b != 1) return;
-                savedServers.Remove(savedServers.Find(d => d.serverName == data.serverName));
+                savedServers.Remove(savedServers.Find(d => d.serverUrl == data.serverUrl));
                 ServerPreferences.StoreRegisteredServerData(savedServers);
                 SavedServers__ScrollView.Remove(item);
             };
