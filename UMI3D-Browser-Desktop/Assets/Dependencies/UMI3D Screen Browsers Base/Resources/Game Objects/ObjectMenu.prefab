@@ -25,6 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1968597631556093676}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,7 +33,6 @@ Transform:
   m_Children:
   - {fileID: 8475879024076909572}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2257655772177756534
 MonoBehaviour:
@@ -56,6 +56,7 @@ MonoBehaviour:
   firstContainerInScene: 1
   containerSelector: {fileID: 7333904173173657436}
   DisplayerPrefab:
+  - {fileID: -8899374358623760505, guid: c87011eb25e3cdc4d93d45595de63e5f, type: 3}
   - {fileID: 1367903713704256018, guid: 5b94995ea750dff4c856ab6df00ed825, type: 3}
   - {fileID: 8792817909080547734, guid: 5d0fb64979009ec4091cb6c0b8ead893, type: 3}
   - {fileID: 1835442536045282207, guid: c5aff2e6a96c5e4468c38f2323e632cd, type: 3}
@@ -96,6 +97,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 7220120769352226066}
     m_Modifications:
     - target: {fileID: 3104291366709051224, guid: db9b578f62b201c45b7bd24c04a0bdea,
@@ -159,6 +161,9 @@ PrefabInstance:
       value: ObjectMenuFormContainer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db9b578f62b201c45b7bd24c04a0bdea, type: 3}
 --- !u!114 &5886993225927841516 stripped
 MonoBehaviour:
