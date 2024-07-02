@@ -68,7 +68,7 @@ namespace umi3d.cdk.interaction
         {
             if (!File.Exists(path))
             {
-                UMI3DLogger.LogWarning("Warning, this file doesn't exist in your device : " + path, scope);
+                UMI3DLogger.LogError("Warning, this file doesn't exist in your device : " + path, scope);
                 return null;
             }
             string res = Guid.NewGuid().ToString();
@@ -95,7 +95,7 @@ namespace umi3d.cdk.interaction
         /// Send upload request when a form contains an Upload File Parameter.
         /// </summary>
         /// <param name="form"></param>
-        public static void CheckFormToUploadFile(ulong environmentId,FormDto form)
+        public static void CheckFormToUploadFile(ulong environmentId, FormDto form)
         {
             form.fields
                 .Select(async id => (await UMI3DEnvironmentLoader.WaitForAnEntityToBeLoaded(environmentId, id, null)).dto)
@@ -124,6 +124,35 @@ namespace umi3d.cdk.interaction
                     }
                 }
             });
+        }
+
+        public static void UploadFileInputCallback(AbstractParameterDto parameterDto)
+        {
+            if (parameterDto is not UploadFileParameterDto uploadFileDto)
+            {
+                UnityEngine.Debug.LogError($"Wrong parameter. Expected: {typeof(UploadFileParameterDto)}, get: {parameterDto.GetType()}");
+                return;
+            }
+
+            //the path of the file to upload
+            string pathValue = uploadFileDto.value;
+
+            string fileId = AddFileToUpload(pathValue);
+            if (fileId == null)
+            {
+                UnityEngine.Debug.LogError($"FileID null");
+                return;
+            }
+
+            var req = new UploadFileRequestDto()
+            {
+                parameter = uploadFileDto,
+                fileId = fileId,
+                toolId = 0,
+                id = uploadFileDto.id,
+                hoveredObjectId = 0
+            };
+            UMI3DClientServer.SendRequest(req, true);
         }
     }
 }
