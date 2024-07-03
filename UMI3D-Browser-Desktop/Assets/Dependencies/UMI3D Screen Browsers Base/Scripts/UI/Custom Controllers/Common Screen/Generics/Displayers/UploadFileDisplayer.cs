@@ -28,6 +28,11 @@ namespace umi3d.commonScreen.Displayer
         protected UploadInputMenuItem menuItem;
 
         /// <summary>
+        /// Name of the parameter.
+        /// </summary>
+        public string Name => menuItem.Name;
+
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="item"></param>

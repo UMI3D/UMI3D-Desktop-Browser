@@ -279,7 +279,7 @@ namespace umi3d.baseBrowser.connection
                 }
                 else if (ObjectMenu[0] is UploadFileDisplayer uploadFile)
                 {
-                    Game.Cursor.Action = uploadFile.name;
+                    Game.Cursor.Action = uploadFile.Name;
                     UpdateContextualMenuActions(
                         ContextualMenuActionEnum.UpAndDown, 
                         null, 
