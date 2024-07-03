@@ -55,19 +55,20 @@ namespace umi3d.commonScreen.Container
 
         public override void Insert(AbstractDisplayer element, int index, bool updateDisplay = true)
         {
-            if (!(element is IDisplayerElement displayer)) return;
-
-            m_form.VScroll.Insert(index, displayer.GetUXMLContent());
             m_displayers.Insert(index, element);
+            if (element is not IDisplayerElement displayer) return;
+            m_form.VScroll.Insert(index, displayer.GetUXMLContent());
         }
 
         public override bool Remove(AbstractDisplayer element, bool updateDisplay = true)
         {
-            if (!(element is IDisplayerElement displayer)) return false;
             if (!Contains(element)) return false;
-
-            m_form.VScroll.Remove(displayer.GetUXMLContent());
             m_displayers.Remove(element);
+
+            if (element is IDisplayerElement displayer)
+            {
+                m_form.VScroll.Remove(displayer.GetUXMLContent());
+            }
             return true;
         }
     }
