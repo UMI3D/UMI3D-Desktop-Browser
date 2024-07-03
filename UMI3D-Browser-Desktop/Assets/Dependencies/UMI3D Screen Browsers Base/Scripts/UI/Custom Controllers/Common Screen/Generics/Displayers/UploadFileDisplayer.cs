@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using SFB;
+using System.Collections.Generic;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
@@ -57,14 +58,24 @@ namespace umi3d.commonScreen.Displayer
 
         public void OpenFileBrowser()
         {
-            string[] paths = StandaloneFileBrowser.OpenFilePanel(menuItem.Name, "", "", false);
+            ExtensionFilter[] extensions = (menuItem.authorizedExtensions == null || menuItem.authorizedExtensions.Count == 0) 
+                ? null 
+                : new[] { new ExtensionFilter("", menuItem.authorizedExtensions.ToArray()) };
+
+            string[] paths = StandaloneFileBrowser.OpenFilePanel(
+                    menuItem.Name, 
+                    "", 
+                    extensions, 
+                    false
+                );
 
             if (paths == null || paths.Length == 0)
             {
                 return;
             }
 
-            FileUploader.AddFileToUpload(paths[0]);
+            menuItem.dto.value = paths[0];
+            menuItem.NotifyValueChange(paths[0]);
         }
 
         /// <summary>
