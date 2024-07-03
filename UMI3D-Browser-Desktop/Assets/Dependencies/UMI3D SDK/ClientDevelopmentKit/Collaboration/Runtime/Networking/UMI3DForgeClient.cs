@@ -15,6 +15,7 @@ using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Frame;
 using BeardedManStudios.Forge.Networking.Unity;
 using MainThreadDispatcher;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -503,16 +504,9 @@ namespace umi3d.cdk.collaboration
                     string token = uploadFileRequest.uploadToken;
                     string fileId = uploadFileRequest.fileId;
 
-                    string fileName = FileUploader.GetFileName(fileId);
-                    byte[] bytesToUpload = FileUploader.GetFileToUpload(fileId);
-                    if (bytesToUpload != null)
-                    {
-                        MainThreadManager.Run(() =>
-                        {
-                            SendPostFile(token, fileName, bytesToUpload);
-                        });
-                    }
+                    UploadFileRequest(token, fileId);
                     break;
+
                 case RedirectionDto redirection:
                     MainThreadManager.Run(() =>
                     {
@@ -658,16 +652,11 @@ namespace umi3d.cdk.collaboration
                 case UMI3DOperationKeys.UploadFileRequest:
                     string token = UMI3DSerializer.Read<string>(container);
                     string fileId = UMI3DSerializer.Read<string>(container);
-                    string name = FileUploader.GetFileName(fileId);
-                    byte[] bytesToUpload = FileUploader.GetFileToUpload(fileId);
-                    if (bytesToUpload != null)
-                    {
-                        MainThreadManager.Run(() =>
-                        {
-                            SendPostFile(token, name, bytesToUpload);
-                        });
-                    }
+
+                    UploadFileRequest(token, fileId);
+                    
                     break;
+
                 case UMI3DOperationKeys.RedirectionRequest:
                     RedirectionDto redirection = UMI3DSerializer.Read<RedirectionDto>(container);
                     MainThreadManager.Run(() =>
@@ -755,6 +744,31 @@ namespace umi3d.cdk.collaboration
                     return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Perform an operation for an uploadFileRequest.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="fileId"></param>
+        void UploadFileRequest(string token, string fileId)
+        {
+            if (!FileUploader.TryGetFileName(fileId, out string name))
+            {
+                UnityEngine.Debug.LogError($"[UploadFile] File name is null.");
+                return;
+            }
+
+            if (!FileUploader.TryGetFileToUpload(fileId, out byte[] bytesToUpload))
+            {
+                UnityEngine.Debug.LogError($"[UploadFile] File in bytes is null.");
+                return;
+            }
+
+            MainThreadManager.Run(() =>
+            {
+                SendPostFile(token, name, bytesToUpload);
+            });
         }
 
         private async void SendGetLocalInfo(string key)
