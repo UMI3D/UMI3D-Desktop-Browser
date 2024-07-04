@@ -259,7 +259,6 @@ namespace umi3d.baseBrowser.connection
             {
                 if (ObjectMenu[0] is TextfieldDisplayer textfield)
                 {
-                    UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"here");
                     Game.Cursor.Action = new LocalisationAttribute("Edit text", "Other", "EditText");
                     UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose, () => textfield.Focus());
                 }
@@ -277,6 +276,21 @@ namespace umi3d.baseBrowser.connection
                         m_isContextualMenuDown = false;
                         button.menuItem.NotifyValueChange(false);
                     });
+                }
+                else if (ObjectMenu[0] is UploadFileDisplayer uploadFile)
+                {
+                    Game.Cursor.Action = uploadFile.Name;
+                    UpdateContextualMenuActions(
+                        ContextualMenuActionEnum.UpAndDown, 
+                        null, 
+                        null,
+                        () =>
+                        {
+                            BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                            uploadFile.OpenFileBrowser();
+                            BaseCursor.UnSetMovement(this);
+                        }
+                    );
                 }
                 //else UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
                 else

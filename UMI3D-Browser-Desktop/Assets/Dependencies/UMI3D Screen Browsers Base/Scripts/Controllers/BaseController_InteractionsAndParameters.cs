@@ -76,6 +76,7 @@ namespace umi3d.baseBrowser.Controller
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
         protected List<parameters.StringEnumParameterInput> stringEnumParameterInputs = new List<parameters.StringEnumParameterInput>();
+        protected List<parameters.UploadFileParameterInput> uploadFileParameterInputs = new();
 
         #region Clear
 
@@ -199,7 +200,8 @@ namespace umi3d.baseBrowser.Controller
             else if (param is BooleanParameterDto) return FindInput(boolParameterInputs, i => i.IsAvailable(), ParameterActions);
             else if (param is StringParameterDto) return FindInput(stringParameterInputs, i => i.IsAvailable(), ParameterActions);
             else if (param is EnumParameterDto<string>) return FindInput(stringEnumParameterInputs, i => i.IsAvailable(), ParameterActions);
-            else return null;
+            else if (param is UploadFileParameterDto) return FindInput(uploadFileParameterInputs, i => i.IsAvailable(), ParameterActions);
+            else throw new System.Exception("Input not found !!!!!!!!!!!");
         }
 
         #region Find Manipulations
