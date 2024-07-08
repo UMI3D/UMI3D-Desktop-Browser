@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using static MumbleProto.UserList;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace umi3d.cdk.collaboration
 {
@@ -159,15 +161,25 @@ namespace umi3d.cdk.collaboration
             if (user == null)
                 return null;
             var player = MumbleAudioPlayerContain(user.id);
+
+            Debug.Assert(player != null, "MumbleAudioPlayer created null for " + user.audioLogin);
+
             return player;
         }
 
         private MumbleAudioPlayer MumbleAudioPlayerContain(ulong id)
         {
             if (SpacialReader.ContainsKey(id))
-                return SpacialReader[id];
+            {
+                Debug.Assert(SpacialReader[id] != null, "MumbleAudioPlayerContain SpacialReader created null for " + id);
+                return SpacialReader[id]; 
+            
+            }
             if (GlobalReader.ContainsKey(id))
+            {
+                Debug.Assert(GlobalReader[id] != null, "MumbleAudioPlayerContain GlobalReader created null for " + id);
                 return GlobalReader[id];
+            }
             return null;
         }
 
@@ -177,10 +189,13 @@ namespace umi3d.cdk.collaboration
 
             if (!string.IsNullOrEmpty(user.audioLogin) && PendingMumbleAudioPlayer.ContainsKey(user.audioLogin))
             {
+                Debug.Assert(PendingMumbleAudioPlayer[user.audioLogin] != null, "GetMumbleAudioPlayer created null for " + user.audioLogin);
                 return PendingMumbleAudioPlayer[user.audioLogin];
             }
 
-            return MumbleAudioPlayerContain(user);
+            var tmp = MumbleAudioPlayerContain(user);
+            Debug.Assert(tmp != null, "GetMumbleAudioPlayer created null for " + user.audioLogin);
+            return tmp;
         }
 
         public MumbleAudioPlayer GetMumbleAudioPlayer(string username, uint session)
