@@ -189,10 +189,13 @@ namespace umi3d.cdk.collaboration
             if (user != null)
             {
                 MumbleAudioPlayer newPlayer = GetMumbleAudioPlayer(user);
+                Debug.Assert(newPlayer != null, "GetMumbleAudioPlayer created null for " + username + ", " + session);
                 return newPlayer;
             }
 
-            return CreatePrending(username);
+            var tmp = CreatePrending(username);
+            Debug.Assert(tmp != null, "GetMumbleAudioPlayer created null for " + username + ", " + session);
+            return tmp;
         }
 
         private MumbleAudioPlayer CreatePrending(string username)
