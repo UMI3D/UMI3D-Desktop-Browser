@@ -187,7 +187,7 @@ namespace umi3d.cdk.collaboration
         {
             if (user == null) return null;
 
-            if (!string.IsNullOrEmpty(user.audioLogin) && PendingMumbleAudioPlayer.ContainsKey(user.audioLogin))
+            if (!string.IsNullOrEmpty(user.audioLogin) && PendingMumbleAudioPlayer.ContainsKey(user.audioLogin) && PendingMumbleAudioPlayer[user.audioLogin] != null)
             {
                 Debug.Assert(PendingMumbleAudioPlayer[user.audioLogin] != null, "GetMumbleAudioPlayer created null for " + user.audioLogin);
                 return PendingMumbleAudioPlayer[user.audioLogin];
@@ -204,12 +204,13 @@ namespace umi3d.cdk.collaboration
             if (user != null)
             {
                 MumbleAudioPlayer newPlayer = GetMumbleAudioPlayer(user);
-                Debug.Assert(newPlayer != null, "GetMumbleAudioPlayer created null for " + username + ", " + session);
-                return newPlayer;
+                Debug.Assert(newPlayer != null, "AAAAAAAAAA GetMumbleAudioPlayer ! created null for " + username + ", " + session);
+                if(newPlayer != null)
+                    return newPlayer;
             }
 
             var tmp = CreatePrending(username);
-            Debug.Assert(tmp != null, "GetMumbleAudioPlayer created null for " + username + ", " + session);
+            Debug.Assert(tmp != null, "AAAAAAAAAA GetMumbleAudioPlayer ! created null for " + username + ", " + session);
             return tmp;
         }
 
