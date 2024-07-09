@@ -36,6 +36,7 @@ namespace umi3d.commonScreen.menu
         public Textfield_C DelayBeaforeShutingMicTextfield = new Textfield_C();
         public Dropdown_C PushToTalkKeyDropdown = new Dropdown_C { name = "push-to-talk" };
         public Button_C LoopBackButton = new Button_C { name = "loop-back" };
+        public Button_C ResetAudioConfButton = new Button_C { name = "reset-audio" };
 
         public SettingsAudio_C() { }
 
@@ -130,7 +131,10 @@ namespace umi3d.commonScreen.menu
             LoopBackButton.ClickedDown += () => OnLoopBackValueChanged(!m_loopBack);
             ScrollView.Add(LoopBackButton);
 
-            
+
+            ResetAudioConfButton.LocalisedLabel = new LocalisationAttribute("Reset Audio", "AudioSettings", "ResetAudioConfButton_Label");
+            ResetAudioConfButton.ClickedDown += () => OnResetAudio();
+            ScrollView.Add(ResetAudioConfButton);
         }
 
         protected override void SetProperties()
@@ -368,6 +372,12 @@ namespace umi3d.commonScreen.menu
             );
             if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
                 umi3d.cdk.collaboration.MicrophoneListener.Instance.useLocalLoopback = m_loopBack;
+        }
+
+        private void OnResetAudio()
+        {
+            if (umi3d.cdk.collaboration.AudioManager.Exists)
+                umi3d.cdk.collaboration.AudioManager.Instance.ResetAudioConference();
         }
 
         #endregion

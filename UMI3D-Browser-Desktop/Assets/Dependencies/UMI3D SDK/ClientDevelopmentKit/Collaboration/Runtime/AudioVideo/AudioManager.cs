@@ -136,7 +136,7 @@ namespace umi3d.cdk.collaboration
             if (volumeMemory.ContainsKey(user.login))
                 player.SetVolume(volumeMemory[user.login]);
             player.OnPlaying.AddListener(s => OnUserSpeaking.Invoke(user, s));
-            player.OnAudioSample = ((data,u) => OnAudioUserData.Invoke(user, data));
+            player.OnAudioSample = ((data, u) => OnAudioUserData.Invoke(user, data));
         }
 
         private void Start()
@@ -172,8 +172,8 @@ namespace umi3d.cdk.collaboration
             if (SpacialReader.ContainsKey(id))
             {
                 Debug.Assert(SpacialReader[id] != null, "MumbleAudioPlayerContain SpacialReader created null for " + id);
-                return SpacialReader[id]; 
-            
+                return SpacialReader[id];
+
             }
             if (GlobalReader.ContainsKey(id))
             {
@@ -205,16 +205,16 @@ namespace umi3d.cdk.collaboration
             {
                 MumbleAudioPlayer newPlayer = GetMumbleAudioPlayer(user);
                 Debug.Assert(newPlayer != null, "AAAAAAAAAA GetMumbleAudioPlayer ! created null for " + username + ", " + session);
-                if(newPlayer != null)
+                if (newPlayer != null)
                     return newPlayer;
             }
 
-            var tmp = CreatePrending(username);
+            var tmp = CreatePending(username);
             Debug.Assert(tmp != null, "AAAAAAAAAA GetMumbleAudioPlayer ! created null for " + username + ", " + session);
             return tmp;
         }
 
-        private MumbleAudioPlayer CreatePrending(string username)
+        private MumbleAudioPlayer CreatePending(string username)
         {
             if (string.IsNullOrEmpty(username))
                 return null;
@@ -269,7 +269,7 @@ namespace umi3d.cdk.collaboration
                 WaitCoroutine.Remove(user.id);
             }
 
-            var pending = CreatePrending(user.audioLogin);
+            var pending = CreatePending(user.audioLogin);
 
             if (GlobalReader.ContainsKey(user.id))
             {
@@ -355,7 +355,7 @@ namespace umi3d.cdk.collaboration
                 }
             }
             SetGainAndVolumeForUser(user);
-            if(audioPlayer is not null)
+            if (audioPlayer is not null)
                 AudioMixerControl.SetGroup(AudioMixerControl.Group.Conversation, audioPlayer);
         }
 
@@ -363,6 +363,38 @@ namespace umi3d.cdk.collaboration
         {
             yield return new WaitUntil(() => user?.audioplayer?.audioSource?.gameObject != null);
             OnAudioChanged(user);
+        }
+
+        public void ResetAudioConference()
+        {
+            UnityEngine.Debug.Log("Start Reset");
+            MicrophoneListener.instance.ResetAudioConference();
+            foreach (var wait in WaitCoroutine)
+                if (wait.Value != null)
+                    StopCoroutine(wait.Value);
+            foreach (var pending in PendingMumbleAudioPlayer)
+                if (pending.Value != null)
+                {
+                    pending.Value.Reset();
+                    GameObject.Destroy(pending.Value.gameObject);
+                }
+            foreach (var global in GlobalReader)
+                if (global.Value != null)
+                {
+                    global.Value.Reset();
+                    GameObject.Destroy(global.Value);
+                }
+            foreach (var local in SpacialReader)
+                if (local.Value != null)
+                {
+                    local.Value.Reset();
+                    GameObject.Destroy(local.Value);
+                }
+            PendingMumbleAudioPlayer.Clear();
+            GlobalReader.Clear();
+            SpacialReader.Clear();
+            WaitCoroutine.Clear();
+            UnityEngine.Debug.Log("End Reset");
         }
     }
 }
