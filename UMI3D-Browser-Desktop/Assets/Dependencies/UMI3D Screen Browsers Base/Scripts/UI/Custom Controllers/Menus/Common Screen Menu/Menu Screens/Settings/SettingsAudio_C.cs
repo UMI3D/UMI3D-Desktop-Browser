@@ -167,7 +167,7 @@ namespace umi3d.commonScreen.menu
             if (TryGetAudiorData(out Data))
             {
                 OnGeneralVolumeValueChanged(Data.GeneralVolume, Data.LastGeneralVolumeNotZero);
-                if (mics.Contains(Data.CurrentMic)) OnMicDropdownValueChanged(Data.CurrentMic);
+                OnMicDropdownValueChanged(mics.Contains(Data.CurrentMic) ? Data.CurrentMic : cdk.collaboration.MicrophoneListener.GetMicrophonesNames().FirstOrDefault());
                 OnNoiseReductionValueChanged(Data.NoiseReduction);
                 OnMicModeValueChanged(Data.Mode);
                 OnAmplitudeValueChanged(Data.Amplitude);
@@ -177,10 +177,7 @@ namespace umi3d.commonScreen.menu
             else
             {
                 OnGeneralVolumeValueChanged(10f, 10f);
-                string mic;
-                if (umi3d.cdk.collaboration.MicrophoneListener.Exists) mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
-                else mic = MicDropdown.choices.FirstOrDefault();
-                OnMicDropdownValueChanged(mic);
+                OnMicDropdownValueChanged(cdk.collaboration.MicrophoneListener.GetMicrophonesNames().FirstOrDefault());
                 OnNoiseReductionValueChanged(true);
                 OnMicModeValueChanged(MicModeEnum.AlwaysSend);
                 OnAmplitudeValueChanged(0f);
