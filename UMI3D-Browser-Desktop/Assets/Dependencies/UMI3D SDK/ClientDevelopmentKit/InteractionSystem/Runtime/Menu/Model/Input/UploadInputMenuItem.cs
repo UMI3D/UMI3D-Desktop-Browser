@@ -26,7 +26,7 @@ namespace umi3d.cdk.menu
         /// <summary>
         /// Only these extensions could be upload by the client. Empty list = allow all, the extensions contain a dot (".obj" for exemple)
         /// </summary>
-        public List<string> authorizedExtensions 
+        public List<string> authorizedExtensions
         {
             get
             {
