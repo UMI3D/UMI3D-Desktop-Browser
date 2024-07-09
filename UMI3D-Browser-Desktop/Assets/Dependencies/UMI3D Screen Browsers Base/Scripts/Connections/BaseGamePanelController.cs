@@ -50,6 +50,8 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitConnectionProcess()
         {
+            DialogueBoxManager.SetRoot(root);
+
             BaseConnectionProcess.Instance.ConnectionSucces += (media) =>
             {
                 GamePanel.CurrentView = GameViews.Loader;

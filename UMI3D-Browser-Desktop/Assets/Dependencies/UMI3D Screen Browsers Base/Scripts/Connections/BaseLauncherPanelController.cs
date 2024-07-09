@@ -36,6 +36,8 @@ namespace umi3d.baseBrowser.connection
         {
             Debug.Assert(document != null);
 
+            DialogueBoxManager.SetRoot(root);
+
             Screen.sleepTimeout = SleepTimeout.SystemSetting;
 
             root.Add(TooltipsLayer_C.Instance);
