@@ -14,6 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: AudioSettings
   Items:
+  - Key: ResetAudioConfButton_Label
+    _trads:
+    - Key:
+        Name: French
+      Value: "R\xE9initialiser l'audio"
+    - Key:
+        Name: Spanish
+      Value: restablecer audio
+    - Key:
+        Name: English
+      Value: Reset audio
   - Key: LoopBack_on
     _trads:
     - Key:

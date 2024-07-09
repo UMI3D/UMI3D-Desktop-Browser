@@ -779,6 +779,7 @@ namespace umi3d.cdk.collaboration
 
             Log(debug);
 
+            UnityEngine.Debug.Log("Hello");
             if (!AudioManager.Instance.DeletePending(playerToDestroy?.GetUsername(), session))
             {
                 playerToDestroy?.Reset();

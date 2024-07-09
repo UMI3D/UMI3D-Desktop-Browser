@@ -142,7 +142,7 @@ namespace umi3d.cdk.collaboration
         private void Start()
         {
             UMI3DUser.OnNewUser.AddListener(OnAudioChanged);
-            UMI3DUser.OnRemoveUser.AddListener(OnUserDisconected);
+            UMI3DUser.OnRemoveUser.AddListener(OnUserDisconnected);
             UMI3DUser.OnUserAudioUpdated.AddListener(OnAudioChanged);
             UMI3DUser.OnUserMicrophoneIdentityUpdated.AddListener(OnAudioChanged);
         }
@@ -151,7 +151,7 @@ namespace umi3d.cdk.collaboration
         {
             base.OnDestroy();
             UMI3DUser.OnNewUser.RemoveListener(OnAudioChanged);
-            UMI3DUser.OnRemoveUser.RemoveListener(OnUserDisconected);
+            UMI3DUser.OnRemoveUser.RemoveListener(OnUserDisconnected);
             UMI3DUser.OnUserAudioUpdated.RemoveListener(OnAudioChanged);
             UMI3DUser.OnUserMicrophoneIdentityUpdated.RemoveListener(OnAudioChanged);
         }
@@ -162,8 +162,6 @@ namespace umi3d.cdk.collaboration
                 return null;
             var player = MumbleAudioPlayerContain(user.id);
 
-            Debug.Assert(player != null, "MumbleAudioPlayer created null for " + user.audioLogin);
-
             return player;
         }
 
@@ -171,13 +169,11 @@ namespace umi3d.cdk.collaboration
         {
             if (SpacialReader.ContainsKey(id))
             {
-                Debug.Assert(SpacialReader[id] != null, "MumbleAudioPlayerContain SpacialReader created null for " + id);
                 return SpacialReader[id];
 
             }
             if (GlobalReader.ContainsKey(id))
             {
-                Debug.Assert(GlobalReader[id] != null, "MumbleAudioPlayerContain GlobalReader created null for " + id);
                 return GlobalReader[id];
             }
             return null;
@@ -189,12 +185,10 @@ namespace umi3d.cdk.collaboration
 
             if (!string.IsNullOrEmpty(user.audioLogin) && PendingMumbleAudioPlayer.ContainsKey(user.audioLogin) && PendingMumbleAudioPlayer[user.audioLogin] != null)
             {
-                Debug.Assert(PendingMumbleAudioPlayer[user.audioLogin] != null, "GetMumbleAudioPlayer created null for " + user.audioLogin);
                 return PendingMumbleAudioPlayer[user.audioLogin];
             }
 
             var tmp = MumbleAudioPlayerContain(user);
-            Debug.Assert(tmp != null, "GetMumbleAudioPlayer created null for " + user.audioLogin);
             return tmp;
         }
 
@@ -204,7 +198,6 @@ namespace umi3d.cdk.collaboration
             if (user != null)
             {
                 MumbleAudioPlayer newPlayer = GetMumbleAudioPlayer(user);
-                Debug.Assert(newPlayer != null, "AAAAAAAAAA GetMumbleAudioPlayer ! created null for " + username + ", " + session);
                 if (newPlayer != null)
                     return newPlayer;
             }
@@ -261,7 +254,7 @@ namespace umi3d.cdk.collaboration
         /// Manage user update
         /// </summary>
         /// <param name="user"></param>
-        private void OnUserDisconected(UMI3DUser user)
+        private void OnUserDisconnected(UMI3DUser user)
         {
             if (WaitCoroutine.ContainsKey(user.id))
             {
