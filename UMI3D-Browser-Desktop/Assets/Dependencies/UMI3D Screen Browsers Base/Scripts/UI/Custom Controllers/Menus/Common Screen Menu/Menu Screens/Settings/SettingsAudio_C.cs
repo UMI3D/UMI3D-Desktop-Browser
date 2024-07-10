@@ -132,7 +132,7 @@ namespace umi3d.commonScreen.menu
             ScrollView.Add(LoopBackButton);
 
 
-            ResetAudioConfButton.LocalisedLabel = new LocalisationAttribute("Reset Audio", "AudioSettings", "ResetAudioConfButton_Label");
+            ResetAudioConfButton.LocaliseText = new LocalisationAttribute("Reset Audio", "AudioSettings", "ResetAudioConfButton_Label");
             ResetAudioConfButton.ClickedDown += () => OnResetAudio();
             ScrollView.Add(ResetAudioConfButton);
         }
