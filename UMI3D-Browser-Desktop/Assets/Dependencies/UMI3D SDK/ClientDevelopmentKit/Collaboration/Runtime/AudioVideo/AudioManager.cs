@@ -370,7 +370,6 @@ namespace umi3d.cdk.collaboration
 
         public void ResetAudioConference()
         {
-            UnityEngine.Debug.Log("Start Reset");
             MicrophoneListener.instance.ResetAudioConference();
             foreach (var wait in WaitCoroutine)
                 if (wait.Value != null)
@@ -397,7 +396,6 @@ namespace umi3d.cdk.collaboration
             GlobalReader.Clear();
             SpacialReader.Clear();
             WaitCoroutine.Clear();
-            UnityEngine.Debug.Log("End Reset");
         }
     }
 }
