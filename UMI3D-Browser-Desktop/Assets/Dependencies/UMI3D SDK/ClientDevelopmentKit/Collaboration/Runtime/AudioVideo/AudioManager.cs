@@ -239,11 +239,23 @@ namespace umi3d.cdk.collaboration
 
         public bool DeletePending(string username, uint session)
         {
+            MumbleAudioPlayer player = null;
+            string name = username;
+
             if (!string.IsNullOrEmpty(username) && PendingMumbleAudioPlayer.ContainsKey(username))
+                player = PendingMumbleAudioPlayer[username];
+            else
             {
-                PendingMumbleAudioPlayer[username].Reset();
-                GameObject.Destroy(PendingMumbleAudioPlayer[username].gameObject);
-                PendingMumbleAudioPlayer.Remove(username);
+                var kp = PendingMumbleAudioPlayer.FirstOrDefault(pending => pending.Value != null && pending.Value.Session == session);
+                player = kp.Value;
+                name = kp.Key;
+            }
+
+            if(player != null && name != null)
+            {
+                player.Reset();
+                GameObject.Destroy(player.gameObject);
+                PendingMumbleAudioPlayer.Remove(name);
                 return true;
             }
 
