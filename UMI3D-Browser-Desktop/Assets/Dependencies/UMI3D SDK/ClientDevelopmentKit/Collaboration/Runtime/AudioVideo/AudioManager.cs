@@ -22,8 +22,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using static MumbleProto.UserList;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace umi3d.cdk.collaboration
 {
