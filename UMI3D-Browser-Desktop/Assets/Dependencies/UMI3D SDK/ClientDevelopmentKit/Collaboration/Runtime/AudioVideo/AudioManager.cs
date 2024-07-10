@@ -166,14 +166,11 @@ namespace umi3d.cdk.collaboration
         private MumbleAudioPlayer MumbleAudioPlayerContain(ulong id)
         {
             if (SpacialReader.ContainsKey(id))
-            {
                 return SpacialReader[id];
 
-            }
             if (GlobalReader.ContainsKey(id))
-            {
                 return GlobalReader[id];
-            }
+
             return null;
         }
 
@@ -181,10 +178,11 @@ namespace umi3d.cdk.collaboration
         {
             if (user == null) return null;
 
-            if (!string.IsNullOrEmpty(user.audioLogin) && PendingMumbleAudioPlayer.ContainsKey(user.audioLogin) && PendingMumbleAudioPlayer[user.audioLogin] != null)
-            {
+            if (
+                !string.IsNullOrEmpty(user.audioLogin) 
+                && PendingMumbleAudioPlayer.ContainsKey(user.audioLogin) 
+                && PendingMumbleAudioPlayer[user.audioLogin] != null)
                 return PendingMumbleAudioPlayer[user.audioLogin];
-            }
 
             var tmp = MumbleAudioPlayerContain(user);
             return tmp;
@@ -201,7 +199,7 @@ namespace umi3d.cdk.collaboration
             }
 
             var tmp = CreatePending(username);
-            Debug.Assert(tmp != null, "AAAAAAAAAA GetMumbleAudioPlayer ! created null for " + username + ", " + session);
+            Debug.Assert(tmp != null, "CreatePending return null for " + username + ", " + session);
             return tmp;
         }
 
@@ -249,7 +247,7 @@ namespace umi3d.cdk.collaboration
                 name = kp.Key;
             }
 
-            if(player != null && name != null)
+            if (player != null && name != null)
             {
                 player.Reset();
                 GameObject.Destroy(player.gameObject);
