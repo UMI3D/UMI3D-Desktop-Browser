@@ -51,7 +51,10 @@ public class PCNavigationDelegate : INavigationDelegate
     {
         // Disabling navigation, changing camera mode to Free, resetting speed values
         isActive = false;
+        data.WantToJump = data.WantToCrouch = data.WantToSprint = false;
         data.IsJumping = data.IsCrouching = data.IsSprinting = false;
+        data.playerTranslationSpeed = Vector3.zero;
+        data.verticalVelocity = 0f;
         data.cameraMode = E_CameraMode.Free;
     }
 
@@ -75,7 +78,7 @@ public class PCNavigationDelegate : INavigationDelegate
             },
             crouching = data.IsCrouching,
             jumping = data.IsJumping,
-            grounded = collisionManager.IsGrounded,
+            grounded = !isActive ? true : collisionManager.IsGrounded,
         };
     }
 
