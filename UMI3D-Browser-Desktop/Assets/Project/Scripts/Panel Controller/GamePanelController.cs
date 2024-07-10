@@ -31,7 +31,11 @@ public class GamePanelController : umi3d.baseBrowser.connection.BaseGamePanelCon
 
         Debug.Assert(Windows_Manager != null, "WindowsManager reference null");
         Loader.Header.Minimize.clicked += Windows_Manager.Minimize;
-        Loader.Header.Maximize.clicked += Windows_Manager.Maximize;
+        Loader.Header.Maximize.clicked += () =>
+        {
+            UnityEngine.Debug.Log($"maximize");
+            Windows_Manager.Maximize();
+        };
         Loader.Header.Close.clicked += Application.Quit;
         Menu.Header.Minimize.clicked += Windows_Manager.Minimize;
         Menu.Header.Maximize.clicked += Windows_Manager.Maximize;

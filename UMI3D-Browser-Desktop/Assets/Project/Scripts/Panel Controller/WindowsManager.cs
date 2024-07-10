@@ -106,22 +106,30 @@ public class WindowsManager : MonoBehaviour
         if ((IsZoomed(hWnd) && !isZoomed) ||
             (!IsZoomed(hWnd) && isZoomed)) //Check if the window is being resized (zoomed or unzoomed)
         {
+            UnityEngine.Debug.Log($"message 2");
             isZoomed = IsZoomed(hWnd);
             if (isZoomed) SwitchFullScreen(true);
         }
         else //The window has been resized with a shortcut
         {
+            UnityEngine.Debug.Log($"message 3");
             if (Screen.fullScreen && !isFullScreen) //Check if the window is being resized without being zoomed
             {
+                UnityEngine.Debug.Log($"message 4");
                 ShowWindow(hWnd, 3);
                 SwitchFullScreen(true);
             }
 
-            else if (!Screen.fullScreen && isFullScreen) SwitchFullScreen(false);
+            else if (!Screen.fullScreen && isFullScreen)
+            {
+                UnityEngine.Debug.Log($"message 5");
+                SwitchFullScreen(false);
+            }
         }
 
         if (!isFullScreen && !isZoomed)
         {
+            UnityEngine.Debug.Log($"message 6");
             widthWindow = Screen.width;
             heightWindow = Screen.height;
         }
@@ -139,21 +147,17 @@ public class WindowsManager : MonoBehaviour
     /// <summary>
     /// Switch between fullscreen and window.
     /// </summary>
-    /// <param name="value">Set fullscreen if true, else window.</param>
-    private void SwitchFullScreen(bool value)
+    /// <param name="fullScreen">Set fullscreen if true, else window.</param>
+    private void SwitchFullScreen(bool fullScreen)
     {
-        if (value)
-        {
-            Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.FullScreenWindow);
-            isFullScreen = true;
-            FullScreenEnabled?.Invoke(true);
-        }
-        else
-        {
-            Screen.SetResolution(widthWindow, heightWindow, false);
-            isFullScreen = false;
-            FullScreenEnabled?.Invoke(false);
-        }
+        UnityEngine.Debug.Log($"SwitchFullScreen");
+        Screen.SetResolution(
+            widthWindow,
+            heightWindow,
+            fullScreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed
+        );
+        isFullScreen = fullScreen;
+        FullScreenEnabled?.Invoke(fullScreen);
     }
 
     #endregion
