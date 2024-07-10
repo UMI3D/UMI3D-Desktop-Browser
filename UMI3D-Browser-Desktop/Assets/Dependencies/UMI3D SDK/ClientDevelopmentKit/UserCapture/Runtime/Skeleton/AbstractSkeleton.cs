@@ -18,10 +18,12 @@ using inetum.unityUtils;
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+
 using umi3d.cdk.userCapture.animation;
 using umi3d.cdk.userCapture.pose;
+using umi3d.cdk.userCapture.description;
 using umi3d.cdk.userCapture.tracking;
+using umi3d.cdk.userCapture.tracking.ik;
 using umi3d.common;
 using umi3d.common.core;
 using umi3d.common.userCapture;
@@ -43,7 +45,7 @@ namespace umi3d.cdk.userCapture
 
         #region Fields
 
-        protected Dictionary<uint, UnityTransformation> bones = new ();
+        protected Dictionary<uint, UnityTransformation> bones = new();
 
         /// <inheritdoc/>
         public virtual IReadOnlyDictionary<uint, UnityTransformation> Bones
@@ -113,6 +115,11 @@ namespace umi3d.cdk.userCapture
 
         private const float SKELETON_STANDARD_SIZE = 1.8f;
 
+        protected IIKHandler postProcessIKHandler;
+
+        private const uint ROOT_BONE = BoneType.Hips;
+        protected GameObject finalSkeletonGameObject;
+
         #endregion Fields
 
         #region DI
@@ -127,9 +134,6 @@ namespace umi3d.cdk.userCapture
 
         #endregion DI
 
-        private const uint ROOT_BONE = BoneType.Hips;
-        protected GameObject finalSkeletonGameObject;
-
         #region Lifecycle
 
         #region Initialisation
@@ -143,11 +147,11 @@ namespace umi3d.cdk.userCapture
             subskeletons = new List<ISubskeleton> { TrackedSubskeleton };
 
             // init final skeleton game objects
-            finalSkeletonGameObject = new GameObject($"Final skeleton - user {UserId}");
+            finalSkeletonGameObject = new GameObject($"Final Skeleton - user {UserId}");
 
             // either personal skeleton container or collab skeleton scene
             // (in order not to be influenced by displacement of this, because of tracked action)
-            // final skeleton is GET logic, normal object is SET
+            // final skeleton is GET logic, subskeletons is SET
             finalSkeletonGameObject.transform.SetParent(this.transform.parent);
             SkeletonHierarchy.Apply(CreateSkeletonBoneGameObject);
 
@@ -161,7 +165,12 @@ namespace umi3d.cdk.userCapture
             bones[ROOT_BONE].Position = HipsAnchor != null ? HipsAnchor.position : Vector3.zero;
             bones[ROOT_BONE].Rotation = HipsAnchor != null ? HipsAnchor.rotation : Quaternion.identity;
 
-            // wait to add PoseSubskeleton until we received at least one frame
+            // setup IK post processor
+            SimpleIKHandler ikHandler = finalSkeletonGameObject.AddComponent<SimpleIKHandler>();
+            ikHandler.Init(this);
+            postProcessIKHandler = ikHandler;
+
+            // wait to add PoseSubskeleton until we received at least one tracking frame
             initPoseSubskeletonCoroutine = StartCoroutine(InitPoseSubskeleton());
 
             Destroyed += () =>
@@ -240,12 +249,53 @@ namespace umi3d.cdk.userCapture
         /// <inheritdoc/>
         public ISkeleton Compute()
         {
+            PreComputed?.Invoke();
+
+            AssembleSkeleton();
+
+            RawComputed?.Invoke();
+
+            PostProcessSkeleton();
+
+            Computed?.Invoke();
+
+            return this;
+        }
+
+        /// <summary>
+        /// Called after just before each skeleton computation.
+        /// </summary>
+        public event System.Action PreComputed;
+
+        /// <summary>
+        /// Called after after each computation and before post-procession.
+        /// </summary>
+        public event System.Action RawComputed;
+
+        /// <summary>
+        /// Called after each post procession of the final skeleton.
+        /// </summary>
+        public event System.Action Computed;
+
+        /// <summary>
+        /// Cache for bottom-up recursive <see cref="ComputeBoneTransform(uint)"/> method.
+        /// Speeding up computations.
+        /// </summary>
+        private Dictionary<uint, bool> alreadyComputedbonesCache = new();
+
+        private Vector3 hipsDisplacement = Vector3.zero;
+
+        /// <summary>
+        /// Assemble skeleton from subskeletons.
+        /// </summary>
+        private void AssembleSkeleton()
+        {
             if (Subskeletons == null || Subskeletons.Count == 0)
-                return this;
+                return;
 
             RetrievebonesRotation(SkeletonHierarchy);
             if (!bones.ContainsKey(ROOT_BONE))
-                return this;
+                return;
 
             foreach (uint boneType in bones.Keys)
                 alreadyComputedbonesCache[boneType] = false;
@@ -270,33 +320,7 @@ namespace umi3d.cdk.userCapture
                 if (!alreadyComputedbonesCache[boneType])
                     ComputeBoneTransform(boneType);
             }
-
-            RawComputed?.Invoke();
-
-            PostProcessSkeleton();
-
-            Computed?.Invoke();
-
-            return this;
         }
-
-        /// <summary>
-        /// Called after after each computation and before post-procession.
-        /// </summary>
-        public event System.Action RawComputed;
-
-        /// <summary>
-        /// Called after each post procession of the final skeleton.
-        /// </summary>
-        public event System.Action Computed;
-
-        /// <summary>
-        /// Cache for bottom-up recursive <see cref="ComputeBoneTransform(uint)"/> method.
-        /// Speeding up computations.
-        /// </summary>
-        private Dictionary<uint, bool> alreadyComputedbonesCache = new();
-
-        private Vector3 hipsDisplacement = Vector3.zero;
 
         /// <summary>
         /// Compute the final position and rotation of each bone, and their parents recursively if not already computed
@@ -363,7 +387,28 @@ namespace umi3d.cdk.userCapture
         /// </summary>
         private void PostProcessSkeleton()
         {
+            // IK performed by IK handler
+            CorrectIK();
+
+            // muscle restrictions
             SkeletonHierarchy.Apply(MuscleRestrict);
+        }
+
+        /// <summary>
+        /// Correct IK after subskeleton merge.
+        /// </summary>
+        /// <param name="layer"></param>
+        protected virtual void CorrectIK()
+        {
+            // fix rotations
+            foreach (IController controller in TrackedSubskeleton.Controllers.Values)
+            {
+                if (!controller.isActive || !controller.isOverrider) // do not overwrite normal controllers
+                    continue;
+
+                postProcessIKHandler.HandleAnimatorIK(0, controller); // pb : what should be overriden ?
+                bones[controller.boneType].Rotation = controller.rotation;
+            }
         }
 
         /// <summary>
@@ -372,31 +417,22 @@ namespace umi3d.cdk.userCapture
         /// <param name="bone"></param>
         private void MuscleRestrict(uint bone)
         {
-            if (!SkeletonHierarchy.Muscles.ContainsKey(bone)) // muscle not defined
+            if (!SkeletonHierarchy.Muscles.TryGetValue(bone, out var muscle)) // muscle not defined
                 return;
-
-            var muscle = SkeletonHierarchy.Muscles[bone];
 
             if (!SkeletonHierarchy.Relations.ContainsKey(bone)) // bone not defined in hierarchy
                 return;
 
-            Quaternion boneRotation = bones[bone].LocalRotation;
+            if (!musclesRestrictors.TryGetValue(bone, out MuscleRestrictor muscleRestrictor))
+            {
+                musclesRestrictors[bone] = new MuscleRestrictor(muscle);
+                muscleRestrictor = musclesRestrictors[bone];
+            }
 
-            // compare orientations
-            Quaternion referenceFrame = muscle.ReferenceFrameRotation.Quaternion();
-            Vector3 rotation = (referenceFrame * boneRotation).eulerAngles;
-
-            float xAngle = (rotation.x % 360f) < 180f ? rotation.x % 360f : ((rotation.x % 360f) - 360f);
-            float yAngle = (rotation.y % 360f) < 180f ? rotation.y % 360f : ((rotation.y % 360f) - 360f);
-            float zAngle = (rotation.z % 360f) < 180f ? rotation.z % 360f : ((rotation.z % 360f) - 360f);
-
-            // if restricted, appply restriction
-            float xAngleRestricted = muscle.XRotationRestriction.HasValue ? Mathf.Clamp(xAngle, muscle.XRotationRestriction.Value.min, muscle.XRotationRestriction.Value.max) : xAngle;
-            float yAngleRestricted = muscle.YRotationRestriction.HasValue ? Mathf.Clamp(yAngle, muscle.YRotationRestriction.Value.min, muscle.YRotationRestriction.Value.max) : yAngle;
-            float zAngleRestricted = muscle.ZRotationRestriction.HasValue ? Mathf.Clamp(zAngle, muscle.ZRotationRestriction.Value.min, muscle.ZRotationRestriction.Value.max) : zAngle;
-
-            bones[bone].LocalRotation = Quaternion.Inverse(referenceFrame) * Quaternion.Euler(xAngleRestricted, yAngleRestricted, zAngleRestricted);
+            bones[bone].LocalRotation = muscleRestrictor.Restrict(bones[bone].LocalRotation);
         }
+
+        private readonly Dictionary<uint, MuscleRestrictor> musclesRestrictors = new();
 
         #endregion Compute
 

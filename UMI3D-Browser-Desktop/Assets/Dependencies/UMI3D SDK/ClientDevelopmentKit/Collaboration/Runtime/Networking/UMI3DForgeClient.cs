@@ -14,8 +14,6 @@ limitations under the License.
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Frame;
 using BeardedManStudios.Forge.Networking.Unity;
-using MainThreadDispatcher;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -654,7 +652,7 @@ namespace umi3d.cdk.collaboration
                     string fileId = UMI3DSerializer.Read<string>(container);
 
                     UploadFileRequest(token, fileId);
-                    
+
                     break;
 
                 case UMI3DOperationKeys.RedirectionRequest:
