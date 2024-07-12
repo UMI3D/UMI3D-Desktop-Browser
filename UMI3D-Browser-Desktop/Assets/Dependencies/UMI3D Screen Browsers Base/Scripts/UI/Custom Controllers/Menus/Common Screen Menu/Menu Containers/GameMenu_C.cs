@@ -132,16 +132,15 @@ namespace umi3d.commonScreen.menu
 
         protected virtual void Transition(VisualElement persistentVisual, bool isTransitionIn)
         {
-            this.SetOpacity(isTransitionIn ? 1 : 0)
-                .WithAnimation(.5f);
-
             this.SetScale(isTransitionIn ? Vector3.one : new Vector3(0.1f, 0.1f, 1))
                 .WithAnimation(.5f);
 
             this.SetOpacity(isTransitionIn ? 1 : 0)
-                .WithAnimation(.5f);
+                .WithAnimation(.5f).SetCallback(() => {
+                    if (!isTransitionIn)
+                        RemoveAllScreen();
+                });
         }
-
         #endregion
     }
 }
