@@ -233,8 +233,8 @@ namespace umi3d.baseBrowser.connection
         float fps = 30;
         private void Update()
         {
-            var time = DateTime.Now - m_time_Start;
-            Menu.GameData.Time = time.ToString("hh") + ":" + time.ToString("mm") + ":" + time.ToString("ss");
+            //var time = DateTime.Now - m_time_Start;
+            //Menu.GameData.Time = time.ToString("hh") + ":" + time.ToString("mm") + ":" + time.ToString("ss");
 
             //FrameManagement();
         }

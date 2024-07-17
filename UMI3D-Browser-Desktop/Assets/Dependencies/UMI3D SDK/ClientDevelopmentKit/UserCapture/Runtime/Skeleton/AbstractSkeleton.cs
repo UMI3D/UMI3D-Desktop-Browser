@@ -114,6 +114,7 @@ namespace umi3d.cdk.userCapture
         protected Transform hipsAnchor;
 
         private const float SKELETON_STANDARD_SIZE = 1.8f;
+        private const float SKELETON_STANDARD_SIZE_INVERSE = 1f / SKELETON_STANDARD_SIZE;
 
         protected IIKHandler postProcessIKHandler;
 
@@ -153,7 +154,7 @@ namespace umi3d.cdk.userCapture
             // (in order not to be influenced by displacement of this, because of tracked action)
             // final skeleton is GET logic, subskeletons is SET
             finalSkeletonGameObject.transform.SetParent(this.transform.parent);
-            SkeletonHierarchy.Apply(CreateSkeletonBoneGameObject);
+            SkeletonHierarchy.Apply(CreateSkeletonBoneGameObject, startBone: BoneType.Hips);
 
             Destroyed += () =>
             {
@@ -278,7 +279,7 @@ namespace umi3d.cdk.userCapture
         public event System.Action Computed;
 
         /// <summary>
-        /// Cache for bottom-up recursive <see cref="ComputeBoneTransform(uint)"/> method.
+        /// Cache for bottom-up recursive <see cref="ComputeBoneWorldTransform(uint)"/> method.
         /// Speeding up computations.
         /// </summary>
         private Dictionary<uint, bool> alreadyComputedbonesCache = new();
@@ -293,12 +294,10 @@ namespace umi3d.cdk.userCapture
             if (Subskeletons == null || Subskeletons.Count == 0)
                 return;
 
-            RetrievebonesRotation(SkeletonHierarchy);
+            RetrieveBonesRotation(SkeletonHierarchy);
+
             if (!bones.ContainsKey(ROOT_BONE))
                 return;
-
-            foreach (uint boneType in bones.Keys)
-                alreadyComputedbonesCache[boneType] = false;
 
             if (TrackedSubskeleton.Controllers.TryGetValue(ROOT_BONE, out IController hipsController))
             {
@@ -312,13 +311,13 @@ namespace umi3d.cdk.userCapture
                 bones[ROOT_BONE].Rotation = HipsAnchor != null ? HipsAnchor.rotation * bones[ROOT_BONE].LocalRotation : Quaternion.identity;
             }
 
-            alreadyComputedbonesCache[ROOT_BONE] = true;
-
             // better use normal recursive computations then.
-            foreach (uint boneType in bones.Keys)
+            foreach (uint boneType in SkeletonHierarchy.OrderedBones) // order is garantied by hierarchy
             {
-                if (!alreadyComputedbonesCache[boneType])
-                    ComputeBoneTransform(boneType);
+                if (boneType == ROOT_BONE) 
+                    continue;
+
+                ComputeBoneWorldTransform(boneType);
             }
         }
 
@@ -326,19 +325,18 @@ namespace umi3d.cdk.userCapture
         /// Compute the final position and rotation of each bone, and their parents recursively if not already computed
         /// </summary>
         /// <param name="boneType"></param>
-        private void ComputeBoneTransform(uint boneType)
+        private void ComputeBoneWorldTransform(uint boneType)
         {
-            if (!alreadyComputedbonesCache[boneType]
-                && SkeletonHierarchy.Relations.TryGetValue(boneType, out var boneRelation)
-                && boneRelation.boneTypeParent != BoneType.None)
-            {
-                if (!alreadyComputedbonesCache[boneRelation.boneTypeParent])
-                    ComputeBoneTransform(boneRelation.boneTypeParent);
+            var boneRelation = SkeletonHierarchy.Relations[boneType]; // garantied to be there
 
-                Matrix4x4 m = Matrix4x4.TRS(bones[boneRelation.boneTypeParent].Position, bones[boneRelation.boneTypeParent].Rotation, transform.localScale * (1f / SKELETON_STANDARD_SIZE));
-                bones[boneType].Position = m.MultiplyPoint3x4(boneRelation.relativePosition); //bones[boneRelation.boneTypeParent].Position + bones[boneRelation.boneTypeParent].Rotation * boneRelation.relativePosition;
-                bones[boneType].Rotation = (bones[boneRelation.boneTypeParent].Rotation * bones[boneType].LocalRotation).normalized;
-                alreadyComputedbonesCache[boneType] = true;
+            if (boneRelation.boneTypeParent != BoneType.None)
+            {
+                UnityTransformation parentransformation = bones[boneRelation.boneTypeParent];
+                Matrix4x4 m = Matrix4x4.TRS(parentransformation.Position, parentransformation.Rotation, transform.localScale * SKELETON_STANDARD_SIZE_INVERSE);
+
+                UnityTransformation transformation = bones[boneType];
+                transformation.Position = m.MultiplyPoint3x4(boneRelation.relativePosition);
+                transformation.Rotation = (parentransformation.Rotation * transformation.LocalRotation).normalized;
             }
         }
 
@@ -348,14 +346,14 @@ namespace umi3d.cdk.userCapture
         /// Get all final bone rotation, based on subskeletons. Lastest subskeleton has lowest priority.
         /// </summary>
         /// <param name="hierarchy"></param>
-        private void RetrievebonesRotation(UMI3DSkeletonHierarchy hierarchy)
+        private void RetrieveBonesRotation(UMI3DSkeletonHierarchy hierarchy)
         {
             //UnityEngine.Debug.Log($"<color=orange>Compute for {UserId}</color>");
             // consider all bones we should have according to the hierarchy, and set all values to identity
             foreach (var bone in hierarchy.Relations.Keys)
             {
-                if (bones.ContainsKey(bone))
-                    bones[bone].LocalRotation = Quaternion.identity;
+                if (bones.TryGetValue(bone, out var boneTransformation))
+                    boneTransformation.LocalRotation = Quaternion.identity;
             }
 
             // for each subskeleton, in ascending order (last has highest priority),
@@ -363,21 +361,19 @@ namespace umi3d.cdk.userCapture
             lock (SubskeletonsLock)
                 foreach (var skeleton in Subskeletons)
                 {
-                    var pose = skeleton.GetPose(hierarchy);
+                    SubSkeletonPoseDto subskeletonPose = skeleton.GetPose(hierarchy);
 
-                    if (pose is null) // if bones are null, sub skeleton should not have any effect. e.g. pose skeleton with no current pose.
+                    if (subskeletonPose is null) // if bones are null, sub skeleton should not have any effect. e.g. pose skeleton with no current pose.
                         continue;
 
-                    List<SubSkeletonBoneDto> poseBones = pose.bones;
+                    if (subskeletonPose.boneAnchor?.bone == ROOT_BONE) //hips displacement is used when subskeleton moves the hips as its anchor, e.g. emotes
+                        hipsDisplacement = Vector3.Scale(HipsAnchor.rotation * subskeletonPose.boneAnchor.position.Struct(), ExtractXZVector);
 
-                    if (pose.boneAnchor?.bone == ROOT_BONE) //hips displacement is used when subskeleton moves the hips as its anchor, e.g. emotes
-                        hipsDisplacement = Vector3.Scale(HipsAnchor.rotation * pose.boneAnchor.position.Struct(), ExtractXZVector);
-
-                    foreach (var b in poseBones)
+                    foreach (SubSkeletonBoneDto subskeletonBone in subskeletonPose.bones)
                     {
                         // if a bone rotation can receive the pose
-                        if (bones.ContainsKey(b.boneType))
-                            bones[b.boneType].LocalRotation = b.localRotation.Quaternion();
+                        if (bones.TryGetValue(subskeletonBone.boneType, out var boneTransformation))
+                            boneTransformation.LocalRotation = subskeletonBone.localRotation.Quaternion();
                     }
                 }
         }

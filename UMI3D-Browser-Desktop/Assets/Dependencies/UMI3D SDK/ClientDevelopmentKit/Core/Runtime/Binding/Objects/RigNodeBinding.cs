@@ -29,10 +29,13 @@ namespace umi3d.cdk.binding
         public RigNodeBinding(RigNodeBindingDataDto dto, Transform boundTransform, UMI3DNodeInstance parentNode, Transform rootObject) : base(dto, boundTransform, parentNode)
         {
             this.rootObject = rootObject;
-            this.originalRotationOffset = Quaternion.Inverse(rootObject.rotation) * boundTransform.rotation;
+            this.autoComputedRotationOffset = Quaternion.Inverse(rootObject.rotation) * boundTransform.rotation; // local in the parent referential
+            this.RigName = dto.rigName;
+
+            RigNodeBindingDataDto = (RigNodeBindingDataDto)SimpleBindingData;
         }
 
-        protected RigNodeBindingDataDto RigNodeBindingDataDto => SimpleBindingData as RigNodeBindingDataDto;
+        protected RigNodeBindingDataDto RigNodeBindingDataDto { get; }
 
         protected Transform rootObject;
 
@@ -41,7 +44,7 @@ namespace umi3d.cdk.binding
         /// <summary>
         /// See <see cref="NodeBindingDataDto.parentNodeId"/>.
         /// </summary>
-        public virtual string RigName => RigNodeBindingDataDto.rigName;
+        public virtual string RigName { get; }
 
         #endregion DTO Access
 
@@ -58,6 +61,9 @@ namespace umi3d.cdk.binding
                 success = false;
                 return;
             }
+
+            if (!hasStartedToBeApplied)
+                Start();
 
             Compute((parentNode.transform.position, parentNode.transform.rotation, parentNode.transform.localScale));
             success = true;

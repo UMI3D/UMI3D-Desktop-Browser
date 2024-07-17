@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Linq;
-using umi3d.cdk.userCapture.tracking;
-using umi3d.common;
+using umi3d.common.core;
 using umi3d.common.userCapture.binding;
 using UnityEngine;
 
@@ -27,27 +25,32 @@ namespace umi3d.cdk.userCapture.binding
     /// </summary>
     public class RigBoneBinding : BoneBinding
     {
-        public RigBoneBinding(RigBoneBindingDataDto dto, Transform rigBoundTransform, ISkeleton skeleton, Transform rootObject) : base(dto, rigBoundTransform, skeleton)
+        public RigBoneBinding(RigBoneBindingDataDto dto, Transform rigBoundTransform, ISkeleton skeleton, Transform rootObject)
+                    : base(dto, rigBoundTransform, skeleton)
         {
-            this.rootObject = rootObject;      
-            this.originalRotationOffset = ApplyOriginalRotation ? Quaternion.Inverse(rootObject.rotation) * boundTransform.rotation : Quaternion.identity;
+            this.rootObject = rootObject;
+            this.UseAutoComputedRotationOffset = dto.applyOriginalRotation;
+            this.autoComputedRotationOffset = UseAutoComputedRotationOffset ? Quaternion.Inverse(rootObject.rotation) * rigBoundTransform.rotation : Quaternion.identity;
+            this.RigName = dto.rigName;
+
+            RigBoneBindingDataDto = (RigBoneBindingDataDto)SimpleBindingData;
         }
 
         #region DTO Access
 
-        protected RigBoneBindingDataDto RigBoneBindingDataDto => SimpleBindingData as RigBoneBindingDataDto;
+        protected RigBoneBindingDataDto RigBoneBindingDataDto { get; }
 
         protected Transform rootObject;
 
         /// <summary>
         /// See <see cref="RigBoneBindingDataDto.rigName"/>.
         /// </summary>
-        public string RigName => RigBoneBindingDataDto.rigName;
+        public string RigName { get; }
 
         /// <summary>
         /// See <see cref="RigBoneBindingDataDto.applyOriginalRotation"/>.
         /// </summary>
-        public bool ApplyOriginalRotation => RigBoneBindingDataDto.applyOriginalRotation;
+        public bool UseAutoComputedRotationOffset { get; }
 
 
         #endregion DTO Access
