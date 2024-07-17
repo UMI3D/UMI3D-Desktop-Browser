@@ -91,7 +91,7 @@ namespace inetum.unityUtils
             }
 
             // Check if this 'subscriber' already listen to notifications.
-            if (_subscriberToID.TryGetValue(subscriber, out HashSet<string> ids))
+            if (_subscriberToID.TryGetValue(subscriberName, out HashSet<string> ids))
             {
                 // Add the 'id' to the list of listen ids, if the list didn't contain this 'id' already.
                 // This list is a set, that means there is no duplicate ids.
@@ -100,7 +100,7 @@ namespace inetum.unityUtils
             else
             {
                 // If that 'subscriber' listen to no one, create a new association 'subscriber' -> ids.
-                _subscriberToID.Add(subscriber, new HashSet<string>() { id });
+                _subscriberToID.Add(subscriberName, new HashSet<string>() { id });
             }
         }
 
@@ -117,6 +117,7 @@ namespace inetum.unityUtils
             // Check if that 'subscriber' listen to any notification.
             if (!_subscriberToID.TryGetValue(subscriberName, out HashSet<string> ids))
             {
+                UnityEngine.Debug.LogWarning($"[NotificationHub] Try to unsubscribe {subscriberName} but subscriber has not subscribed yet.");
                 // If subscriber is not listening to notification then return;
                 return;
             }
@@ -162,6 +163,7 @@ namespace inetum.unityUtils
             // Check if that 'subscriber' listen to any notification.
             if (!_subscriberToID.TryGetValue(subscriberName, out HashSet<string> ids))
             {
+                UnityEngine.Debug.LogWarning($"[NotificationHub] Try to unsubscribe {subscriberName} but subscriber has not subscribed yet.");
                 // If subscriber is not listening to notifications then return;
                 return;
             }
@@ -169,6 +171,7 @@ namespace inetum.unityUtils
             // Check if 'subscriber' listen to 'id'.
             if (!ids.Contains(id))
             {
+                UnityEngine.Debug.LogWarning($"[NotificationHub] Try to unsubscribe {subscriberName} with id {id} but subscriber has not subscribed to this id yet.");
                 // If subscriber is not listening to 'id' then return;
                 return;
             }
