@@ -148,28 +148,28 @@ namespace umi3d.cdk.userCapture
             subskeletons = new List<ISubskeleton> { TrackedSubskeleton };
 
             // init final skeleton game objects
-            finalSkeletonGameObject = new GameObject($"Final Skeleton - user {UserId}");
+            //finalSkeletonGameObject = new GameObject($"Final Skeleton - user {UserId}");
 
             // either personal skeleton container or collab skeleton scene
             // (in order not to be influenced by displacement of this, because of tracked action)
             // final skeleton is GET logic, subskeletons is SET
-            finalSkeletonGameObject.transform.SetParent(this.transform.parent);
-            SkeletonHierarchy.Apply(CreateSkeletonBoneGameObject, startBone: BoneType.Hips);
+            //finalSkeletonGameObject.transform.SetParent(this.transform.parent);
+            //SkeletonHierarchy.Apply(CreateSkeletonBoneGameObject, startBone: BoneType.Hips);
 
-            Destroyed += () =>
-            {
-                if (finalSkeletonGameObject != null) // clean final skeleton
-                    UnityEngine.Object.Destroy(finalSkeletonGameObject);
-            };
+            //Destroyed += () =>
+            //{
+            //    if (finalSkeletonGameObject != null) // clean final skeleton
+            //        UnityEngine.Object.Destroy(finalSkeletonGameObject);
+            //};
 
-            bones[ROOT_BONE].Transform.SetParent(finalSkeletonGameObject.transform);
-            bones[ROOT_BONE].Position = HipsAnchor != null ? HipsAnchor.position : Vector3.zero;
-            bones[ROOT_BONE].Rotation = HipsAnchor != null ? HipsAnchor.rotation : Quaternion.identity;
+            //bones[ROOT_BONE].Transform.SetParent(finalSkeletonGameObject.transform);
+            //bones[ROOT_BONE].Position = HipsAnchor != null ? HipsAnchor.position : Vector3.zero;
+            //bones[ROOT_BONE].Rotation = HipsAnchor != null ? HipsAnchor.rotation : Quaternion.identity;
 
             // setup IK post processor
-            SimpleIKHandler ikHandler = finalSkeletonGameObject.AddComponent<SimpleIKHandler>();
-            ikHandler.Init(this);
-            postProcessIKHandler = ikHandler;
+            //SimpleIKHandler ikHandler = finalSkeletonGameObject.AddComponent<SimpleIKHandler>();
+            //ikHandler.Init(this);
+            //postProcessIKHandler = ikHandler;
 
             // wait to add PoseSubskeleton until we received at least one tracking frame
             initPoseSubskeletonCoroutine = StartCoroutine(InitPoseSubskeleton());
@@ -387,7 +387,7 @@ namespace umi3d.cdk.userCapture
             CorrectIK();
 
             // muscle restrictions
-            SkeletonHierarchy.Apply(MuscleRestrict);
+            //SkeletonHierarchy.Apply(MuscleRestrict);
         }
 
         /// <summary>
@@ -396,6 +396,7 @@ namespace umi3d.cdk.userCapture
         /// <param name="layer"></param>
         protected virtual void CorrectIK()
         {
+            return;
             // fix rotations
             foreach (IController controller in TrackedSubskeleton.Controllers.Values)
             {
