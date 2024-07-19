@@ -215,9 +215,11 @@ namespace umi3d.cdk.collaboration
         /// <summary>
         /// Logout from the World Controller server.
         /// </summary>
-        public void Logout()
+        public async void Logout()
         {
+            await environment.Clear();
 
+            httpClient.Stop();
         }
 
         /// <summary>

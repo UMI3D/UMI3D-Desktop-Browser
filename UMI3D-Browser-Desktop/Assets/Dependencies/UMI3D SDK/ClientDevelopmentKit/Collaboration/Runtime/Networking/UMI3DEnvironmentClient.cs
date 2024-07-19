@@ -360,6 +360,9 @@ namespace umi3d.cdk.collaboration
                 GameObject.Destroy(ForgeClient.gameObject);
                 ForgeClient = null;
             }
+
+            HttpClient.Stop();
+
             return true;
         }
 

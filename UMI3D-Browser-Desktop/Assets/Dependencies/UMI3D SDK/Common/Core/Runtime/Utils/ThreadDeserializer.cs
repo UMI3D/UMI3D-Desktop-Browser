@@ -51,9 +51,15 @@ namespace umi3d.common
         {
             bsonQueue = new Queue<(byte[], Action<UMI3DDto>, Newtonsoft.Json.TypeNameHandling)>();
             Running = true;
+            Debug.Log("NEW THREAD");
             thread = new Thread(ThreadUpdate);
             if (!thread.IsAlive)
                 thread.Start();
+        }
+
+        ~ThreadDeserializer()
+        {
+            Stop();
         }
 
         public void Stop()
@@ -106,6 +112,7 @@ namespace umi3d.common
             {
                 try
                 {
+                    Debug.Log("RUNNING " + Thread.CurrentThread.ManagedThreadId);
                     (byte[], Action<UMI3DDto>, Newtonsoft.Json.TypeNameHandling) c = default;
                     bool set = false;
                     lock (bsonQueue)

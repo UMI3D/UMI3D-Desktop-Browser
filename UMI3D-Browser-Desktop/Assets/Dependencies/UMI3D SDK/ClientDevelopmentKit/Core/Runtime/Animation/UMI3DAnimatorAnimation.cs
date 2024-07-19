@@ -429,9 +429,6 @@ namespace umi3d.cdk
                     animator = node.gameObject.GetComponentInChildren<Animator>();
                 if (animator != null && dto.playing)
                     Start();
-
-                MainThreadDispatcher.UnityMainThreadDispatcher.Instance().Enqueue(debugClip);
-
             });
         }
 
