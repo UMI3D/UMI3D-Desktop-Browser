@@ -61,7 +61,7 @@ public class WindowsManager
     /// <br/>
     /// A zoomed window is like a full screen window but with the top bar.
     /// </summary>
-    static bool IsWindowZoomed
+    public static bool IsWindowZoomed
     {
         get
         {
@@ -76,7 +76,7 @@ public class WindowsManager
     /// <summary>
     /// Whether this application is in full screen.
     /// </summary>
-    static bool IsWindowInFullScreen
+    public static bool IsWindowInFullScreen
     {
         get
         {
@@ -87,8 +87,12 @@ public class WindowsManager
     /// The last full screen state.
     /// </summary>
     static FullScreenMode fullScreenMode = FullScreenMode.Windowed;
+    /// <summary>
+    /// The next full screen state.
+    /// </summary>
+    static FullScreenMode nextFullScreenMode = FullScreenMode.Windowed;
 
-    #if UNITY_STANDALONE_WIN
+#if UNITY_STANDALONE_WIN
 
     /// <summary>
     /// External method to minimize or maximize the window.<br/>
@@ -153,7 +157,7 @@ public class WindowsManager
             Minimize
         );
 
-        // Maximize the window when 'WindowsManagerNotificationKey.Maximize' is sent.
+        // Windowed the window when 'WindowsManagerNotificationKey.Windowed' is sent.
         NotificationHub.Default.Subscribe(
             typeof(WindowsManager).FullName,
             WindowsManagerNotificationKey.Maximize,
@@ -169,18 +173,23 @@ public class WindowsManager
              FullScreenWillChange
          );
 
-        // Set the initial resolution.
-        Screen.SetResolution(
-            widthMonitor / 2,
-            heightMonitor / 2,
-            FullScreenMode.Windowed
-        );
+        //// Set the initial resolution.
+        //Screen.SetResolution(
+        //    widthMonitor / 2,
+        //    heightMonitor / 2,
+        //    FullScreenMode.Windowed
+        //);
     }
 
     public static void Update()
     {
+        if (nextFullScreenMode != fullScreenMode)
+        {
+            return;
+        }
+
         //Check if the window is being resized thanks to the original window tab bar button.
-        if ((IsWindowZoomed && !zoomed) || (!IsWindowZoomed && zoomed)) 
+        if (IsWindowZoomed != zoomed) 
         {
             zoomed = IsWindowZoomed;
             if (zoomed)
@@ -188,68 +197,12 @@ public class WindowsManager
                 SwitchFullScreen(true);
             }
         }
-        // Check if the window is being resized (full screen) thanks to the alt + enter shortcut.
-        else if (IsWindowInFullScreen && !IsFullScreen(fullScreenMode))
+        // Check if the window is being resized thanks to the alt + enter shortcut.
+        else if (IsWindowInFullScreen != IsFullScreen(fullScreenMode))
         {
-            SwitchFullScreen(true);
-        }
-        // Check if the window is being resized (windowed) thanks to the alt + enter shortcut.
-        else if (!IsWindowInFullScreen && IsFullScreen(fullScreenMode))
-        {
-            SwitchFullScreen(false);
+            SwitchFullScreen(IsWindowInFullScreen);
         }
 
-
-
-
-
-        if (Input.GetKeyUp(KeyCode.W))
-        {
-            ShowWindow(GetActiveWindow(), SW_SHOWMAXIMIZED);
-        }
-        if (Input.GetKeyUp(KeyCode.X))
-        {
-            ShowWindow(GetActiveWindow(), SW_SHOWMINIMIZED);
-        }
-        if (Input.GetKeyUp(KeyCode.C))
-        {
-            UnityEngine.Debug.Log($"Résolution : {widthMonitor}, {heightMonitor}");
-            Screen.SetResolution(
-                widthMonitor,
-                heightMonitor,
-                FullScreenMode.FullScreenWindow
-            );
-        }
-        if (Input.GetKeyUp(KeyCode.V))
-        {
-            UnityEngine.Debug.Log($"Résolution : {widthMonitor}, {heightMonitor}");
-            Screen.SetResolution(
-                widthMonitor / 2,
-                heightMonitor / 2,
-                FullScreenMode.FullScreenWindow
-            );
-        }
-        if (Input.GetKeyUp(KeyCode.B))
-        {
-            UnityEngine.Debug.Log($"Résolution : {widthMonitor}, {heightMonitor}");
-            Screen.SetResolution(
-                widthMonitor / 2,
-                heightMonitor / 2,
-                FullScreenMode.Windowed
-            );
-        }
-        if (Input.GetKeyUp(KeyCode.N))
-        {
-            UnityEngine.Debug.Log($"{Screen.fullScreenMode}, {IsWindowZoomed}");
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha1))
-        {
-            SwitchFullScreen(true);
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha2))
-        {
-            SwitchFullScreen(false);
-        }
     }
 
     /// <summary>
@@ -293,14 +246,7 @@ public class WindowsManager
     /// <param name="fullScreen">Set full screen if true, else window.</param>
     static void SwitchFullScreen(bool fullScreen)
     {
-        // If the full screen mode is not going to change then return.
-        if ((fullScreen &&  IsFullScreen(fullScreenMode))
-            || (!fullScreen && !IsFullScreen(fullScreenMode)))
-        {
-            return;
-        }
-
-        fullScreenMode = GetFullScreenMode(fullScreen);
+        nextFullScreenMode = GetFullScreenMode(fullScreen);
 
         // If the window is going to be in full screen save the actual window resolution.
         if (fullScreen && (Screen.width != widthMonitor || Screen.height != heightMonitor))
@@ -313,7 +259,7 @@ public class WindowsManager
         Screen.SetResolution(
             fullScreen ? widthMonitor : widthWindow,
             fullScreen ? heightMonitor : heightWindow,
-            fullScreenMode
+            nextFullScreenMode
         );
 
         // Notify observers that the full screen mode has changed.
@@ -321,9 +267,17 @@ public class WindowsManager
             typeof(WindowsManager).FullName, 
             WindowsManagerNotificationKey.FullScreenModeChanged, 
             new() { 
-                { WindowsManagerNotificationKey.FullScreenModeChangedInfo.Mode, fullScreenMode } 
+                { WindowsManagerNotificationKey.FullScreenModeChangedInfo.Mode, nextFullScreenMode } 
             }
         );
+
+        // Wait one frame so that the window can be resized.
+        new Task(async () =>
+        {
+            // Wait one frame.
+            await Task.Yield();
+            fullScreenMode = nextFullScreenMode;
+        }).Start(TaskScheduler.FromCurrentSynchronizationContext());
     }
 
     /// <summary>
@@ -356,6 +310,7 @@ public class WindowsManager
     {
         if (!notification.TryGetInfoT(WindowsManagerNotificationKey.FullScreenModeChangedInfo.Mode, out FullScreenMode mode))
         {
+            UnityEngine.Debug.LogError($"[WindowManager] info key is missing.");
             return;
         }
 
@@ -378,7 +333,7 @@ public static class WindowsManagerNotificationKey
     /// <summary>
     ///  If the window is hidden, maximize (display) the window in its previous state, else do nothing.
     /// </summary>
-    public const string Maximize = "Maximize";
+    public const string Maximize = "Windowed";
 
     /// <summary>
     /// Ask to change the full screen mode.
