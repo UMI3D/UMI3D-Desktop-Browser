@@ -335,8 +335,6 @@ namespace umi3d.cdk.collaboration
             channel = null;
             pendingChannel = null;
             identity?.Clear();
-
-            QuittingManager.OnApplicationIsQuitting.AddListener(_OnApplicationQuit);
         }
 
         protected virtual void _OnApplicationQuit()

@@ -22,42 +22,73 @@ using UnityEngine;
 /// </summary>
 public class GamePanelController : umi3d.baseBrowser.connection.BaseGamePanelController
 {
-    [Header("Windows Manager")]
-    public WindowsManager Windows_Manager;
-
     protected override void Start()
     {
         base.Start();
 
-        Debug.Assert(Windows_Manager != null, "WindowsManager reference null");
-        Loader.Header.Minimize.clicked += Windows_Manager.Minimize;
-        Loader.Header.Maximize.clicked += Windows_Manager.Maximize;
-        Loader.Header.Close.clicked += Application.Quit;
-        Menu.Header.Minimize.clicked += Windows_Manager.Minimize;
-        Menu.Header.Maximize.clicked += Windows_Manager.Maximize;
-        Menu.Header.Close.clicked += Application.Quit;
-        Game.TopArea.AppHeader.Minimize.clicked += Windows_Manager.Minimize;
-        Game.TopArea.AppHeader.Maximize.clicked += Windows_Manager.Maximize;
-        Game.TopArea.AppHeader.Close.clicked += Application.Quit;
+        GamePanel.DisplayHeader = WindowsManager.IsWindowInFullScreen;
+    }
 
-        Windows_Manager.FullScreenEnabled = value => GamePanel.DisplayHeader = value;
-        Windows_Manager.DisplayDialogueBoxToQuit = () =>
+    private void OnEnable()
+    {
+        NotificationHub.Default.Subscribe(
+            this,
+            QuittingManagerNotificationKey.RequestToQuit,
+            null,
+            _ApplicationIsQuitting
+        );
+
+        NotificationHub.Default.Subscribe(
+           this,
+           WindowsManagerNotificationKey.FullScreenModeChanged,
+           null,
+           FullScreenChanged
+       );
+    }
+
+    private void OnDisable()
+    {
+        NotificationHub.Default.Unsubscribe(this, QuittingManagerNotificationKey.RequestToQuit);
+        NotificationHub.Default.Unsubscribe(this, WindowsManagerNotificationKey.FullScreenModeChanged);
+    }
+
+    private void Update()
+    {
+        WindowsManager.Update();
+    }
+
+    void _ApplicationIsQuitting(Notification notification)
+    {
+        var dialogueBox = new umi3d.commonScreen.Displayer.Dialoguebox_C();
+        dialogueBox.Size = ElementSize.Small;
+        dialogueBox.Type = DialogueboxType.Confirmation;
+        dialogueBox.Title = "Close application";
+        dialogueBox.Message = "Do you want to close the application?";
+        dialogueBox.ChoiceAText = "Cancel";
+        dialogueBox.ChoiceA.Type = ButtonType.Default;
+        dialogueBox.ChoiceBText = "Close";
+        dialogueBox.Callback = index =>
         {
-            var dialogueBox = new umi3d.commonScreen.Displayer.Dialoguebox_C();
-            dialogueBox.Size = ElementSize.Small;
-            dialogueBox.Type = DialogueboxType.Confirmation;
-            dialogueBox.Title = "Close application";
-            dialogueBox.Message = "Do you want to close the application?";
-            dialogueBox.ChoiceAText = "Cancel";
-            dialogueBox.ChoiceA.Type = ButtonType.Default;
-            dialogueBox.ChoiceBText = "Close";
-            dialogueBox.Callback = index =>
-            {
-                QuittingManager.ApplicationIsQuitting = index == 1;
-                if (index == 1) Application.Quit();
-            };
-            dialogueBox.EnqueuePriority(GamePanel);
+            NotificationHub.Default.Notify(
+                this, 
+                QuittingManagerNotificationKey.QuittingConfirmation, 
+                new()
+                {
+                    {QuittingManagerNotificationKey.QuittingConfirmationInfo.Confirmation, index == 1 }
+                }
+            );
         };
+        dialogueBox.EnqueuePriority(GamePanel);
+    }
+
+    void FullScreenChanged(Notification notification)
+    {
+        if (!notification.TryGetInfoT(WindowsManagerNotificationKey.FullScreenModeChangedInfo.Mode, out FullScreenMode mode))
+        {
+            return;
+        }
+
+        GamePanel.DisplayHeader = mode == FullScreenMode.FullScreenWindow;
     }
 
     protected override void InitLoader()

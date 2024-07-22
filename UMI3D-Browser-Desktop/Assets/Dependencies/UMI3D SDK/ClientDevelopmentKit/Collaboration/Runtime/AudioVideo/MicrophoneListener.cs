@@ -34,7 +34,12 @@ namespace umi3d.cdk.collaboration
         {
             base.Start();
 
-            QuittingManager.OnApplicationIsQuitting.AddListener(_OnApplicationQuit);
+            NotificationHub.Default.Subscribe(
+                this,
+                QuittingManagerNotificationKey.ApplicationIsQuitting,
+                null,
+                _ApplicationIsQuitting
+            );
 
             UMI3DUser.OnUserMicrophoneIdentityUpdated.AddListener(IdentityUpdate);
             UMI3DUser.OnUserMicrophoneChannelUpdated.AddListener(ChannelUpdate);
@@ -100,6 +105,11 @@ namespace umi3d.cdk.collaboration
             UMI3DUser.OnUserMicrophoneUseMumbleUpdated.RemoveListener(UseMumbleUpdate);
 
             UMI3DEnvironmentClient.EnvironementLoaded.RemoveListener(Heartbeat);
+        }
+
+        void _ApplicationIsQuitting(Notification notification)
+        {
+            _OnApplicationQuit();
         }
         #endregion
 
