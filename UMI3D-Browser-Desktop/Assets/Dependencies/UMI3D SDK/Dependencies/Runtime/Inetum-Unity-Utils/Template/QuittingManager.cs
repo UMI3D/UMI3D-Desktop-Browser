@@ -98,6 +98,7 @@ namespace inetum.unityUtils
                 QuittingManagerNotificationKey.ApplicationIsQuitting
             );
 
+            UnityEngine.Debug.Log($"*********** Application is quitting ***********");
             // Quit.
             Application.Quit();
         }
