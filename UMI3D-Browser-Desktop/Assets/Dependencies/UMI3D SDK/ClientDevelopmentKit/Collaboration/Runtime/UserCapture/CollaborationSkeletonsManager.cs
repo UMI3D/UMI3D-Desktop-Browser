@@ -142,11 +142,12 @@ namespace umi3d.cdk.collaboration.userCapture
         #region LifeCycle
 
         private bool canClearSkeletons = false;
+        private bool canUpdateSkeletons = false;
 
         private void Init()
         {
             collaborativeEnvironmentManagementService.OnUpdateJoinnedUserList += () => UpdateSkeletons(collaborativeEnvironmentManagementService.UserList);
-            collaborativeLoaderService.onEnvironmentLoaded.AddListener(() => { InitSkeletons(); if (ShouldSendTracking) SendTrackingLoop(); canClearSkeletons = true; });
+            collaborativeLoaderService.onEnvironmentLoaded.AddListener(() => { InitSkeletons(); if (ShouldSendTracking) SendTrackingLoop(); canClearSkeletons = true; canUpdateSkeletons = true; });
             collaborationClientServerService.OnLeavingEnvironment.AddListener(Clear);
             collaborationClientServerService.OnRedirection.AddListener(Clear);
         }
@@ -299,6 +300,9 @@ namespace umi3d.cdk.collaboration.userCapture
 
         public virtual void UpdateSkeleton(IEnumerable<UserTrackingFrameDto> frames)
         {
+            if (!canUpdateSkeletons)
+                return;
+
             if (Application.isBatchMode)
                 return;
 
