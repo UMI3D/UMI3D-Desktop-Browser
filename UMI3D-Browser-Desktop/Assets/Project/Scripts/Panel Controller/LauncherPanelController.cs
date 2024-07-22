@@ -15,45 +15,17 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
-using System;
 using UnityEngine;
 using static umi3d.baseBrowser.preferences.SettingsPreferences;
 
 public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncherPanelController
 {
-    public WindowsManager Windows_Manager;
-
     protected override void Start()
     {
         base.Start();
 
-        Debug.Assert(Windows_Manager != null, "WindowsManager reference is null");
-        Launcher.Header.Minimize.clicked += Windows_Manager.Minimize;
-        Launcher.Header.Maximize.clicked += Windows_Manager.Maximize;
-        Launcher.Header.Close.clicked += Application.Quit;
-
-        Windows_Manager.FullScreenEnabled = value => Launcher.DisplayHeader = value;
-        Windows_Manager.DisplayDialogueBoxToQuit = () =>
-        {
-            var dialogueBox = new umi3d.commonScreen.Displayer.Dialoguebox_C();
-            dialogueBox.Size = ElementSize.Small;
-            dialogueBox.Type = DialogueboxType.Confirmation;
-            dialogueBox.Title = "Close application";
-            dialogueBox.Message = "Do you want to close the application?";
-            dialogueBox.ChoiceAText = "Cancel";
-            dialogueBox.ChoiceA.Type = ButtonType.Default;
-            dialogueBox.ChoiceBText = "Close";
-            dialogueBox.Callback = index =>
-            {
-                QuittingManager.ApplicationIsQuitting = index == 1;
-                if (index == 1) Application.Quit();
-            };
-            dialogueBox.EnqueuePriority(Launcher);
-        };
-
         Launcher.Version = BrowserDesktop.BrowserVersion.Version;
         Launcher.Settings.Controller.Controller = ControllerEnum.MouseAndKeyboard;
-
 
         GeneralData data;
         if (TryGetGeneralData(out data))
@@ -65,6 +37,70 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
             Debug.Log("Not Found");
             ShowLanguageSelection();
         }
+
+        Launcher.DisplayHeader = WindowsManager.IsWindowInFullScreen;
+    }
+
+    private void OnEnable()
+    {
+        NotificationHub.Default.Subscribe(
+            this,
+            QuittingManagerNotificationKey.RequestToQuit,
+            null,
+            _ApplicationIsQuitting
+        );
+
+        NotificationHub.Default.Subscribe(
+            this,
+            WindowsManagerNotificationKey.FullScreenModeChanged,
+            null,
+            FullScreenChanged
+        );
+    }
+
+    private void OnDisable()
+    {
+        NotificationHub.Default.Unsubscribe(this, QuittingManagerNotificationKey.RequestToQuit);
+        NotificationHub.Default.Unsubscribe(this, WindowsManagerNotificationKey.FullScreenModeChanged);
+    }
+
+    private void Update()
+    {
+        WindowsManager.Update();
+    }
+
+    void _ApplicationIsQuitting(Notification notification)
+    {
+        var dialogueBox = new umi3d.commonScreen.Displayer.Dialoguebox_C();
+        dialogueBox.Size = ElementSize.Small;
+        dialogueBox.Type = DialogueboxType.Confirmation;
+        dialogueBox.Title = "Close application";
+        dialogueBox.Message = "Do you want to close the application?";
+        dialogueBox.ChoiceAText = "Cancel";
+        dialogueBox.ChoiceA.Type = ButtonType.Default;
+        dialogueBox.ChoiceBText = "Close";
+        dialogueBox.Callback = index =>
+        {
+            NotificationHub.Default.Notify(
+                this,
+                QuittingManagerNotificationKey.QuittingConfirmation,
+                new()
+                {
+                    {QuittingManagerNotificationKey.QuittingConfirmationInfo.Confirmation, index == 1 }
+                }
+            );
+        };
+        dialogueBox.EnqueuePriority(Launcher);
+    }
+
+    void FullScreenChanged(Notification notification)
+    {
+        if (!notification.TryGetInfoT(WindowsManagerNotificationKey.FullScreenModeChangedInfo.Mode, out FullScreenMode mode))
+        {
+            return;
+        }
+
+        Launcher.DisplayHeader = mode != FullScreenMode.Windowed;
     }
 
     private void ShowLanguageSelection()
