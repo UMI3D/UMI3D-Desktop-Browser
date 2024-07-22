@@ -53,15 +53,12 @@ namespace inetum.unityUtils
         /// <returns></returns>
         static bool WantsToQuit()
         {
-            UnityEngine.Debug.Log($"WantsToQuit");
             // If applicationIsQuitting then return true to confirm the quitting process.
             if (applicationIsQuitting)
             {
-                UnityEngine.Debug.Log($"Pas normal sauf si on quitte vraiment");
                 return true;
             }
 
-            UnityEngine.Debug.Log($"ici c'est bien");
             // Notify the observers that the application is asked to quit.
             // The observers have to display a pop up that let the user
             // choose between confirming or cancelling the quitting process.
