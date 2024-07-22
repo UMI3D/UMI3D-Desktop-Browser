@@ -224,6 +224,7 @@ namespace inetum.unityUtils
             // Check if there are subscription for that 'id'.
             if (!_subscriptions.TryGetValue(id, out List<Subscription> subscriptions))
             {
+                UnityEngine.Debug.LogWarning($"[NotificationHub] {publisherName} try to notify with id {id} but no one is listening.");
                 return observers;
             }
 
