@@ -5,7 +5,13 @@
         "GUID:d0bf4ea2ef3a7c74e9160b8995fd902b",
         "GUID:da2f061e14490274aae03b21eb85eb03"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor",
+        "macOSStandalone",
+        "WSA",
+        "WindowsStandalone32",
+        "WindowsStandalone64"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
