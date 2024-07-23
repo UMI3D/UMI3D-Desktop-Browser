@@ -38,7 +38,7 @@ namespace umi3d.cdk.collaboration
                 this,
                 QuittingManagerNotificationKey.ApplicationIsQuitting,
                 null,
-                _ApplicationIsQuitting
+                _OnApplicationQuit
             );
 
             UMI3DUser.OnUserMicrophoneIdentityUpdated.AddListener(IdentityUpdate);
@@ -56,6 +56,12 @@ namespace umi3d.cdk.collaboration
             identity = new Identity(GetIdentity);
 
             pushToTalkKeycode = KeyCode.M;
+        }
+
+        public override void ResetAudioConference()
+        {
+            base.ResetAudioConference();
+            identity = new Identity(GetIdentity);
         }
 
 
@@ -99,11 +105,6 @@ namespace umi3d.cdk.collaboration
             UMI3DUser.OnUserMicrophoneUseMumbleUpdated.RemoveListener(UseMumbleUpdate);
 
             UMI3DEnvironmentClient.EnvironementLoaded.RemoveListener(Heartbeat);
-        }
-
-        void _ApplicationIsQuitting(Notification notification)
-        {
-            _OnApplicationQuit();
         }
         #endregion
 
