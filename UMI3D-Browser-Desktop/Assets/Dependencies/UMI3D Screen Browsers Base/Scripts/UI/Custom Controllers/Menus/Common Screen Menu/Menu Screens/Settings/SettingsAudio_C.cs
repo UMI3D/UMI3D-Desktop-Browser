@@ -33,9 +33,10 @@ namespace umi3d.commonScreen.menu
         public Toggle_C NoiseReductionToggle = new Toggle_C();
         public SegmentedPicker_C<MicModeEnum> MicModeSegmentedPicker = new SegmentedPicker_C<MicModeEnum>();
         public ThresholdSlider_C AmplitudeSlider = new ThresholdSlider_C();
-        public Textfield_C DelayBeaforeShutingMicTextfield = new Textfield_C();
+        public Textfield_C DelayBeaforeShuttingMicTextfield = new Textfield_C();
         public Dropdown_C PushToTalkKeyDropdown = new Dropdown_C { name = "push-to-talk" };
         public Button_C LoopBackButton = new Button_C { name = "loop-back" };
+        public Button_C ResetAudioConfButton = new Button_C { name = "reset-audio" };
 
         public SettingsAudio_C() { }
 
@@ -110,14 +111,14 @@ namespace umi3d.commonScreen.menu
             ScrollView.Add(AmplitudeSlider);
 #endif
 
-            DelayBeaforeShutingMicTextfield.LocaliseLabel = new LocalisationAttribute
+            DelayBeaforeShuttingMicTextfield.LocaliseLabel = new LocalisationAttribute
             (
                 "Delay before mute mic when lower than threshold",
                 "AudioSettings", "DelayShutMic"
             );
-            DelayBeaforeShutingMicTextfield.RegisterValueChangedCallback(ce => OnDelayBeforeShutingMicValueChanged(ce.newValue));
+            DelayBeaforeShuttingMicTextfield.RegisterValueChangedCallback(ce => OnDelayBeforeShutingMicValueChanged(ce.newValue));
 #if UNITY_STANDALONE
-            ScrollView.Add(DelayBeaforeShutingMicTextfield);
+            ScrollView.Add(DelayBeaforeShuttingMicTextfield);
 #endif
 
             PushToTalkKeyDropdown.LocalisedLabel = new LocalisationAttribute("Push to talk key", "AudioSettings", "PushToTalk_Label");
@@ -130,7 +131,10 @@ namespace umi3d.commonScreen.menu
             LoopBackButton.ClickedDown += () => OnLoopBackValueChanged(!m_loopBack);
             ScrollView.Add(LoopBackButton);
 
-            
+
+            ResetAudioConfButton.LocaliseText = new LocalisationAttribute("Reset Audio", "AudioSettings", "ResetAudioConfButton_Label");
+            ResetAudioConfButton.ClickedDown += () => OnResetAudio();
+            ScrollView.Add(ResetAudioConfButton);
         }
 
         protected override void SetProperties()
@@ -266,17 +270,17 @@ namespace umi3d.commonScreen.menu
             {
                 case MicModeEnum.AlwaysSend:
                     AmplitudeSlider.Hide();
-                    DelayBeaforeShutingMicTextfield.Hide();
+                    DelayBeaforeShuttingMicTextfield.Hide();
                     PushToTalkKeyDropdown.Hide();
                     break;
                 case MicModeEnum.Amplitude:
                     AmplitudeSlider.Display();
-                    DelayBeaforeShutingMicTextfield.Display();
+                    DelayBeaforeShuttingMicTextfield.Display();
                     PushToTalkKeyDropdown.Hide();
                     break;
                 case MicModeEnum.PushToTalk:
                     AmplitudeSlider.Hide();
-                    DelayBeaforeShutingMicTextfield.Hide();
+                    DelayBeaforeShuttingMicTextfield.Hide();
                     PushToTalkKeyDropdown.Display();
                     break;
                 default:
@@ -319,7 +323,7 @@ namespace umi3d.commonScreen.menu
         {
             if (string.IsNullOrEmpty(value))
             {
-                DelayBeaforeShutingMicTextfield.SetValueWithoutNotify(value);
+                DelayBeaforeShuttingMicTextfield.SetValueWithoutNotify(value);
 
                 if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
                     umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds = 0f;
@@ -329,7 +333,7 @@ namespace umi3d.commonScreen.menu
             }
             else if (float.TryParse(value, out var valueFloat))
             {
-                DelayBeaforeShutingMicTextfield.SetValueWithoutNotify(valueFloat.ToString());
+                DelayBeaforeShuttingMicTextfield.SetValueWithoutNotify(valueFloat.ToString());
 
                 if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
                     umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds = valueFloat;
@@ -337,7 +341,7 @@ namespace umi3d.commonScreen.menu
                 Data.DelayBeforeShutMic = valueFloat;
                 StoreAudioData(Data);
             }
-            else DelayBeaforeShutingMicTextfield.SetValueWithoutNotify(Data.DelayBeforeShutMic.ToString());
+            else DelayBeaforeShuttingMicTextfield.SetValueWithoutNotify(Data.DelayBeforeShutMic.ToString());
         }
 
         /// <summary>
@@ -368,6 +372,12 @@ namespace umi3d.commonScreen.menu
             );
             if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
                 umi3d.cdk.collaboration.MicrophoneListener.Instance.useLocalLoopback = m_loopBack;
+        }
+
+        private void OnResetAudio()
+        {
+            if (umi3d.cdk.collaboration.AudioManager.Exists)
+                umi3d.cdk.collaboration.AudioManager.Instance.ResetAudioConference();
         }
 
         #endregion
