@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using umi3d.browserRuntime.notificationKeys;
+using umi3d.browserRuntime.pc;
 using UnityEngine;
 using static umi3d.baseBrowser.preferences.SettingsPreferences;
 

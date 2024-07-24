@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using umi3d.common;
 using umi3d.common.core;
 using umi3d.common.dto.binding;
 
@@ -28,50 +29,84 @@ namespace umi3d.cdk.binding
     {
         #region DTO access
 
-        protected AbstractSimpleBindingDataDto SimpleBindingData => data as AbstractSimpleBindingDataDto;
+        protected AbstractSimpleBindingDataDto SimpleBindingData { get; }
 
         /// <summary>
         /// See <see cref="AbstractSimpleBindingDataDto.syncPosition"/>.
         /// </summary>
-        public bool SyncPosition => SimpleBindingData.syncPosition;
+        public bool SyncPosition { get; }
 
         /// <summary>
         /// See <see cref="AbstractSimpleBindingDataDto.syncRotation"/>.
         /// </summary>
-        public bool SyncRotation => SimpleBindingData.syncRotation;
+        public bool SyncRotation { get; }
 
         /// <summary>
         /// See <see cref="AbstractSimpleBindingDataDto.syncScale"/>.
         /// </summary>
-        public bool SyncScale => SimpleBindingData.syncScale;
+        public bool SyncScale { get; }
 
         /// <summary>
         /// See <see cref="AbstractSimpleBindingDataDto.offSetPosition"/>.
         /// </summary>
-        public Vector3 OffSetPosition => SimpleBindingData.offSetPosition.Struct();
+        public Vector3 OffSetPosition { get; }
 
         /// <summary>
         /// See <see cref="AbstractSimpleBindingDataDto.offSetRotation"/>.
         /// </summary>
-        public Quaternion OffSetRotation => SimpleBindingData.offSetRotation.Quaternion();
+        public Quaternion OffSetRotation { get; }
 
         /// <summary>
         /// See <see cref="AbstractSimpleBindingDataDto.offSetScale"/>.
         /// </summary>
-        public Vector3 OffSetScale => SimpleBindingData.offSetScale.Struct();
+        public Vector3 OffSetScale { get; }
 
         /// <summary>
         /// See <see cref="AbstractSimpleBindingDataDto.anchorPosition"/>.
         /// </summary>
-        public Vector3 AnchorPosition => SimpleBindingData.anchorPosition.Struct();
+        public Vector3 AnchorPosition { get; }
+
+        protected bool hasStartedToBeApplied = false;
 
         #endregion DTO access
 
-        protected Quaternion originalRotationOffset = Quaternion.identity;
+        protected Quaternion autoComputedRotationOffset = Quaternion.identity;
+
+        public PureTransformation OriginalTransformation { get; protected set; } = new();
 
         public AbstractSimpleBinding(AbstractSimpleBindingDataDto dto, Transform boundTransform) : base(boundTransform, dto)
         {
+            OffSetPosition = dto.offSetPosition.Struct();
+            OffSetRotation = dto.offSetRotation.Quaternion();
+            OffSetScale = dto.offSetScale.Struct();
+            AnchorPosition = dto.anchorPosition.Struct();
+
+            this.SyncPosition = dto.syncPosition;
+            this.SyncRotation = dto.syncRotation;
+            this.SyncScale = dto.syncScale;
+
+            SimpleBindingData = (AbstractSimpleBindingDataDto)data;
         }
+
+        /// <summary>
+        /// Called at the first start of each binding.
+        /// </summary>
+        protected virtual void Start()
+        {
+            if (hasStartedToBeApplied)
+                return;
+
+            if (boundTransform == null)
+            {
+                UMI3DLogger.LogWarning($"Bound transform is null. It may have been deleted without removing the binding first.", DebugScope.CDK | DebugScope.Core);
+                return;
+            }
+
+            OriginalTransformation = PureTransformation.CopyTransform(boundTransform);
+
+            hasStartedToBeApplied = true;
+        }
+
 
         protected virtual void Compute(ITransformation parentTransformation)
         {
@@ -86,7 +121,7 @@ namespace umi3d.cdk.binding
         {
             if (SyncPosition && SyncRotation)
             {
-                Quaternion rotation = parentTransform.rotation * originalRotationOffset * OffSetRotation;
+                Quaternion rotation = parentTransform.rotation * autoComputedRotationOffset * OffSetRotation;
                 Vector3 position = parentTransform.position + AnchorPosition + parentTransform.rotation * (OffSetPosition - AnchorPosition);
                 boundTransform.SetPositionAndRotation(position, rotation);
             }
@@ -96,10 +131,27 @@ namespace umi3d.cdk.binding
             }
             else if (SyncRotation)
             {
-                boundTransform.rotation = parentTransform.rotation * originalRotationOffset * OffSetRotation;
+                boundTransform.rotation = parentTransform.rotation * autoComputedRotationOffset * OffSetRotation;
             }
             if (SyncScale)
                 boundTransform.localScale = Vector3.Scale(parentTransform.scale, OffSetScale);
+        }
+
+        /// <inheritdoc/>
+        public override void Reset()
+        {
+            if (boundTransform == null) // object destroyed before binding reset
+                return;
+
+            if (SyncPosition && SyncRotation)
+                boundTransform.SetLocalPositionAndRotation(OriginalTransformation.LocalPosition, OriginalTransformation.LocalRotation);
+            else if (SyncPosition)
+                boundTransform.localPosition = OriginalTransformation.LocalPosition;
+            else if (SyncRotation)
+                boundTransform.localRotation = OriginalTransformation.LocalRotation;
+
+            if (SyncScale)
+                boundTransform.localScale = OriginalTransformation.Scale;
         }
     }
 }

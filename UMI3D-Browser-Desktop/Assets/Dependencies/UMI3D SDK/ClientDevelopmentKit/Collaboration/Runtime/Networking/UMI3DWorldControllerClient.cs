@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.collaboration.dto.networking;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
-using umi3d.worldController;
 using UnityEngine;
 
 namespace umi3d.cdk.collaboration
@@ -41,6 +41,7 @@ namespace umi3d.cdk.collaboration
 
         private WorldHttpClient httpClient;
 
+        private static List<string> formCompatibleVersions = new() { "1", "2.0" };
         /// <summary>
         /// Called to create a new Public Identity for this client.
         /// </summary>
@@ -101,11 +102,12 @@ namespace umi3d.cdk.collaboration
         public async Task<bool> Connect(bool downloadLibraryOnly = false)
         {
             if (!isConnected && !isConnecting)
-                return await Connect(new ConnectionDto()
-                {
+                return await Connect(new ConnectionDto() {
                     globalToken = this.globalToken,
                     gate = this.gate,
-                    libraryPreloading = downloadLibraryOnly
+                    libraryPreloading = downloadLibraryOnly,
+                    sdkVersion = UMI3DVersion.version,
+                    formCompatibleVersions = formCompatibleVersions,
                 });
             return false;
         }
@@ -139,11 +141,14 @@ namespace umi3d.cdk.collaboration
                 else if (answerDto is common.interaction.form.ConnectionFormDto form2)
                 {
                     common.interaction.form.FormAnswerDto answer = await GetFormAnswer(form2);
-                    var _answer = new FormConnectionAnswerDto() {
+                    var _answer = new FormConnectionAnswerDto()
+                    {
                         divFormAnswerDto = answer,
                         metadata = form2.metadata,
                         globalToken = form2.globalToken,
                         gate = dto.gate,
+                        sdkVersion = dto.sdkVersion,
+                        formCompatibleVersions = dto.formCompatibleVersions,
                         libraryPreloading = dto.libraryPreloading
                     };
                     return await Connect(_answer);
@@ -158,7 +163,7 @@ namespace umi3d.cdk.collaboration
             var lstToDownload = UMI3DResourcesManager.LibrariesToDownload(privateIdentity.libraries);
             bool shouldDownload = await UMI3DCollaborationClientServer.Instance.Identifier.ShouldDownloadLibraries(lstToDownload);
 
-            if (!shouldDownload) 
+            if (!shouldDownload)
                 return;
 
             MultiProgress progress = new MultiProgress("Searching for Libraries");
@@ -215,9 +220,11 @@ namespace umi3d.cdk.collaboration
         /// <summary>
         /// Logout from the World Controller server.
         /// </summary>
-        public void Logout()
+        public async void Logout()
         {
+            await environment.Clear();
 
+            httpClient.Stop();
         }
 
         /// <summary>

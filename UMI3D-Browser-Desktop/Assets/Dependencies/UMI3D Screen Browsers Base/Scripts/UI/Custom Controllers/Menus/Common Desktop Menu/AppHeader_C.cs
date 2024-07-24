@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using inetum.unityUtils;
+using umi3d.browserRuntime.notificationKeys;
 using umi3d.commonScreen.Displayer;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -90,7 +91,6 @@ namespace umi3d.commonDesktop.menu
 
             m_isSet = true;
 
-            UnityEngine.Debug.Log($"App Header");
             Minimize.clicked += Minimized;
             Maximize.clicked += Windowed;
             Close.clicked += Application.Quit;
@@ -108,7 +108,7 @@ namespace umi3d.commonDesktop.menu
         {
             NotificationHub.Default.Notify(
                 this,
-                "Minimize"
+                WindowsManagerNotificationKey.Minimize
             );
         }
          
@@ -119,10 +119,10 @@ namespace umi3d.commonDesktop.menu
         {
             NotificationHub.Default.Notify(
                 this,
-                "FullScreenModeWillChange",
+                WindowsManagerNotificationKey.FullScreenModeWillChange,
                 new()
                 {
-                    { "Mode", FullScreenMode.Windowed }
+                    { WindowsManagerNotificationKey.FullScreenModeChangedInfo.Mode, FullScreenMode.Windowed }
                 }
             );
         }
