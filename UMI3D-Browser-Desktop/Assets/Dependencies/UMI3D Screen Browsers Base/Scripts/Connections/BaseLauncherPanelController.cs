@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Linq;
 using System.Threading.Tasks;
+using umi3d.cdk.collaboration;
 using umi3d.commonScreen;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.menu;
@@ -34,6 +35,8 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void Start()
         {
+            UMI3DWorldControllerClient.formCompatibleVersions = new() { "1" };
+
             Debug.Assert(document != null);
 
             Screen.sleepTimeout = SleepTimeout.SystemSetting;
