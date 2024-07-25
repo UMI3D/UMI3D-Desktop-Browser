@@ -21,6 +21,7 @@ using UnityEngine;
 using static umi3d.baseBrowser.preferences.SettingsPreferences;
 using umi3d.commonScreen.Displayer;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace umi3d.commonScreen.menu
 {
@@ -135,6 +136,43 @@ namespace umi3d.commonScreen.menu
             ResetAudioConfButton.LocaliseText = new LocalisationAttribute("Reset Audio", "AudioSettings", "ResetAudioConfButton_Label");
             ResetAudioConfButton.ClickedDown += () => OnResetAudio();
             ScrollView.Add(ResetAudioConfButton);
+
+            instance = this;
+            InitMumbleWithMic();
+        }
+
+        /// <summary>
+        /// Static instance of the audio settings.
+        /// </summary>
+        static SettingsAudio_C instance;
+        /// <summary>
+        /// Whether or not the audio settings are waiting for the initialization of mumble with the selected mic. <br/>
+        /// <br/>
+        /// If true then no new initialization should happen.
+        /// </summary>
+        static bool isWaitingForMumbleMicInitialization = false;
+        /// <summary>
+        /// Initialize mumble with the selected mic.
+        /// </summary>
+        static void InitMumbleWithMic()
+        {
+            // Return if an initialization is happening.
+            if (isWaitingForMumbleMicInitialization) return;
+            isWaitingForMumbleMicInitialization = true;
+
+            new Task(async () =>
+            {
+                // Wait until MicrophoneListener exists.
+                while (!cdk.collaboration.MicrophoneListener.Exists)
+                {
+                    await Task.Yield();
+                }
+
+                // Set mumble with the selected mic.
+                cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(instance.MicDropdown.value);
+
+                isWaitingForMumbleMicInitialization = false;
+            }).Start(TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         protected override void SetProperties()
