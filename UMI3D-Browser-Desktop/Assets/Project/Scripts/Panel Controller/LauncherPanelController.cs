@@ -68,7 +68,9 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
 
     private void Update()
     {
+#if !UNITY_EDITOR && UNITY_STANDALONE
         WindowsManager.Update();
+#endif
     }
 
     void _ApplicationIsQuitting(Notification notification)
