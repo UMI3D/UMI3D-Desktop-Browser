@@ -56,7 +56,9 @@ public class GamePanelController : umi3d.baseBrowser.connection.BaseGamePanelCon
 
     private void Update()
     {
+#if !UNITY_EDITOR && UNITY_STANDALONE
         WindowsManager.Update();
+#endif
     }
 
     void _ApplicationIsQuitting(Notification notification)
