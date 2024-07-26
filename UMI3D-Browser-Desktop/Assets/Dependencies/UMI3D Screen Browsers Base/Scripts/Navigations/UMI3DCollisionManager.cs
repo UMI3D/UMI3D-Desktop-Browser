@@ -132,7 +132,10 @@ public sealed class UMI3DCollisionManager
             ? desiredTranslation
             : Vector3.up * desiredTranslation.y;
 
-        desiredTranslation = GetPossibleVerticalTranslation(desiredTranslation);
+        // This line is commented because it caused the player to go through the navmesh.
+        //desiredTranslation = GetPossibleVerticalTranslation(desiredTranslation);
+
+
         willEndUpAboveNavMesh = WillTranslationEndUpAboveNavMesh(desiredTranslation);
         if (!willEndUpAboveNavMesh)
         {
@@ -196,42 +199,43 @@ public sealed class UMI3DCollisionManager
         return Vector3.up * desiredTranslation.y;
     }
 
-    public Vector3 GetPossibleVerticalTranslation(Vector3 desiredTranslation)
-    {
-        Vector3 horizontalDesiredTranslation = new()
-        {
-            x = desiredTranslation.x,
-            y = 0f,
-            z = desiredTranslation.z,
-        };
-        Vector3 verticalDesiredTranslation = Vector3.up * desiredTranslation.y;
+    // This method is commented because it caused the player to go through the navmesh.
+    //public Vector3 GetPossibleVerticalTranslation(Vector3 desiredTranslation)
+    //{
+    //    Vector3 horizontalDesiredTranslation = new()
+    //    {
+    //        x = desiredTranslation.x,
+    //        y = 0f,
+    //        z = desiredTranslation.z,
+    //    };
+    //    Vector3 verticalDesiredTranslation = Vector3.up * desiredTranslation.y;
 
-        bool willCollide = colliderDelegate.WillCollide(
-            horizontalDesiredTranslation,
-            verticalDesiredTranslation,
-            out RaycastHit hit,
-            desiredTranslation.y + .1f,
-            data.obstacleLayer,
-            collisionDebugger().DebugVerticalCollision
-        );
-        if (!willCollide)
-        {
-            return desiredTranslation;
-        }
+    //    bool willCollide = colliderDelegate.WillCollide(
+    //        horizontalDesiredTranslation,
+    //        verticalDesiredTranslation,
+    //        out RaycastHit hit,
+    //        desiredTranslation.y + .1f,
+    //        data.obstacleLayer,
+    //        collisionDebugger().DebugVerticalCollision
+    //    );
+    //    if (!willCollide)
+    //    {
+    //        return desiredTranslation;
+    //    }
 
-        float delta = hit.point.y - (playerTransform.position.y + data.topSphereCenter.y + data.capsuleRadius);
+    //    float delta = hit.point.y - (playerTransform.position.y + data.topSphereCenter.y + data.capsuleRadius);
 
-        if (collisionDebugger().DebugVerticalCollision)
-        {
-            UnityEngine.Debug.Log($"Vertical collision: {hit.transform.name}, player = {playerTransform.position.y}, hitPoint= {hit.point.y}, delta= {delta}");
-        }
-        return new()
-        {
-            x = desiredTranslation.x,
-            y = delta,
-            z = desiredTranslation.z,
-        };
-    }
+    //    if (collisionDebugger().DebugVerticalCollision)
+    //    {
+    //        UnityEngine.Debug.Log($"Vertical collision: {hit.transform.name}, player = {playerTransform.position.y}, hitPoint= {hit.point.y}, delta= {delta}");
+    //    }
+    //    return new()
+    //    {
+    //        x = desiredTranslation.x,
+    //        y = delta,
+    //        z = desiredTranslation.z,
+    //    };
+    //}
 
     float GetVerticalTranslationToGround(float hitYAxis)
     {
