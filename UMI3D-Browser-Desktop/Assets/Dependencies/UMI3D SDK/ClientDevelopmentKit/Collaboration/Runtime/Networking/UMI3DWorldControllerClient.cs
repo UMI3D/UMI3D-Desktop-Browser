@@ -102,7 +102,8 @@ namespace umi3d.cdk.collaboration
         public async Task<bool> Connect(bool downloadLibraryOnly = false)
         {
             if (!isConnected && !isConnecting)
-                return await Connect(new ConnectionDto() {
+                return await Connect(new ConnectionDto()
+                {
                     globalToken = this.globalToken,
                     gate = this.gate,
                     libraryPreloading = downloadLibraryOnly,
