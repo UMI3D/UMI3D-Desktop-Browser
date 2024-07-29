@@ -100,6 +100,7 @@ namespace umi3d.commonScreen.Displayer
             textfield.name = gameObject.name;
             textfield.LocaliseLabel = menuItem.ToString();
             textfield.isDelayed = true;
+            textfield.SetValueWithoutNotify(menuItem.GetValue());
             textfield.RegisterValueChangedCallback(OnValueChanged);
 
             if (menuItem.dto.privateParameter)
