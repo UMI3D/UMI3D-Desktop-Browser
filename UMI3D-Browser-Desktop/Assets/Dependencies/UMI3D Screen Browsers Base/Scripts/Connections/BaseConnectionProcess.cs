@@ -454,9 +454,6 @@ namespace umi3d.baseBrowser.connection
             else AskForDownloadingLibraries?.Invoke(ids.Count, callback);
         }
 
-
-        public void Leave() => UMI3DCollaborationClientServer.Logout();
-
         /// <summary>
         /// Clears the environment and goes back to the launcher.
         /// </summary>

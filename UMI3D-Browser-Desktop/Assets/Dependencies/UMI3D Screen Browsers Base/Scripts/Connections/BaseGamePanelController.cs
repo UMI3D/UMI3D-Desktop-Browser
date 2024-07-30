@@ -10,9 +10,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using System;
 using umi3d.baseBrowser.Controller;
 using umi3d.baseBrowser.notification;
+using umi3d.browserRuntime.notificationKeys;
 using umi3d.cdk.collaboration;
 using umi3d.commonScreen;
 using umi3d.commonScreen.Displayer;
@@ -61,13 +63,24 @@ namespace umi3d.baseBrowser.connection
             };
             BaseConnectionProcess.Instance.ConnectionFail += (message) =>
             {
-                var dialoguebox = new Dialoguebox_C();
-                dialoguebox.Type = DialogueboxType.Default;
-                dialoguebox.Title = new LocalisationAttribute("Server error", "ErrorStrings", "ServerError");
-                dialoguebox.Message = message;
-                dialoguebox.ChoiceAText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
-                dialoguebox.Callback = (index) => BaseConnectionProcess.Instance.Leave();
-                dialoguebox.Enqueue(root);
+                string title = new LocalisationAttribute("Server error", "ErrorStrings", "ServerError").Value;
+                string buttonA = new LocalisationAttribute("Leave", "GenericStrings", "Leave").Value;
+                Action<int> callback = index => UMI3DCollaborationClientServer.Logout();
+                NotificationHub.Default.Notify(
+                    this,
+                    DialogueBoxNotificationKey.NewDialogueBox,
+                    new()
+                    {
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Priority, false },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Size, ElementSize.Small },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Type, DialogueboxType.Default },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Title, title },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Message, message },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsText, new[] { buttonA } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsType, new[] { ButtonType.Default } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Callback, callback },
+                    }
+                );
             };
             BaseConnectionProcess.Instance.LoadedEnvironment += () =>
             {
@@ -87,53 +100,81 @@ namespace umi3d.baseBrowser.connection
             {
                 BaseController.CanProcess = false;
 
-                var dialoguebox = new Dialoguebox_C();
-                dialoguebox.Type = DialogueboxType.Confirmation;
-                dialoguebox.Title = new LocalisationAttribute("Connection to the server lost", "ErrorStrings", "ConnectionLost");
-                dialoguebox.Message = new LocalisationAttribute
-                (
-                    "Leave the environment or try to reconnect ?",
-                    "ErrorStrings", "LeaveOrTry"
-                );
-                dialoguebox.ChoiceAText = new LocalisationAttribute("Reconnect", "GenericStrings", "Reconnect");
-                dialoguebox.ChoiceA.Type = ButtonType.Default;
-                dialoguebox.ChoiceBText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
-                dialoguebox.Callback = (index) =>
+                string title = new LocalisationAttribute("Connection to the server lost", "ErrorStrings", "ConnectionLost").Value;
+                string message = new LocalisationAttribute("Leave the environment or try to reconnect ?", "ErrorStrings", "LeaveOrTry").Value;
+                string buttonA = new LocalisationAttribute("Reconnect", "GenericStrings", "Reconnect").Value;
+                string buttonB = new LocalisationAttribute("Leave", "GenericStrings", "Leave").Value;
+                Action<int> callback = index => 
                 {
                     BaseController.CanProcess = true;
-                    if (index == 0) cdk.collaboration.UMI3DCollaborationClientServer.Reconnect();
-                    else BaseConnectionProcess.Instance.Leave();
+                    if (index == 0) UMI3DCollaborationClientServer.Reconnect();
+                    else UMI3DCollaborationClientServer.Logout();
                 };
-                dialoguebox.Enqueue(root);
+                NotificationHub.Default.Notify(
+                    this,
+                    DialogueBoxNotificationKey.NewDialogueBox,
+                    new()
+                    {
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Priority, false },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Size, ElementSize.Small },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Type, DialogueboxType.Confirmation },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Title, title },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Message, message },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsText, new[] { buttonA, buttonB } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsType, new[] { ButtonType.Default, ButtonType.Danger } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Callback, callback },
+                    }
+                );
             };
             BaseConnectionProcess.Instance.ForcedLeave += (message) =>
             {
-                var dialoguebox = new Dialoguebox_C();
-                dialoguebox.Type = DialogueboxType.Default;
-                dialoguebox.Title = new LocalisationAttribute("Forced Deconnection", "ErrorStrings", "ForcedDeco");
-                dialoguebox.Message = message;
-                dialoguebox.ChoiceAText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
-                dialoguebox.Callback = (index) => BaseConnectionProcess.Instance.Leave();
-                dialoguebox.Enqueue(root);
+                string title = new LocalisationAttribute("Forced Disconnection", "ErrorStrings", "ForcedDeco").Value;
+                string buttonA = new LocalisationAttribute("Leave", "GenericStrings", "Leave").Value;
+                Action<int> callback = index => UMI3DCollaborationClientServer.Logout();
+                NotificationHub.Default.Notify(
+                    this,
+                    DialogueBoxNotificationKey.NewDialogueBox,
+                    new()
+                    {
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Priority, false },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Size, ElementSize.Small },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Type, DialogueboxType.Confirmation },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Title, title },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Message, message },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsText, new[] { buttonA } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsType, new[] { ButtonType.Default } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Callback, callback },
+                    }
+                );
             };
-            BaseConnectionProcess.Instance.AskForDownloadingLibraries += (count, callback) =>
+            BaseConnectionProcess.Instance.AskForDownloadingLibraries += (count, _callback) =>
             {
-                var dialoguebox = new Dialoguebox_C();
-                dialoguebox.Type = DialogueboxType.Confirmation;
-                dialoguebox.Title = new LocalisationAttribute
+                string title = new LocalisationAttribute
                 (
                     (count == 1) ? $"One assets library is required" : $"{count} assets libraries are required",
-                    "ErrorStrings", 
-                    (count == 1) ? "AssetsLibRequired1" : "AssetsLibRequired", 
+                    "ErrorStrings",
+                    (count == 1) ? "AssetsLibRequired1" : "AssetsLibRequired",
                     (count == 1) ? null : new string[1] { count.ToString() }
+                ).Value;
+                string message = new LocalisationAttribute("Download libraries and connect to the server ?", "ErrorStrings", "DownloadAndConnect").Value;
+                string buttonA = new LocalisationAttribute("Accept", "GenericStrings", "Accept").Value;
+                string buttonB = new LocalisationAttribute("Deny", "GenericStrings", "Deny").Value;
+                Action<int> callback = index => _callback?.Invoke(index == 0);
+                NotificationHub.Default.Notify(
+                    this,
+                    DialogueBoxNotificationKey.NewDialogueBox,
+                    new()
+                    {
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Priority, false },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Size, ElementSize.Small },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Type, DialogueboxType.Confirmation },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Title, title },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Message, message },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsText, new[] { buttonA, buttonB } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsType, new[] { ButtonType.Default, ButtonType.Default } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Callback, callback },
+                    }
                 );
-                dialoguebox.Message = new LocalisationAttribute("Download libraries and connect to the server ?", "ErrorStrings", "DownloadAndConnect");
-                dialoguebox.ChoiceA.Type = ButtonType.Default;
-                dialoguebox.ChoiceAText = new LocalisationAttribute("Accept", "GenericStrings", "Accept");
-                dialoguebox.ChoiceB.Type = ButtonType.Default;
-                dialoguebox.ChoiceBText = new LocalisationAttribute("Deny", "GenericStrings", "Deny");
-                dialoguebox.Callback = (index) => callback?.Invoke(index == 0);
-                dialoguebox.Enqueue(root);
             };
             BaseConnectionProcess.Instance.GetParameterDtos += GetParameterDtos;
             BaseConnectionProcess.Instance.LoadingLauncher += (value) =>
@@ -145,15 +186,23 @@ namespace umi3d.baseBrowser.connection
             };
             BaseConnectionProcess.Instance.DisplayPopUpAfterLoadingFailed += (title, message, action) =>
             {
-                var dialoguebox = new Dialoguebox_C();
-                dialoguebox.Type = DialogueboxType.Confirmation;
-                dialoguebox.Title = title;
-                dialoguebox.Message = message;
-                dialoguebox.ChoiceAText = new LocalisationAttribute("Resume", "GenericStrings", "Resume");
-                dialoguebox.ChoiceA.Type = ButtonType.Default;
-                dialoguebox.ChoiceBText = new LocalisationAttribute("Stop", "GenericStrings", "Stop");
-                dialoguebox.Callback = action;
-                dialoguebox.Enqueue(root);
+                string buttonA = new LocalisationAttribute("Resume", "GenericStrings", "Resume").Value;
+                string buttonB = new LocalisationAttribute("Stop", "GenericStrings", "Stop").Value;
+                NotificationHub.Default.Notify(
+                    this,
+                    DialogueBoxNotificationKey.NewDialogueBox,
+                    new()
+                    {
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Priority, false },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Size, ElementSize.Small },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Type, DialogueboxType.Confirmation },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Title, title },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Message, message },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsText, new[] { buttonA, buttonB } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsType, new[] { ButtonType.Default, ButtonType.Default } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Callback, action },
+                    }
+                );
             };
             BaseConnectionProcess.Instance.EnvironmentLoaded += () =>
             {

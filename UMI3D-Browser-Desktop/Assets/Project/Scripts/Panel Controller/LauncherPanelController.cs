@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using System;
 using umi3d.browserRuntime.notificationKeys;
 using umi3d.browserRuntime.pc;
 using UnityEngine;
@@ -75,15 +76,7 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
 
     void _ApplicationIsQuitting(Notification notification)
     {
-        var dialogueBox = new umi3d.commonScreen.Displayer.Dialoguebox_C();
-        dialogueBox.Size = ElementSize.Small;
-        dialogueBox.Type = DialogueboxType.Confirmation;
-        dialogueBox.Title = "Close application";
-        dialogueBox.Message = "Do you want to close the application?";
-        dialogueBox.ChoiceAText = "Cancel";
-        dialogueBox.ChoiceA.Type = ButtonType.Default;
-        dialogueBox.ChoiceBText = "Close";
-        dialogueBox.Callback = index =>
+        Action<int> callback = index =>
         {
             NotificationHub.Default.Notify(
                 this,
@@ -94,7 +87,22 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
                 }
             );
         };
-        dialogueBox.EnqueuePriority(Launcher);
+
+        NotificationHub.Default.Notify(
+            this,
+            DialogueBoxNotificationKey.NewDialogueBox,
+            new()
+            {
+                { DialogueBoxNotificationKey.NewDialogueBoxInfo.Priority, true },
+                { DialogueBoxNotificationKey.NewDialogueBoxInfo.Size, ElementSize.Small },
+                { DialogueBoxNotificationKey.NewDialogueBoxInfo.Type, DialogueboxType.Confirmation },
+                { DialogueBoxNotificationKey.NewDialogueBoxInfo.Title, "Close application" },
+                { DialogueBoxNotificationKey.NewDialogueBoxInfo.Message, "Do you want to close the application?" },
+                { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsText, new[] { "Cancel", "Close" } },
+                { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsType, new[] { ButtonType.Default, ButtonType.Danger } },
+                { DialogueBoxNotificationKey.NewDialogueBoxInfo.Callback, callback },
+            }
+        );
     }
 
     void FullScreenChanged(Notification notification)

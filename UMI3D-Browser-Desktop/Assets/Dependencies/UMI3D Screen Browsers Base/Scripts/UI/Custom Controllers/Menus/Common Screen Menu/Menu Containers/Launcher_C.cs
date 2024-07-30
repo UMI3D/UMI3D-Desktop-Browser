@@ -13,8 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
+using umi3d.browserRuntime.notificationKeys;
+using umi3d.cdk.collaboration;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
 using UnityEngine.UIElements;
@@ -68,20 +71,30 @@ namespace umi3d.commonScreen.menu
             Libraries.AllowDeletion = true;
             Libraries.WrongLibraryPathFound += (pathes) =>
             {
-                var dialogueBox = new Dialoguebox_C();
-                dialogueBox.Type = DialogueboxType.Default;
-                dialogueBox.Title = new LocalisationAttribute("Some libraries are not found", "LibrariesScreen", "Library_WrongPath_Title");
-                dialogueBox.Message = new LocalisationAttribute("Here is the list of the path that are not found:", "LibrariesScreen", "Library_WrongPath_Description");
-                var pathList = new Text_C();
-                pathList.LocalisedText = "\"" + string.Join("\"\n\"", pathes);
-                pathList.style.whiteSpace = WhiteSpace.Normal;
-                dialogueBox.Add(pathList);
-                dialogueBox.ChoiceAText = new LocalisationAttribute("Show me", "LibrariesScreen", "Library_WrongPath_ShowMe");
-                dialogueBox.Callback = (index) =>
+                string title = new LocalisationAttribute("Some libraries are not found", "LibrariesScreen", "Library_WrongPath_Title").Value;
+                string message = new LocalisationAttribute("Here is the list of the path that are not found:", "LibrariesScreen", "Library_WrongPath_Description").Value;
+                message += "\n";
+                message += "\"" + string.Join("\"\n\"", pathes);
+                string buttonA = new LocalisationAttribute("Show me", "LibrariesScreen", "Library_WrongPath_ShowMe").Value;
+                Action<int> callback = index =>
                 {
                     AddScreenToStack = LauncherScreens.Libraries;
                 };
-                dialogueBox.Enqueue(this);
+                NotificationHub.Default.Notify(
+                    this,
+                    DialogueBoxNotificationKey.NewDialogueBox,
+                    new()
+                    {
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Priority, false },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Size, ElementSize.Small },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Type, DialogueboxType.Default },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Title, title },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Message, message },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsText, new[] { buttonA } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsType, new[] { ButtonType.Default } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Callback, callback },
+                    }
+                );
             };
 
             Navigation_ScrollView.Add(NavigationButtons);

@@ -13,7 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
+using System;
 using System.Collections.Generic;
+using umi3d.browserRuntime.notificationKeys;
+using umi3d.cdk.collaboration;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
 using UnityEngine;
@@ -71,6 +75,33 @@ namespace umi3d.commonScreen.menu
             Navigation_ScrollView.Add(Resume);
             Navigation_ScrollView.Add(NavigationButtons);
             Navigation_ScrollView.Add(Leave);
+
+            Leave.clicked += () =>
+            {
+                string title = new LocalisationAttribute("Do you want to leave the environment ?", "ErrorStrings", "LeaveEnv?").Value;
+                string message = "";
+                string buttonA = new LocalisationAttribute("Stay", "GenericStrings", "Stay").Value;
+                string buttonB = new LocalisationAttribute("Leave", "GenericStrings", "Leave").Value;
+                Action<int> callback = index => 
+                {
+                    if (index != 0) UMI3DCollaborationClientServer.Logout();
+                };
+                NotificationHub.Default.Notify(
+                    this,
+                    DialogueBoxNotificationKey.NewDialogueBox,
+                    new()
+                    {
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Priority, true },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Size, ElementSize.Small },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Type, DialogueboxType.Confirmation },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Title, title },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Message, message },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsText, new[] { buttonA, buttonB } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsType, new[] { ButtonType.Default, ButtonType.Danger } },
+                        { DialogueBoxNotificationKey.NewDialogueBoxInfo.Callback, callback },
+                    }
+                );
+            };
         }
 
         protected override void SetProperties()

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2022 Inetum
+Copyright 2019 - 2024 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@ using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using umi3d.browserRuntime;
+using umi3d.browserRuntime.notificationKeys;
 using umi3d.commonScreen.Container;
+using umi3d.commonScreen.game;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Displayer
@@ -51,15 +53,63 @@ namespace umi3d.commonScreen.Displayer
 
         static void DialogueBoxNewDialogueBox(Notification notification)
         {
-            UnityEngine.Debug.Log($"DialogueBoxManager argument received");
+            UnityEngine.Debug.Log($"DialogueBoxManager new dialogue box");
 
-            //Dialoguebox_C dialoguebox = new();
-            //dialoguebox.Type = DialogueboxType.Default;
-            //dialoguebox.Title = new LocalisationAttribute("Server error", "ErrorStrings", "ServerError");
-            //dialoguebox.Message = message;
-            //dialoguebox.ChoiceAText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
-            //dialoguebox.Callback = (index) => BaseConnectionProcess.Instance.Leave();
-            //dialoguebox.Enqueue(root);
+            Dialoguebox_C dialogueBox = new();
+
+            if (notification.TryGetInfoT(DialogueBoxNotificationKey.NewDialogueBoxInfo.Size, out ElementSize size))
+            {
+                dialogueBox.Size = size;
+            }
+            if (notification.TryGetInfoT(DialogueBoxNotificationKey.NewDialogueBoxInfo.Type, out DialogueboxType dialogueboxType))
+            {
+                dialogueBox.Type = dialogueboxType;
+            }
+            if (notification.TryGetInfoT(DialogueBoxNotificationKey.NewDialogueBoxInfo.Title, out string title))
+            {
+                dialogueBox.Title = title;
+            }
+            if (notification.TryGetInfoT(DialogueBoxNotificationKey.NewDialogueBoxInfo.Message, out string message))
+            {
+                dialogueBox.Message = message;
+            }
+            if (notification.TryGetInfoT(DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsText, out string[] buttonsText))
+            {
+                if (buttonsText?.Length >= 1)
+                {
+                    dialogueBox.ChoiceAText = buttonsText[0];
+                }
+                if (buttonsText?.Length >= 2)
+                {
+                    dialogueBox.ChoiceBText = buttonsText[1];
+                }
+            }
+            if (notification.TryGetInfoT(DialogueBoxNotificationKey.NewDialogueBoxInfo.ButtonsType, out ButtonType[] buttonsType))
+            {
+                if (buttonsType?.Length >= 1)
+                {
+                    dialogueBox.ChoiceA.Type = buttonsType[0];
+                }
+                if (buttonsType?.Length >= 2)
+                {
+                    dialogueBox.ChoiceB.Type = buttonsType[1];
+                }
+            }
+            if (notification.TryGetInfoT(DialogueBoxNotificationKey.NewDialogueBoxInfo.Callback, out Action<int> callback))
+            {
+                dialogueBox.Callback = callback;
+            }
+            if (notification.TryGetInfoT(DialogueBoxNotificationKey.NewDialogueBoxInfo.Priority, out bool priority))
+            {
+                if (priority)
+                {
+                    dialogueBox.EnqueuePriority(root);
+                }
+                else
+                {
+                    dialogueBox.Enqueue(root);
+                }
+            }
         }
 
         static void DeeplinkingArgumentsReceived(Notification notification)

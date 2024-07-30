@@ -25,22 +25,6 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitMenu()
         {
-            Menu.Leave.clicked += () =>
-            {
-                var dialoguebox = new Dialoguebox_C();
-                dialoguebox.Type = DialogueboxType.Confirmation;
-                dialoguebox.Title = new LocalisationAttribute("Do you want to leave the environment ?", "ErrorStrings", "LeaveEnv?");
-                dialoguebox.Message = "";
-                dialoguebox.ChoiceAText = new LocalisationAttribute("Stay", "GenericStrings", "Stay");
-                dialoguebox.ChoiceBText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
-                dialoguebox.ChoiceA.Type = ButtonType.Default;
-                dialoguebox.Callback = (index) =>
-                {
-                    if (index != 0) BaseConnectionProcess.Instance.Leave();
-                };
-                dialoguebox.EnqueuePriority(root);
-            };
-
             InitMenu_Audio();
         }
 
