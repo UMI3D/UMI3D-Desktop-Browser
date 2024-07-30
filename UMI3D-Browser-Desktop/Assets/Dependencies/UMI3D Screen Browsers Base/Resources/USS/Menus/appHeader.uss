@@ -2,7 +2,7 @@
 	flex-direction: row;
 	background-color: var(--color-background_transparent-menu);
 	width: 100%;
-	min-height: 54px;
+	min-height: 100px;
 }
 
 .app__header-buttons__box {
@@ -15,15 +15,15 @@
 }
 
 .app__header-window__button.button-small.button-square > .button-body {
-	width: 70px;
-	height: 40px;
+	width: 100px;
+	height: 90px;
 }
 
 .app__header-minimize__icon,
 .app__header-maximize__icon,
 .app__header-close__icon {
-	width: 40px;
-	height: 40px;
+	width: 70px;
+	height: 70px;
 }
 
 .app__header-minimize__icon {

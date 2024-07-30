@@ -17,11 +17,9 @@ limitations under the License.
 using inetum.unityUtils;
 using Mumble;
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using umi3d.common;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -228,7 +226,12 @@ namespace umi3d.cdk.collaboration
         public bool useLocalLoopback
         {
             get => debuggingVariables?.UseLocalLoopback ?? false;
-            set { if (debuggingVariables != null) debuggingVariables.UseLocalLoopback = value; }
+            set
+            {
+                if (debuggingVariables != null)
+                    debuggingVariables.UseLocalLoopback = value;
+                mumbleClient?.SetSelfMute(!value && isMute);
+            }
         }
 
         public float minAmplitudeToSend
@@ -334,8 +337,6 @@ namespace umi3d.cdk.collaboration
             channel = null;
             pendingChannel = null;
             identity?.Clear();
-
-            QuittingManager.OnApplicationIsQuitting.AddListener(_OnApplicationQuit);
         }
 
         protected virtual void _OnApplicationQuit()
@@ -391,7 +392,11 @@ namespace umi3d.cdk.collaboration
             channel = null;
             pendingChannel = null;
         }
-
+        public virtual void ResetAudioConference()
+        {
+            Reset();
+            Heartbeat();
+        }
         #endregion
 
 
@@ -416,6 +421,12 @@ namespace umi3d.cdk.collaboration
                 }
                 channel = pendingChannel;
                 pendingChannel = null;
+
+                await Delay(300);
+                UMI3DUser user = UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser();
+                if (user.microphoneStatus == isMute)
+                    user.SetMicrophoneStatus(!isMute);
+
                 return true;
             }
             return false;
@@ -459,7 +470,7 @@ namespace umi3d.cdk.collaboration
             }
 
             mumbleClient.connectionFailed.AddListener(Failed);
-            mumbleClient.OnDisconnected += OnDisconected;
+            mumbleClient.OnDisconnected += OnDisconnected;
             mumbleClient.OnPingReceived += OnPingReceived;
 
             if (!await YieldConnected())
@@ -493,7 +504,7 @@ namespace umi3d.cdk.collaboration
                 mumbleStatus = MumbleStatus.Disconnecting;
                 mumbleClient.ConnectionError.RemoveListener(Failed);
                 mumbleClient.connectionFailed.RemoveListener(Failed);
-                mumbleClient.OnDisconnected -= OnDisconected;
+                mumbleClient.OnDisconnected -= OnDisconnected;
                 mumbleClient.OnPingReceived -= OnPingReceived;
                 mumbleClient.Close();
                 mumbleClient = null;
@@ -719,7 +730,7 @@ namespace umi3d.cdk.collaboration
             {
                 mumbleClient.ConnectionError.RemoveListener(Failed);
                 mumbleClient.connectionFailed.RemoveListener(Failed);
-                mumbleClient.OnDisconnected -= OnDisconected;
+                mumbleClient.OnDisconnected -= OnDisconnected;
                 mumbleClient.OnPingReceived -= OnPingReceived;
                 mumbleClient.Close();
                 mumbleClient = null;
@@ -727,9 +738,9 @@ namespace umi3d.cdk.collaboration
             mumbleStatus = MumbleStatus.NotConnected;
         }
 
-        void OnDisconected()
+        void OnDisconnected()
         {
-            LogError("Disconected");
+            LogError("Disconnected");
             Failed();
         }
 

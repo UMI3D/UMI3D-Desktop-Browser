@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Collections.Generic;
 using umi3d.cdk.userCapture.animation;
 using umi3d.cdk.userCapture.pose;
@@ -70,6 +71,31 @@ namespace umi3d.cdk.userCapture
         IPoseSubskeleton PoseSubskeleton { get; }
 
         /// <summary>
+        /// True if a skeleton part is visible, using renderer's logic.
+        /// </summary>
+        bool IsVisible { get; }
+
+        /// <summary>
+        /// Raised when the skeleton became visible/invisible.
+        /// </summary>
+        event Action<bool> VisibilityChanged;
+
+        /// <summary>
+        /// Called after just before each skeleton computation.
+        /// </summary>
+        event Action PreComputed;
+
+        /// <summary>
+        /// Called after after each computation and before post-procession.
+        /// </summary>
+        event Action RawComputed;
+
+        /// <summary>
+        /// Called after each post procession of the final skeleton.
+        /// </summary>
+        event Action Computed;
+
+        /// <summary>
         /// Update the positions/rotation of bone of subskeletons based on the received frame.
         /// </summary>
         /// <param name="frame"></param>
@@ -99,5 +125,31 @@ namespace umi3d.cdk.userCapture
         /// </summary>
         /// <param name="subskeleton"></param>
         void RemoveSubskeleton(IAnimatedSubskeleton subskeleton);
+
+        /// <summary>
+        /// How to compute the skeleton. Can decrease the quality of computations.
+        /// </summary>
+        public enum ComputeMode
+        {
+            /// <summary>
+            /// Compute the whole skeleton
+            /// </summary>
+            FULL,
+
+            /// <summary>
+            /// Only compute the movement of the root
+            /// </summary>
+            ROOT_ONLY,
+
+            /// <summary>
+            /// Disable all computations
+            /// </summary>
+            DISABLED
+        }
+
+        /// <summary>
+        /// How to compute the skeleton. Can decrease the quality of computations.
+        /// </summary>
+        ComputeMode ComputationMode { get; set; }
     }
 }

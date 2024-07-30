@@ -29,9 +29,11 @@ namespace umi3d.cdk.binding
         /// <summary>
         /// Cache of bindings on the node ordered by descending priority.
         /// </summary>
-        protected AbstractSimpleBinding[] orderedBindings;
+        protected readonly AbstractSimpleBinding[] orderedBindings;
 
-        public List<AbstractSimpleBinding> Bindings => orderedBindings.ToList();
+        public IReadOnlyList<AbstractSimpleBinding> Bindings { get; }
+
+        protected MultiBindingDataDto MultiBindingData { get; }
 
         public MultiBinding(MultiBindingDataDto data, AbstractSimpleBinding[] bindings, Transform boundTransform, bool isOrdered = false) : base(boundTransform, data)
         {
@@ -45,6 +47,8 @@ namespace umi3d.cdk.binding
                                                .OrderByDescending(x => x.Priority)
                                                .ToArray();
             }
+            Bindings = orderedBindings.ToList();
+            MultiBindingData = data;
         }
 
         /// <inheritdoc/>
@@ -58,11 +62,13 @@ namespace umi3d.cdk.binding
 
             for (int i = 0; i < orderedBindings.Length; i++)
             {
-                orderedBindings[i].Apply(out success);
+                AbstractBinding binding = orderedBindings[i];
+
+                binding.Apply(out success);
                 if (!success)
                     break;
 
-                if (!orderedBindings[i].IsPartiallyFit)
+                if (!binding.IsPartiallyFit)
                     break;
 
                 if (i < orderedBindings.Length - 1 && !orderedBindings[i + 1].IsPartiallyFit)
@@ -70,6 +76,21 @@ namespace umi3d.cdk.binding
             }
 
             success = true;
+        }
+
+        /// <inheritdoc/>
+        public override void Reset()
+        {
+            if (boundTransform == null) // object destroyed before binding
+                return;
+
+            foreach (AbstractSimpleBinding binding in orderedBindings)
+            {
+                if (binding is not null && binding.ResetWhenRemoved)
+                {
+                    binding.Reset();
+                }
+            }
         }
     }
 }

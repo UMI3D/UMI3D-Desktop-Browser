@@ -13,7 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
+using umi3d.browserRuntime.notificationKeys;
 using umi3d.commonScreen.Displayer;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonDesktop.menu
@@ -87,11 +90,41 @@ namespace umi3d.commonDesktop.menu
             Close.Add(Close_Icon);
 
             m_isSet = true;
+
+            Minimize.clicked += Minimized;
+            Maximize.clicked += Windowed;
+            Close.clicked += Application.Quit;
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public override VisualElement contentContainer => m_isSet ? Container : this;
+
+        /// <summary>
+        /// Hide the window.
+        /// </summary>
+        void Minimized()
+        {
+            NotificationHub.Default.Notify(
+                this,
+                WindowsManagerNotificationKey.Minimize
+            );
+        }
+         
+        /// <summary>
+        /// Leave full screen mode to window mode.
+        /// </summary>
+        void Windowed()
+        {
+            NotificationHub.Default.Notify(
+                this,
+                WindowsManagerNotificationKey.FullScreenModeWillChange,
+                new()
+                {
+                    { WindowsManagerNotificationKey.FullScreenModeChangedInfo.Mode, FullScreenMode.Windowed }
+                }
+            );
+        }
     }
 }

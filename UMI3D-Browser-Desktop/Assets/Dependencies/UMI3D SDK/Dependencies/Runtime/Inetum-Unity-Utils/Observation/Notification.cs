@@ -16,6 +16,7 @@ limitations under the License.
 
 using System;
 using System.Collections.Generic;
+using UnityEngine.Playables;
 
 namespace inetum.unityUtils
 {
@@ -54,6 +55,52 @@ namespace inetum.unityUtils
             ID = id;
             Publisher = publisher;
             Info = info;
+        }
+
+        /// <summary>
+        /// Try to get the information stored with this <paramref name="key"/>.<br/>
+        /// Return true if the information exist, else false.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public bool TryGetInfo(string key, out Object info)
+        {
+            // If 'Info' is null then there is no additional information.
+            if (Info == null)
+            {
+                info = null;
+                return false;
+            }
+
+            // Try to find the value corresponding to that 'key'.
+            return Info.TryGetValue(key, out info);
+        }
+
+        /// <summary>
+        /// Try to get the information stored with this <paramref name="key"/>.<br/>
+        /// Return true if the information exist and is of type <typeparamref name="T"/>, else false.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public bool TryGetInfoT<T>(string key, out T info)
+        {
+            if (!TryGetInfo(key, out object infoObject))
+            {
+                info = default;
+                return false;
+            }
+
+            // Try to cast the information.
+            if (infoObject is not T infoT)
+            {
+                info = default;
+                return false;
+            }
+
+            info = infoT;
+            return true;
         }
     }
 }

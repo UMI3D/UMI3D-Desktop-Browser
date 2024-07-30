@@ -190,27 +190,27 @@ namespace umi3d.cdk.interaction
             form.fields
                 .Select(async id => (await UMI3DEnvironmentLoader.WaitForAnEntityToBeLoaded(environmentId, id, null)).dto)
                 .ForEach(async p =>
-            {
-                var param = await p;
-                if (param is UploadFileParameterDto ParameterDto)
                 {
-                    UMI3DLogger.Log(param.ToJson(), scope);
-                    string pathValue = (param as UploadFileParameterDto).value;//the path of the file to upload
-                    // -> create request with TryStorePath
-
-                    if (!TryStorePath(pathValue, out string fileId)) { return; }
-
-                    var req = new UploadFileRequestDto()
+                    var param = await p;
+                    if (param is UploadFileParameterDto ParameterDto)
                     {
-                        parameter = param,
-                        fileId = fileId,
-                        toolId = 0,
-                        id = ParameterDto.id,
-                        hoveredObjectId = 0
-                    };
-                    UMI3DClientServer.SendRequest(req, true);
-                }
-            });
+                        UMI3DLogger.Log(param.ToJson(), scope);
+                        string pathValue = (param as UploadFileParameterDto).value;//the path of the file to upload
+                                                                                   // -> create request with TryStorePath
+
+                        if (!TryStorePath(pathValue, out string fileId)) { return; }
+
+                        var req = new UploadFileRequestDto()
+                        {
+                            parameter = param,
+                            fileId = fileId,
+                            toolId = 0,
+                            id = ParameterDto.id,
+                            hoveredObjectId = 0
+                        };
+                        UMI3DClientServer.SendRequest(req, true);
+                    }
+                });
         }
     }
 }

@@ -47,30 +47,16 @@ namespace inetum.unityUtils
         /// </summary>
         Dictionary<Object, HashSet<string>> _subscriberToID = new();
 
-        List<Subscription> GetFilteredSubscriptions(Object subscriber, string id, Object[] publishers)
-        {
-            throw new System.NotImplementedException();
-            //return _subscriptions.FindAll(
-            //    sub => {
-            //        return true;
-            //    }
-            //);
-        }
-
         /// <summary>
         /// Add an entry to notify the <paramref name="subscriber"/> by calling the 
         /// <paramref name="action"/> when the publisher send a notification.
         /// </summary>
-        /// <param name="subscriber">The object waiting for notification. Must not be null. Ideally must correspond to object.GetType().FullName.</param>
+        /// <param name="subscriber">The object waiting for notification. Must not be null. If subscriber is static then user typeof().FullName.</param>
         /// <param name="id">Id of the notification.</param>
         /// <param name="publishers">The 'subscriber' will listen to those objects' notifications. Ideally must correspond to object.GetType().FullName.</param>
         /// <param name="action">The action perform to notify.</param>
         public void Subscribe(Object subscriber, string id, Object[] publishers, Action<Notification> action)
         {
-            string subscriberName = subscriber is string 
-                ? subscriber as string 
-                : subscriber.GetType().FullName;
-
             string[] publishersNames = publishers == null
                 ? null
                 : publishers.Select(publisher =>
@@ -83,7 +69,7 @@ namespace inetum.unityUtils
             // Create a subscription entry.
             Subscription subscription = new()
             {
-                Subscriber = subscriberName,
+                Subscriber = subscriber,
                 Publishers = publishersNames,
                 Action = action
             };
@@ -115,9 +101,22 @@ namespace inetum.unityUtils
         }
 
         /// <summary>
+        /// Add an entry to notify the <paramref name="subscriber"/> by calling the 
+        /// <paramref name="action"/> when the publisher send a notification.
+        /// </summary>
+        /// <param name="subscriber">The object waiting for notification. Must not be null. If subscriber is static then user typeof().FullName.</param>
+        /// <param name="id">Id of the notification.</param>
+        /// <param name="publishers">The 'subscriber' will listen to those objects' notifications. Ideally must correspond to object.GetType().FullName.</param>
+        /// <param name="action">The action perform to notify.</param>
+        public void Subscribe(Object subscriber, string id, Object[] publishers, Action action)
+        {
+            Subscribe(subscriber, id, publishers, notification => action());
+        }
+
+        /// <summary>
         /// Remove all entries concerning a specific <paramref name="subscriber"/>.
         /// </summary>
-        /// <param name="subscriber">The object waiting for notification. Must not be null. Ideally must correspond to object.GetType().FullName.</param>
+        /// <param name="subscriber">The object waiting for notification. Must not be null.</param>
         public void Unsubscribe(Object subscriber)
         {
             string subscriberName = subscriber is string
@@ -125,8 +124,9 @@ namespace inetum.unityUtils
                 : subscriber.GetType().FullName;
 
             // Check if that 'subscriber' listen to any notification.
-            if (!_subscriberToID.TryGetValue(subscriberName, out HashSet<string> ids))
+            if (!_subscriberToID.TryGetValue(subscriber, out HashSet<string> ids))
             {
+                UnityEngine.Debug.LogWarning($"[NotificationHub] Try to unsubscribe {subscriberName} but subscriber has not subscribed yet.");
                 // If subscriber is not listening to notification then return;
                 return;
             }
@@ -142,7 +142,7 @@ namespace inetum.unityUtils
                 }
 
                 // Remove all the subscriptions concerning 'subscriber'.
-                subscriptions.RemoveAll(sub => sub.Subscriber == subscriberName);
+                subscriptions.RemoveAll(sub => sub.Subscriber == subscriber);
 
                 // Remove id from the subscriptions if there is no more subscribers.
                 if (subscriptions.Count == 0)
@@ -155,13 +155,13 @@ namespace inetum.unityUtils
             ids.Clear();
 
             // Remove 'subscriber' from '_subscriberToID'.
-            _subscriberToID.Remove(subscriberName);
+            _subscriberToID.Remove(subscriber);
         }
 
         /// <summary>
         /// Remove matching entries concerning a specific <paramref name="subscriber"/> and <paramref name="id"/>.
         /// </summary>
-        /// <param name="subscriber">The object waiting for notification. Must not be null. Ideally must correspond to object.GetType().FullName.</param>
+        /// <param name="subscriber">The object waiting for notification. Must not be null. If subscriber is static then user typeof().FullName.</param>
         /// <param name="id">Id of the notification.</param>
         public void Unsubscribe(Object subscriber, string id)
         {
@@ -170,8 +170,9 @@ namespace inetum.unityUtils
                 : subscriber.GetType().FullName;
 
             // Check if that 'subscriber' listen to any notification.
-            if (!_subscriberToID.TryGetValue(subscriberName, out HashSet<string> ids))
+            if (!_subscriberToID.TryGetValue(subscriber, out HashSet<string> ids))
             {
+                UnityEngine.Debug.LogWarning($"[NotificationHub] Try to unsubscribe {subscriberName} but subscriber has not subscribed yet.");
                 // If subscriber is not listening to notifications then return;
                 return;
             }
@@ -179,6 +180,7 @@ namespace inetum.unityUtils
             // Check if 'subscriber' listen to 'id'.
             if (!ids.Contains(id))
             {
+                UnityEngine.Debug.LogWarning($"[NotificationHub] Try to unsubscribe {subscriberName} with id {id} but subscriber has not subscribed to this id yet.");
                 // If subscriber is not listening to 'id' then return;
                 return;
             }
@@ -189,7 +191,7 @@ namespace inetum.unityUtils
             // If there is not more ids then remove 'subscriber' from '_subscriberToID'.
             if (ids.Count == 0)
             {
-                _subscriberToID.Remove(subscriberName);
+                _subscriberToID.Remove(subscriber);
             }
 
             // Check if subscriptions exist for 'id'.
@@ -200,7 +202,7 @@ namespace inetum.unityUtils
             }
 
             // Remove all the subscriptions concerning 'subscriber'.
-            subscriptions.RemoveAll(sub => sub.Subscriber == subscriberName);
+            subscriptions.RemoveAll(sub => sub.Subscriber == subscriber);
 
             // Remove id from the subscriptions if there is no more subscribers.
             if (subscriptions.Count == 0)
@@ -212,11 +214,15 @@ namespace inetum.unityUtils
         /// <summary>
         /// Send a notification to all the concerning subscribers. Return the number of observers.
         /// </summary>
-        /// <param name="id">Id of the notification.</param>
         /// <param name="publisher">The object sending the notification. Must not be null. Ideally must correspond to object.GetType().FullName.</param>
+        /// <param name="id">Id of the notification.</param>
         /// <param name="info">Additional information.</param>
         /// <returns></returns>
-        public int Notify(string id, Object publisher, Dictionary<string, Object> info = null)
+        public int Notify(
+            Object publisher, 
+            string id, 
+            Dictionary<string, Object> info = null
+        )
         {
             string publisherName = publisher is string
                 ? publisher as string
@@ -227,6 +233,7 @@ namespace inetum.unityUtils
             // Check if there are subscription for that 'id'.
             if (!_subscriptions.TryGetValue(id, out List<Subscription> subscriptions))
             {
+                UnityEngine.Debug.LogWarning($"[NotificationHub] {publisherName} try to notify with id {id} but no one is listening.");
                 return observers;
             }
 
@@ -238,7 +245,17 @@ namespace inetum.unityUtils
                 // If the subscription's subscriber is listening to this notification's publisher then send notification.
                 if (subscription.Publishers == null || subscription.Publishers.Contains(publisherName))
                 {
-                    subscription.Action(notification);
+                    try
+                    {
+                        subscription.Action(notification);
+                    }
+                    catch (Exception e)
+                    {
+                        UnityEngine.Debug.LogError($"[NotificationHub] Subscription action return an exception:\n " +
+                            $"id: {id}, publisher: {publisher}, subscriber: {subscription.Subscriber}");
+                        UnityEngine.Debug.LogException(e);
+                        continue;
+                    }
                     observers++;
                 }
             }
@@ -252,9 +269,9 @@ namespace inetum.unityUtils
         private class Subscription
         {
             /// <summary>
-            /// The object that wait for a notification.
+            /// The object that wait for a notification. If subscriber is static then user typeof().FullName.
             /// </summary>
-            public string Subscriber;
+            public Object Subscriber;
 
             /// <summary>
             /// The objects that can send the notification to the <see cref="Subscriber"/>.<br/>

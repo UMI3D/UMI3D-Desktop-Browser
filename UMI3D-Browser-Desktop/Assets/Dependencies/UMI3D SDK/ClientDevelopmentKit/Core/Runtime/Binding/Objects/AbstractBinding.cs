@@ -39,17 +39,22 @@ namespace umi3d.cdk.binding
         /// <summary>
         /// See <see cref="AbstractBindingDataDto.partialFit"/>.
         /// </summary>
-        public virtual bool IsPartiallyFit => data.partialFit;
+        public virtual bool IsPartiallyFit { get; }
 
         /// <summary>
         /// See <see cref="AbstractBindingDataDto.priority"/>.
         /// </summary>
-        public virtual int Priority => data.priority;
+        public virtual int Priority { get; }
+
+        /// <summary>
+        /// See <see cref="AbstractBindingDataDto.resetWhenRemoved"/>.
+        /// </summary>
+        public virtual bool ResetWhenRemoved { get; }
 
         /// <summary>
         /// Transform of the bound node.
         /// </summary>
-        public virtual Transform BoundTransform => boundTransform;
+        public virtual Transform BoundTransform => boundTransform;  
 
         #endregion DTO Access
 
@@ -57,6 +62,10 @@ namespace umi3d.cdk.binding
         {
             this.boundTransform = boundTransform;
             this.data = data;
+            this.IsPartiallyFit = data.partialFit;
+            this.Priority = data.priority;
+            this.Priority = data.priority;
+            this.ResetWhenRemoved = data.resetWhenRemoved;
         }
 
         /// <summary>
@@ -64,5 +73,10 @@ namespace umi3d.cdk.binding
         /// </summary>
         /// <param name="success"></param>
         public abstract void Apply(out bool success);
+
+        /// <summary>
+        /// Put back the bound object at its original world place.
+        /// </summary>
+        public abstract void Reset();
     }
 }
