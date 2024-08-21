@@ -150,7 +150,13 @@ namespace umi3d.commonDesktop.game
             var row = CreateMappingRow();
             row.AddMapping(name, Controller, action);
 
-            S_interactionMapping.Add(interaction, row);
+            if (interaction is null)
+                UnityEngine.Debug.LogWarning($"interaction is null");
+            else if (S_interactionMapping.ContainsKey(interaction))
+                UnityEngine.Debug.LogWarning($"S_interactionMapping already contain {interaction}");
+            
+                S_interactionMapping.Add(interaction, row);
+
             if (S_interactionMapping.Count == 1)
             {
                 row.AddLeftClick();

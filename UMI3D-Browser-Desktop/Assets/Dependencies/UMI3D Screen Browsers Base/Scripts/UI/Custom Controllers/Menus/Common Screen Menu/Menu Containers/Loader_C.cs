@@ -57,9 +57,9 @@ namespace umi3d.commonScreen.menu
 
         #region Implementation
 
-        umi3d.cdk.Progress _progress = null;
+        umi3d.common.Progress _progress = null;
 
-        void OnProgress(umi3d.cdk.Progress progress)
+        void OnProgress(umi3d.common.Progress progress)
         {
             if (_progress != null)
             {

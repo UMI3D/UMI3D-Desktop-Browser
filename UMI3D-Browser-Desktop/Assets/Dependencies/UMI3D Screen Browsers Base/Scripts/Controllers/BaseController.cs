@@ -444,9 +444,9 @@ namespace umi3d.baseBrowser.Controller
                     &&
                     (mouseData.CurrentHoveredId != mouseData.LastHoveredId)
                     &&
-                    associatedInputs.ContainsKey(mouseData.CurrentHovered.dto.id))
+                    associatedInputs.ContainsKey((mouseData.CurrentHovered.environmentId, mouseData.CurrentHovered.dto.id)))
                 {
-                    foreach (var input in associatedInputs[mouseData.CurrentHovered.dto.id])
+                    foreach (var input in associatedInputs[(mouseData.CurrentHovered.environmentId,mouseData.CurrentHovered.dto.id)])
                         input.UpdateHoveredObjectId(mouseData.CurrentHoveredId);
                 }
 

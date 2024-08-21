@@ -25,14 +25,14 @@ namespace umi3d.baseBrowser.notification
     public class NotificationLoader : cdk.NotificationLoader
     {
         public Notification3D notification3DPrefab;
-        public event System.Action<common.NotificationDto> Notification2DReceived;
+        public event System.Action<ulong,common.NotificationDto> Notification2DReceived;
 
         public override AbstractLoader GetNotificationLoader()
         {
             return new InternalNotificationLoader(this);
         }
 
-        public void Notify(common.NotificationDto dto) { Notification2DReceived?.Invoke(dto); }
+        public void Notify(ulong environmentId, common.NotificationDto dto) { Notification2DReceived?.Invoke(environmentId,dto); }
     }
 
     public class InternalNotificationLoader : cdk.InternalNotificationLoader
@@ -61,7 +61,7 @@ namespace umi3d.baseBrowser.notification
             else
             {
                 await base.ReadUMI3DExtension(value);
-                loader.Notify(value.dto as NotificationDto);
+                loader.Notify(value.environmentId,value.dto as NotificationDto);
             }
         }
     }

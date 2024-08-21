@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.common;
@@ -141,7 +142,7 @@ namespace umi3d.commonScreen.game
         protected static List<NotificationDto> m_notificationDtos = new List<NotificationDto>();
         protected static List<NotificationDto> m_newNotificationDtos = new List<NotificationDto>();
 
-        public static Notification_C AddNotification(NotificationDto dto)
+        public static Notification_C AddNotification(ulong environmentId, NotificationDto dto)
         {
             m_notificationDtos.Insert(0, dto);
             m_newNotificationDtos.Insert(0, dto);
@@ -177,7 +178,8 @@ namespace umi3d.commonScreen.game
                 var callbackDto = new NotificationCallbackDto()
                 {
                     id = dto.id,
-                    callback = index == 0
+                    callback = index == 0,
+                    environmentId = environmentId
                 };
                 UMI3DClientServer.SendData(callbackDto, true);
 

@@ -65,7 +65,8 @@ namespace umi3d.baseBrowser.inputs.interactions
                                 toolId = this.toolId,
                                 hoveredObjectId = hoveredObjectId,
                                 bonePosition = (Vector3Dto)boneTransform.position.Dto(),
-                                boneRotation = (Vector4Dto)boneTransform.rotation.Dto()
+                                boneRotation = (Vector4Dto)boneTransform.rotation.Dto(),
+                                environmentId = environmentId
                             };
 
                             MapDistanceWithDof(distanceInFrame, ref pararmeterDto);

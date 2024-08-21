@@ -93,9 +93,9 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitGame_Notification()
         {
-            NotificationLoader.Notification2DReceived += dto =>
+            NotificationLoader.Notification2DReceived += (environmentId,dto) =>
             {
-                var notification = NotificationCenter_C.AddNotification(dto);
+                var notification = NotificationCenter_C.AddNotification(environmentId,dto);
 
                 root.schedule.Execute(() =>
                 {
@@ -319,6 +319,8 @@ namespace umi3d.baseBrowser.connection
 
                 UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
                 ButtonDisplayer button = ObjectMenu.FirstOrDefault<ButtonDisplayer>();
+                if (button is null)
+                    UnityEngine.Debug.Log("Button is null");
                 Game.Cursor.Action = button.Text;
                 UpdateContextualMenuActions(ContextualMenuActionEnum.UpAndDown, null,
                 () =>
