@@ -18,7 +18,6 @@ using inetum.unityUtils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
@@ -101,8 +100,7 @@ namespace umi3d.cdk
                 {
                     if (o is GameObject g)
                     {
-                        NodeContainer container = g.GetOrAddComponent<NodeContainer>();
-                        await CallbackAfterLoadingForMesh(data.environmentId, g, meshDto, data.node.transform, offset, container);
+                        await CallbackAfterLoadingForMesh(data.environmentId, g, meshDto, data.node.transform, offset, null);
                     }
                     else if (o is (GameObject go, Scene scene))
                     {
@@ -150,9 +148,6 @@ namespace umi3d.cdk
                 case UMI3DPropertyKeys.IsTraversable:
                     (data.entity as UMI3DNodeInstance).IsTraversable = (bool)data.property.value;
                     return true;
-                case UMI3DPropertyKeys.IsBlockingInteraction:
-                    (data.entity as UMI3DNodeInstance).IsBlockingInteraction = (bool)data.property.value;
-                    return true;
                 default:
                     return false;
             }
@@ -183,9 +178,6 @@ namespace umi3d.cdk
                     return true;
                 case UMI3DPropertyKeys.IsTraversable:
                     (data.entity as UMI3DNodeInstance).IsTraversable = UMI3DSerializer.Read<bool>(data.container);
-                    return true;
-                case UMI3DPropertyKeys.IsBlockingInteraction:
-                    (data.entity as UMI3DNodeInstance).IsBlockingInteraction = UMI3DSerializer.Read<bool>(data.container);
                     return true;
                 default:
                     return false;
