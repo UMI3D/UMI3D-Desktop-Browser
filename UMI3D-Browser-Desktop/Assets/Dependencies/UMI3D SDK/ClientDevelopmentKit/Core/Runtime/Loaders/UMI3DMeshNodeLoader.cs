@@ -322,6 +322,8 @@ namespace umi3d.cdk
 
             nodeInstance.IsPartOfNavmesh = dto.isPartOfNavmesh;
             nodeInstance.IsTraversable = dto.isTraversable;
+            nodeInstance.IsBlockingInteraction = dto.isBlockingInteraction;
+
         }
 
         private void SetBlendShapeRef(GameObject instance, UMI3DNodeInstance nodeInstance, UMI3DMeshNodeDto dto, bool setValue = true)

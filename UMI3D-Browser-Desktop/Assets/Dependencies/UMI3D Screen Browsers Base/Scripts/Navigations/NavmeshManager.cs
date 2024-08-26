@@ -148,9 +148,9 @@ namespace umi3d.baseBrowser.Navigation
         {
             if (node.IsPartOfNavmesh)
             {
-                if (node.gameObject.GetComponent<Collider>() != null)
+                if (node.GameObject.GetComponent<Collider>() != null)
                 {
-                    node.gameObject.layer = ToLayer(navmeshLayer);
+                    node.GameObject.layer = ToLayer(navmeshLayer);
                 }
 
                 foreach (var renderer in node.renderers)
@@ -205,9 +205,9 @@ namespace umi3d.baseBrowser.Navigation
         /// <param name="mask"></param>
         private void SetLayer(UMI3DNodeInstance node, LayerMask mask)
         {
-            if (node.gameObject.GetComponent<Collider>() != null)
+            if (node.GameObject.GetComponent<Collider>() != null)
             {
-                node.gameObject.layer = ToLayer(navmeshLayer);
+                node.GameObject.layer = ToLayer(navmeshLayer);
             }
 
             foreach (var renderer in node.renderers)

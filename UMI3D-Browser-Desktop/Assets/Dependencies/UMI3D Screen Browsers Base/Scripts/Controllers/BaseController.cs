@@ -13,7 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using System.Collections.Generic;
+using System.ComponentModel;
 using umi3d.baseBrowser.cursor;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk;
@@ -138,6 +140,25 @@ namespace umi3d.baseBrowser.Controller
             CurrentController = m_controllers.Find(controller => controller is KeyboardAndMouseController);
         }
 
+        private void Instance_onNodeGameObjectSet(UMI3DNodeInstance node, GameObject oldGameObject)
+        {
+            NodeContainer container;
+            if(oldGameObject != null)
+            {
+                container = oldGameObject.GetComponent<NodeContainer>();
+                if(container != null)
+                    GameObject.Destroy(container);
+            }
+
+            container = node.GameObject.GetOrAddComponent<NodeContainer>();
+            container.instance = node;
+        }
+
+        protected virtual void OnEnable()
+        {
+            UMI3DEnvironmentLoader.Instance.onNodeGameObjectSet += Instance_onNodeGameObjectSet;
+        }
+
         protected virtual void Start()
         {
             m_controllers.ForEach(controller => controller?.Start());
@@ -162,6 +183,8 @@ namespace umi3d.baseBrowser.Controller
             KeyboardEmote.S_Emotes.Clear();
             KeyboardNavigation.S_Navigations.Clear();
             KeyboardManipulation.S_Manipulations.Clear();
+
+            UMI3DEnvironmentLoader.Instance.onNodeGameObjectSet  -= Instance_onNodeGameObjectSet;
         }
         #endregion
 
@@ -370,33 +393,55 @@ namespace umi3d.baseBrowser.Controller
             var raycastInfo = common.Physics.RaycastAll(ray, 100f);
 
             //1. Cast a ray to find all interactables
-            List<(RaycastHit, InteractableContainer)> interactables = new List<(RaycastHit, InteractableContainer)>();
+            List<(RaycastHit, InteractableContainer, bool)> interactables = new ();
             for (int i = 0; i < raycastInfo.hitCount; i++)
             {
                 RaycastHit hit = raycastInfo.hits[i];
                 if (hit.collider.gameObject.GetComponentInParent<cdk.UMI3DLoadingHandler>() == null) continue;
+                var nodeContainer = hit.collider.gameObject.GetComponentInParent<NodeContainer>()?.instance.IsBlockingInteraction ?? false;
                 var interactable = hit.collider.gameObject.GetComponent<InteractableContainer>();
                 if (interactable == null) interactable = hit.collider.gameObject.GetComponentInParent<InteractableContainer>();
-                if (interactable != null) interactables.Add((hit, interactable));
+                if (nodeContainer || interactable != null)
+                    interactables.Add((hit, interactable, nodeContainer));
             }
 
             //2. Sort them by hasPriority and distance from user
-            interactables.Sort(delegate ((RaycastHit, InteractableContainer) x, (RaycastHit, InteractableContainer) y)
+            interactables.Sort(delegate ((RaycastHit, InteractableContainer, bool) x, (RaycastHit, InteractableContainer, bool) y)
             {
-                if (x.Item2.Interactable.HasPriority && !y.Item2.Interactable.HasPriority) return -1;
-                else if (!x.Item2.Interactable.HasPriority && y.Item2.Interactable.HasPriority) return 1;
-                else
-                {
-                    if (Vector3.Distance(CameraTransform.position, x.Item1.point) >= Vector3.Distance(CameraTransform.position, y.Item1.point))
-                        return 1;
-                    else
-                        return -1;
+                var xp = x.Item2?.Interactable.HasPriority ?? false;
+                var yp = y.Item2?.Interactable.HasPriority ?? false;
+
+
+                var whenXisCloser = (!yp || x.Item3 || xp);
+                var WhenXisFurther = !(!xp || y.Item3 || yp);
+
+
+                int res;
+
+                if (whenXisCloser == WhenXisFurther) {
+                    res = whenXisCloser ? -1 : 1;
                 }
+                else {
+                    var xIsCloser = (Vector3.Distance(CameraTransform.position, x.Item1.point) <= Vector3.Distance(CameraTransform.position, y.Item1.point));
+                    res = (xIsCloser && whenXisCloser || !xIsCloser && WhenXisFurther) ? -1 : 1;
+                }
+
+                return res;
             });
 
-            foreach ((RaycastHit, InteractableContainer) entry in interactables)
+
+            //interactables.Debug(e => $"{e.Item1.collider.gameObject.name} {e.Item1.distance} {e.Item2 != null} p:{e.Item2?.Interactable.HasPriority ?? false} b:{e.Item3}");
+
+            foreach ((RaycastHit, InteractableContainer, bool) entry in interactables)
             {
                 InteractableContainer interactableContainer = entry.Item2;
+                if (interactableContainer is null)
+                {
+                    if(entry.Item3)
+                        break;
+                    continue;
+                }
+                
                 Interactable interactable = interactableContainer.Interactable;
                 RaycastHit hit = entry.Item1;
 

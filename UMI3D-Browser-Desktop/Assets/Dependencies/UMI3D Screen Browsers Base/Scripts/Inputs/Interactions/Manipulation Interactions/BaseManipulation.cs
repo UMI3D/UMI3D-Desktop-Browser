@@ -224,7 +224,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             {
                 if (associatedInteraction?.frameOfReference != null)
                 {
-                    GameObject frame = cdk.UMI3DEnvironmentLoader.GetNode(environmentId, associatedInteraction.frameOfReference).gameObject;
+                    GameObject frame = cdk.UMI3DEnvironmentLoader.GetNode(environmentId, associatedInteraction.frameOfReference).GameObject;
                     if (frame != null)
                     {
                         frameOfReference = frame.transform;
