@@ -120,10 +120,7 @@ public sealed class UMI3DCameraManager
     void CameraPropertiesReception(Notification notification) 
     {
         if (!notification.TryGetInfoT(UMI3DClientNotificatonKeys.Info.CameraProperties, out AbstractCameraPropertiesDto dto))
-        {
-            Debug.LogError("Should have received a dto, but it is missing.");
             return; 
-        }
 
         Camera cam = Camera.main;
 
