@@ -135,6 +135,7 @@ public sealed class UMI3DCameraManager
             cam.orthographicSize = (dto as OrthographicCameraPropertiesDto).size;
         }
 
+        cam.transform.localPosition = dto.localPosition.Struct();
         cam.nearClipPlane = dto.nearPlane;
         cam.farClipPlane = dto.farPlane;
     }
