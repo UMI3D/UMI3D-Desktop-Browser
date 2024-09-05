@@ -83,6 +83,11 @@ namespace umi3d.cdk
                 return false;
             }
 
+            public override string ToString()
+            {
+                return $"{id}_{version}";
+            }
+
             public static bool operator ==(Library a, Library b)
                 => a.Equals(b);
 
@@ -585,6 +590,7 @@ namespace umi3d.cdk
                                 else
                                     CacheCollection.Insert(0, new ObjectData(file.url, null, null, data.library, file.path, file.fileRelativePath));
                             }
+                            
                             libraries.Add(data.library, new KeyValuePair<DataFile, HashSet<ulong>>(data, new HashSet<ulong>()));
                         }
                         else
@@ -901,6 +907,7 @@ namespace umi3d.cdk
                     toDownload.Add(assetLibrary.libraryId);
                 }
             }
+
             return toDownload.ToList();
         }
 
@@ -1070,7 +1077,15 @@ namespace umi3d.cdk
                         }
                         Instance.libraries.Remove(library);
                     }
+
+                    var parent = Directory.GetParent(dataf.Key.path);
+
                     Directory.Delete(dataf.Key.path, true);
+
+                    if (!parent.EnumerateFileSystemInfos().Any())
+                    {
+                        parent.Delete();
+                    }
                 }
             }
         }
@@ -1097,7 +1112,7 @@ namespace umi3d.cdk
                     dicPath = System.IO.Path.GetDirectoryName(path);
                     url = Path.Combine(baseUrl, name);
 
-                    await DownloadFile(key, dicPath, path, url, name, false, progress);
+                    await DownloadFile(key, dicPath, path, url, name, true, progress);
                     data.files.Add(new Data(url, path, name));
                     progress.AddComplete();
                 }
