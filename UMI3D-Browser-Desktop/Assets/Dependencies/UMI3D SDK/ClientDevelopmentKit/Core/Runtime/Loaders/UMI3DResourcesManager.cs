@@ -212,6 +212,7 @@ namespace umi3d.cdk
             public string url;
             public string comSplit;
             public string fileRelativePath;
+            public string fileName;
 
             /// <summary>
             /// field containing authorization string.
@@ -336,45 +337,45 @@ namespace umi3d.cdk
                 return url.Split("/com.").Last();
             }
 
-            public ObjectData(string url, object value, HashSet<ulong> entityId)
-            {
-                this.value = value;
-                entityIds = entityId;
-                libraryIds = new HashSet<Library>();
-                state = Estate.Loaded;
-                downloadedPath = null;
-                this.url = FormatUrl(url);
-                a = rx.Match(url);
+            //public ObjectData(string url, object value, HashSet<ulong> entityId)
+            //{
+            //    this.value = value;
+            //    entityIds = entityId;
+            //    libraryIds = new HashSet<Library>();
+            //    state = Estate.Loaded;
+            //    downloadedPath = null;
+            //    this.url = FormatUrl(url);
+            //    a = rx.Match(url);
 
-                this.comSplit = UrlToCom(this.url);
-            }
+            //    this.comSplit = UrlToCom(this.url);
+            //}
 
-            public ObjectData(string url, object value, ulong entityId)
-            {
-                this.value = value;
-                entityIds = new HashSet<ulong>() { entityId };
-                libraryIds = new HashSet<Library>();
-                state = Estate.Loaded;
-                downloadedPath = null;
-                this.url = FormatUrl(url);
-                a = rx.Match(url);
-                this.comSplit = UrlToCom(this.url);
-            }
+            //public ObjectData(string url, object value, ulong entityId)
+            //{
+            //    this.value = value;
+            //    entityIds = new HashSet<ulong>() { entityId };
+            //    libraryIds = new HashSet<Library>();
+            //    state = Estate.Loaded;
+            //    downloadedPath = null;
+            //    this.url = FormatUrl(url);
+            //    a = rx.Match(url);
+            //    this.comSplit = UrlToCom(this.url);
+            //}
 
-            public ObjectData(string url, string extension, string authorization, HashSet<ulong> entityId)
-            {
-                value = null;
-                entityIds = entityId;
-                libraryIds = new HashSet<Library>();
-                state = Estate.NotLoaded;
-                downloadedPath = null;
-                this.url = FormatUrl(url);
-                this.extension = extension;
-                a = rx.Match(url);
-                this.authorization = ComputeAuthorization(authorization);
+            //public ObjectData(string url, string extension, string authorization, HashSet<ulong> entityId)
+            //{
+            //    value = null;
+            //    entityIds = entityId;
+            //    libraryIds = new HashSet<Library>();
+            //    state = Estate.NotLoaded;
+            //    downloadedPath = null;
+            //    this.url = FormatUrl(url);
+            //    this.extension = extension;
+            //    a = rx.Match(url);
+            //    this.authorization = ComputeAuthorization(authorization);
 
-                this.comSplit = UrlToCom(this.url);
-            }
+            //    this.comSplit = UrlToCom(this.url);
+            //}
 
             public ObjectData(string url, string extension, string authorization, ulong entityId)
             {
@@ -389,6 +390,7 @@ namespace umi3d.cdk
                 this.authorization = ComputeAuthorization(authorization);
 
                 this.comSplit = UrlToCom(this.url);
+                this.fileName = System.IO.Path.GetFileName(this.url);
             }
 
             public ObjectData(string url, string extension, string authorization, ulong entityId, Library library)
@@ -404,6 +406,7 @@ namespace umi3d.cdk
                 this.authorization = ComputeAuthorization(authorization);
 
                 this.comSplit = UrlToCom(this.url);
+                this.fileName = System.IO.Path.GetFileName(this.url);
             }
 
             public ObjectData(string url, string extension, string authorization, Library library, string downloadedPath, string fileRelativePath)
@@ -420,22 +423,23 @@ namespace umi3d.cdk
                 this.fileRelativePath = fileRelativePath;
 
                 this.comSplit = UrlToCom(this.url);
+                this.fileName = System.IO.Path.GetFileName(this.url);
             }
 
-            public ObjectData(string url, string extension, string authorization, ulong entityId, string downloadedPath)
-            {
-                value = null;
-                entityIds = new HashSet<ulong>() { entityId };
-                libraryIds = new HashSet<Library>();
-                state = Estate.NotLoaded;
-                this.downloadedPath = downloadedPath;
-                this.url = FormatUrl(url);
-                this.extension = extension;
-                this.authorization = authorization;
-                a = rx.Match(url);
+            //public ObjectData(string url, string extension, string authorization, ulong entityId, string downloadedPath)
+            //{
+            //    value = null;
+            //    entityIds = new HashSet<ulong>() { entityId };
+            //    libraryIds = new HashSet<Library>();
+            //    state = Estate.NotLoaded;
+            //    this.downloadedPath = downloadedPath;
+            //    this.url = FormatUrl(url);
+            //    this.extension = extension;
+            //    this.authorization = authorization;
+            //    a = rx.Match(url);
 
-                this.comSplit = UrlToCom(this.url);
-            }
+            //    this.comSplit = UrlToCom(this.url);
+            //}
         }
 
         public Dictionary<ulong, Library> librariesMap = new Dictionary<ulong, Library>();
@@ -793,6 +797,9 @@ namespace umi3d.cdk
             }
             catch (Exception e)
             {
+                if (e is Umi3dBundleException be && be.bundleAlreadyLoaded)
+                    throw;
+
                 var code = (e as Umi3dNetworkingException)?.errorCode ?? 0;
                 if (!await UMI3DClientServer.Instance.TryAgainOnHttpFail(
                      new RequestFailedArgument(
@@ -815,6 +822,9 @@ namespace umi3d.cdk
             }
             catch (Exception e)
             {
+                if (e is Umi3dBundleException be && be.bundleAlreadyLoaded)
+                    throw;
+
                 Debug.LogException(e);
                 if (count >= 2 || (e is Umi3dNetworkingException n && n.errorCode == 404))
                     throw;
@@ -841,7 +851,30 @@ namespace umi3d.cdk
                 objectData = (library == null) ? new ObjectData(file.url, file.extension, file.authorization, id) : new ObjectData(file.url, file.extension, file.authorization, id, library.Value);
                 CacheCollection.Insert(0, objectData);
             }
-            return await _LoadFile(id, objectData, loader, file.pathIfInBundle);
+            try
+            {
+                return await _LoadFile(id, objectData, loader, file.pathIfInBundle);
+            }
+            catch(Umi3dBundleException be)
+            {
+                if (!be.bundleAlreadyLoaded)
+                    throw;
+
+                objectData = CacheCollection.Find((o) =>
+                {
+                    return o != objectData && o.fileName == fileName;
+                });
+
+                if (objectData == null)
+                {
+                    throw;
+                }
+                return await _LoadFile(id, objectData, loader, file.pathIfInBundle);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         private string GetFilePath(string url, Library? library = null)
@@ -1019,6 +1052,17 @@ namespace umi3d.cdk
             }
         }
 
+        private static ObjectData FindObjectDataMatchingName(ObjectData data)
+        {
+            var fileName = data.fileRelativePath.Split('/').Last().Split('\\').Last();
+
+            ObjectData objectData = instance.CacheCollection.Find((o) =>
+            {
+                return o != data && o.fileRelativePath.EndsWith(fileName);
+            });
+            return objectData;
+        }
+
         public static bool isKnowedLibrary(ulong key)
         {
             if (Instance.librariesMap.TryGetValue(key, out Library libraryID))
@@ -1112,7 +1156,7 @@ namespace umi3d.cdk
                     dicPath = System.IO.Path.GetDirectoryName(path);
                     url = Path.Combine(baseUrl, name);
 
-                    await DownloadFile(key, dicPath, path, url, name, true, progress);
+                    await DownloadFile(key, dicPath, path, url, name, progress);
                     data.files.Add(new Data(url, path, name));
                     progress.AddComplete();
                 }
@@ -1128,24 +1172,29 @@ namespace umi3d.cdk
             return (data);
         }
 
-        private async Task DownloadFile(Library key, string directoryPath, string filePath, string url, string fileRelativePath, bool force = false, Progress progress = null)
+        private async Task DownloadFile(Library key, string directoryPath, string filePath, string url, string fileRelativePath, Progress progress = null)
         {
             url = ObjectData.FormatUrl(url);
             var sp = ObjectData.UrlToCom(url);
             Match matchUrl = ObjectData.rx.Match(url);
-            ObjectData objectData = force ? null : CacheCollection.Find((o) =>
+            ObjectData objectData = CacheCollection.Find((o) =>
             {
                 return o.MatchUrl(matchUrl, url, sp, key);
             });
 
             if (objectData != null)
             {
-                if (objectData.downloadedPath != null)
+                var containsLib = objectData.libraryIds.Any(lib => lib == key);
+
+                if (objectData.downloadedPath != null && containsLib)
                 {
                     return;
                 }
                 else
                 {
+                    if (!containsLib)
+                        objectData.libraryIds.Add(key);
+
                     objectData.downloadedPath = filePath;
                 }
             }
