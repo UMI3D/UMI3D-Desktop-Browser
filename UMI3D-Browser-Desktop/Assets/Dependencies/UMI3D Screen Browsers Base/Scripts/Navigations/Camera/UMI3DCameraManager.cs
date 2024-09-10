@@ -13,10 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
+using inetum.unityUtils;
 using umi3d.baseBrowser.cursor;
 using umi3d.baseBrowser.Navigation;
+using umi3d.cdk.notification;
+using umi3d.common;
 using UnityEngine;
 
 public sealed class UMI3DCameraManager
@@ -33,6 +34,11 @@ public sealed class UMI3DCameraManager
 
     #endregion
     
+    public UMI3DCameraManager()
+    {
+        NotificationHub.Default.Subscribe(this, UMI3DClientNotificatonKeys.CameraPropertiesNotification, null, CameraPropertiesReception);
+    }
+
     public void HandleView()
     {
         if (
@@ -106,5 +112,28 @@ public sealed class UMI3DCameraManager
             0f
         );
         neckPivot.localRotation = Quaternion.Euler(neckAngle);
+    }
+
+    void CameraPropertiesReception(Notification notification) 
+    {
+        if (!notification.TryGetInfoT(UMI3DClientNotificatonKeys.Info.CameraProperties, out AbstractCameraPropertiesDto dto))
+            return; 
+
+        Camera cam = Camera.main;
+
+        if (dto is PerspectiveCameraPropertiesDto)
+        {
+            cam.orthographic = false;
+            cam.fieldOfView = (dto as PerspectiveCameraPropertiesDto).fieldOfView;
+        }
+        else
+        {
+            cam.orthographic = true;
+            cam.orthographicSize = (dto as OrthographicCameraPropertiesDto).size;
+        }
+
+        cam.transform.localPosition = dto.localPosition.Struct();
+        cam.nearClipPlane = dto.nearPlane;
+        cam.farClipPlane = dto.farPlane;
     }
 }
