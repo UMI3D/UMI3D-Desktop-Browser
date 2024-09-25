@@ -69,7 +69,6 @@ namespace umi3d.cdk.collaboration
         {
             if(status == MicrophoneListener.mute)
             {
-                UnityEngine.Debug.Log($"Open microphone {status}");
                 if (status && Exists && Instance.OpenMicrophoneValidators.Count > 0)
                 {
                     //check if possible
