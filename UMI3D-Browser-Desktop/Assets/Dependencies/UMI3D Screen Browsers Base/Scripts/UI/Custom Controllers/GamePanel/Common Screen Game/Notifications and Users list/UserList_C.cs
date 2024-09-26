@@ -121,6 +121,7 @@ namespace umi3d.commonScreen.game
         {
             var _u = m_users.FirstOrDefault(U => (U.User == user));
             if (_u == null) RefreshList();
+            else RefreshUserButton(_u,user);
             //else _u.IsMute = !user.microphoneStatus;
         }
 
@@ -174,7 +175,15 @@ namespace umi3d.commonScreen.game
                 newUser.IsMute = false;
             }
 
+            RefreshUserButton(newUser, user);
+
             return newUser;
+        }
+
+        protected virtual void RefreshUserButton(User_C userElement, UMI3DUser user)
+        {
+            //userElement.ClearButtons();
+            //user.userActions.ForEach(userElement.AddButton);
         }
 
         #endregion

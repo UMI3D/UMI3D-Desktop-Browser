@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
 using umi3d.cdk.collaboration;
 using UnityEngine;
@@ -221,6 +222,8 @@ namespace umi3d.commonScreen.Displayer
             Add(Mute);
             Mute.Add(Mute_Background);
             Mute_Background.Add(Mute_Icon);
+
+            buttons = new();
         }
 
         protected override void SetProperties()
@@ -229,6 +232,36 @@ namespace umi3d.commonScreen.Displayer
             UserName = null;
             IsMute = false;
             Volume = 100f;
+        }
+
+
+        List<VisualElement> buttons;
+
+        public void ClearButtons()
+        {
+            buttons.ForEach(buttons => buttons.RemoveFromHierarchy());
+            buttons.Clear();
+        }
+
+        public void AddButton(UserAction userAction)
+        {
+            Button_C button = new Button_C { name = userAction.name, tooltip = userAction.description };
+            Visual_C button_Background = new Visual_C { name = $"{userAction.name}-background" };
+            Visual_C button_Icon = new Visual_C { name = $"{userAction.name}-icon" };
+
+            button.AddToClassList(USSCustomClassMute);
+            button_Background.AddToClassList(USSCustomClassMute_Background);
+            button_Icon.AddToClassList(USSCustomClassMute_Icon);
+
+            button.Type = ButtonType.Invisible;
+            button.Shape = ButtonShape.Round;
+            button.clicked += userAction.Call;
+
+            Add(button);
+            button.Add(button_Background);
+            button_Background.Add(button_Icon);
+
+            buttons.Add(button);
         }
 
         #region Implementation

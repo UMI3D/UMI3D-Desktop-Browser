@@ -211,7 +211,7 @@ namespace umi3d.cdk.collaboration
             if (loginUpdate || pswUpdate) OnUserMicrophoneIdentityUpdated.Invoke(this);
             if (areTrackedControllersVisibleUpdate) OnAreTrackedControllersVisible.Invoke(this);
             if (userActionUpdate) OnUserActionsUpdated.Invoke(this);
-
+            UnityEngine.Debug.Log($"userActionUpdate {userActionUpdate}");
         }
 
         bool MatchActions(UserDto user)

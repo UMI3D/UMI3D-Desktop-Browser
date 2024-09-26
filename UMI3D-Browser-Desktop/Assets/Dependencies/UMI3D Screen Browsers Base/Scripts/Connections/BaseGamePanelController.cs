@@ -220,6 +220,7 @@ namespace umi3d.baseBrowser.connection
             UMI3DUser.OnUserAvatarStatusUpdated.RemoveListener(Game.NotifAndUserArea.UserList.UpdateUser);
             UMI3DUser.OnUserAttentionStatusUpdated.RemoveListener(Game.NotifAndUserArea.UserList.UpdateUser);
             UMI3DUser.OnRemoveUser.RemoveListener(Game.NotifAndUserArea.UserList.RemoveUser);
+            UMI3DUser.OnUserActionsUpdated.RemoveListener(Game.NotifAndUserArea.UserList.UpdateUser);
         }
 
         protected override void OnDestroy()
