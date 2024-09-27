@@ -182,8 +182,8 @@ namespace umi3d.commonScreen.game
 
         protected virtual void RefreshUserButton(User_C userElement, UMI3DUser user)
         {
-            //userElement.ClearButtons();
-            //user.userActions.ForEach(userElement.AddButton);
+            userElement.ClearButtons();
+            user.userActions.ForEach(userElement.AddButton);
         }
 
         #endregion
