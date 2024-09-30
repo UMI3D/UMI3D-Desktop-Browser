@@ -251,6 +251,7 @@ namespace umi3d.commonScreen.Displayer
 
             button.AddToClassList(USSCustomClassMute);
             button_Background.AddToClassList(USSCustomClassMute_Background);
+            
             button_Icon.AddToClassList(USSCustomClassMute_Icon);
 
             button.Type = ButtonType.Invisible;
@@ -260,6 +261,9 @@ namespace umi3d.commonScreen.Displayer
             Add(button);
             button.Add(button_Background);
             button_Background.Add(button_Icon);
+
+            button.style.minWidth = 100;
+            button.style.backgroundColor = UnityEngine.Random.ColorHSV();
 
             buttons.Add(button);
         }

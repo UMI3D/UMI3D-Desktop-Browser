@@ -155,6 +155,7 @@ namespace umi3d.commonScreen.game
 
         protected virtual User_C CreateUser(UMI3DUser user)
         {
+            UnityEngine.Debug.Log($"CreateUser for {user.id} {user.userActions?.Count}");
             var newUser = new User_C();
             newUser.User = user;
             newUser.UserName = user.login;
@@ -182,6 +183,7 @@ namespace umi3d.commonScreen.game
 
         protected virtual void RefreshUserButton(User_C userElement, UMI3DUser user)
         {
+            UnityEngine.Debug.Log($"RefreshUserButton for {user.id} {user.userActions?.Count}");
             userElement.ClearButtons();
             user.userActions.ForEach(userElement.AddButton);
         }
