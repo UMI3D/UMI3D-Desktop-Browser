@@ -26,6 +26,7 @@
 	--background-image-mic-off: resource('Icons/Mic/MIC_OFF');
 	--background-image-sound-on: resource('Icons/Sound/SOUND_ON');
 	--background-image-sound-off: resource('Icons/Sound/SOUND_OFF');
+	--background-image-menu: resource('Icons/MENU');
 	--background-image-notif__users-on: resource('Icons/NotifAndUsers/Arrow_Left');
 	--background-image-notif__users-off: resource('Icons/NotifAndUsers/Arrow_Right');
 	--background-image-emote: resource('Icons/Emote/Smile');
