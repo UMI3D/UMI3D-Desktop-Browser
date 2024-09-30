@@ -64,7 +64,6 @@ namespace umi3d.cdk
 
         public bool SetEntity(SetUMI3DPropertyContainerData data)
         {
-            UnityEngine.Debug.Log($"PropertyList SetEntity {data.operationId}");
             switch (data.operationId)
             {
                 case UMI3DOperationKeys.SetEntityListAddProperty:

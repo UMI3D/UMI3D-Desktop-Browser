@@ -155,7 +155,7 @@ namespace umi3d.cdk.collaboration
 
         public bool isClient => id == UMI3DCollaborationClientServer.Instance.GetUserId();
 
-        protected UMI3DUser(ulong environmentId, UserDto user)
+        public UMI3DUser(ulong environmentId, UserDto user)
         {
             dto = user;
             if (user.userActions == null)
