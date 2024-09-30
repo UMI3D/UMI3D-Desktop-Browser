@@ -20,7 +20,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.collaboration.dto.signaling;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace umi3d.cdk.collaboration
@@ -162,28 +161,17 @@ namespace umi3d.cdk.collaboration
             if (user.userActions == null)
                 user.userActions = new System.Collections.Generic.List<UserActionDto>();
 
-            UnityEngine.Debug.Log("Step B1");
-            userActions = new(user.userActions ?? new System.Collections.Generic.List<UserActionDto>(),UserAction.Converter(this.EnvironmentId));
-            UnityEngine.Debug.Log("Step B2");
-            UnityEngine.Debug.Log($"Create user {isClient} {user.userActions.Count}");
-            UnityEngine.Debug.Log("Step B3");
+            userActions = new(user.userActions, UserAction.Converter(this.EnvironmentId));
+
             userActions.OnCollectionUpdated += UserActions_OnCollectionUpdated;
-            UnityEngine.Debug.Log("Step B4");
             this.EnvironmentId = environmentId;
-            UnityEngine.Debug.Log("Step B5");
         }
 
         public static UMI3DUser CreateUser(ulong environmentId, UserDto dto)
         {
-            UnityEngine.Debug.Log("Step A0");
             var user = new UMI3DUser(environmentId, dto);
-            UnityEngine.Debug.Log("Step A1");
             var instance = UMI3DEnvironmentLoader.Instance.RegisterEntity(environmentId, user.id, dto, user, () => { UMI3DUser.OnRemoveUser.Invoke(user); });
-            UnityEngine.Debug.Log("Step A2");
             instance.NotifyLoaded();
-            UnityEngine.Debug.Log("Step A3");
-            UnityMainThreadDispatcher.Instance().Enqueue( () =>
-            UnityEngine.Debug.Log($"Register {dto.id}"));
             CreateUserAux(user);
             return user;
         }
@@ -258,7 +246,7 @@ namespace umi3d.cdk.collaboration
             if (dto.userActions.Count != user.userActions.Count)
                 return false;
 
-            if(dto.userActions.Count == 0) 
+            if (dto.userActions.Count == 0)
                 return true;
 
             return dto.userActions
@@ -268,7 +256,7 @@ namespace umi3d.cdk.collaboration
 
         bool MatchAction((UserActionDto, UserActionDto) c)
         {
-            return MatchAction(c.Item1,c.Item2);
+            return MatchAction(c.Item1, c.Item2);
         }
 
         bool MatchAction(UserActionDto a, UserActionDto b)
@@ -286,10 +274,10 @@ namespace umi3d.cdk.collaboration
             if (a == b)
                 return true;
 
-            if(a==null || b == null)
+            if (a == null || b == null)
                 return false;
 
-            if(a.variants.Count != b.variants.Count)
+            if (a.variants.Count != b.variants.Count)
                 return false;
 
             return a.variants
@@ -450,66 +438,5 @@ namespace umi3d.cdk.collaboration
         public static UMI3DUserEvent OnAreTrackedControllersVisible = new UMI3DUserEvent();
 
         public static UMI3DUserEvent OnUserActionsUpdated = new UMI3DUserEvent();
-    }
-
-    public class UserAction : UserActionDto
-    {
-        ulong environmentId;
-        Texture2D texture2D;
-
-        public async Task<Texture2D> GetTexture() {
-            if (texture2D != null)
-                return texture2D;
-            if (icon2D == null)
-                return null;
-
-            return await loadResources();
-        }
-
-        public UserAction(ulong environmentId, UserActionDto dto)
-        {
-            this.environmentId = environmentId;
-            this.id = dto.id;
-            this.isPrimary = dto.isPrimary;
-            this.name = dto.name;
-            this.description = dto.description;
-            this.icon3D = dto.icon3D;
-            this.icon2D = dto.icon2D;
-        }
-
-        async Task<Texture2D> loadResources()
-        {
-
-            if (this.icon2D != null && this.icon2D.variants.Count > 0)
-            {
-                try
-                {
-                    FileDto fileToLoad = UMI3DEnvironmentLoader.AbstractParameters.ChooseVariant(this.icon2D.variants);
-                    if (fileToLoad == null)
-                        return null;
-
-                    string ext = fileToLoad.extension;
-                    IResourcesLoader loader = UMI3DEnvironmentLoader.AbstractParameters.SelectLoader(ext);
-                    if (loader != null)
-                    {
-                        var o = await UMI3DResourcesManager.LoadFile(UMI3DGlobalID.EnvironmentId, fileToLoad, loader);
-                        return (Texture2D)o;
-                    }
-                }
-                catch
-                {
-
-                }
-            }
-            return null;
-        }
-
-        public void Call()
-        {
-            var dto = new UserActionRequestDto() { environmentId = this.environmentId, actionId = this.id };
-            UMI3DClientServer.SendRequest(dto, true);
-        }
-
-        public static Func<UserActionDto, UserAction> Converter(ulong environmentId) => dto => new(environmentId, dto);
     }
 }
