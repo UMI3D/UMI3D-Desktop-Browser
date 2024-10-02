@@ -13,8 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk;
 using umi3d.cdk.collaboration;
+using umi3d.common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -119,17 +124,29 @@ namespace umi3d.commonScreen.Displayer
         public virtual string USSCustomClassUserName => $"{UssCustomClass_Emc}__name";
         public virtual string USSCustomClassUserName_Background => $"{UssCustomClass_Emc}__name-background";
         public virtual string USSCustomClassUserName_Slider => $"{UssCustomClass_Emc}__name-audio-slider";
+        
         public virtual string USSCustomClassMute => $"{UssCustomClass_Emc}__mute";
         public virtual string USSCustomClassMute_Background => $"{UssCustomClass_Emc}__mute-background";
         public virtual string USSCustomClassMute_Icon => $"{UssCustomClass_Emc}__mute-icon";
         public virtual string USSCustomClassMute_On => $"{UssCustomClass_Emc}__mute-icon__on";
         public virtual string USSCustomClassMute_Off => $"{UssCustomClass_Emc}__mute-icon__off";
 
+        public virtual string USSCustomClassMenu => USSCustomClassMute;
+        public virtual string USSCustomClassMenu_Background => USSCustomClassMute_Background;
+        public virtual string USSCustomClassMenu_Icon => $"{UssCustomClass_Emc}__menu-icon";
+
+
+
         public event System.Action<bool> LocalMuteValueChanged;
         public UMI3DUser User;
         public Text_C UserNameVisual = new Text_C { name = "user-name" };
         public Visual_C User_Background = new Visual_C { name = "user-background" };
         public Visual_C User_Audio_Slider = new Visual_C { name = "user-audio-slider" };
+
+        public Button_C Menu = new Button_C { name = "menu" };
+        public Visual_C Menu_Background = new Visual_C { name = "menu-background" };
+        public Visual_C Menu_Icon = new Visual_C { name = "menu-icon" };
+
         public Button_C Mute = new Button_C { name = "mute" };
         public Visual_C Mute_Background = new Visual_C { name = "mute-background" };
         public Visual_C Mute_Icon = new Visual_C { name = "mute-icon" };
@@ -168,6 +185,11 @@ namespace umi3d.commonScreen.Displayer
             Mute.AddToClassList(USSCustomClassMute);
             Mute_Background.AddToClassList(USSCustomClassMute_Background);
             Mute_Icon.AddToClassList(USSCustomClassMute_Icon);
+
+            Menu.AddToClassList(USSCustomClassMenu);
+            Menu_Background.AddToClassList(USSCustomClassMenu_Background);
+            Menu_Icon.AddToClassList(USSCustomClassMenu_Icon);
+
         }
 
         protected override void InitElement()
@@ -204,6 +226,10 @@ namespace umi3d.commonScreen.Displayer
             Mute.Shape = ButtonShape.Round;
             Mute.clicked += () => LocalMuteValueChanged?.Invoke(!m_isMute);
 
+            Menu.Type = ButtonType.Invisible;
+            Menu.Shape = ButtonShape.Round;
+            Menu.clicked += Menu_clicked;
+
             ///Globaly mute: to implement in the future.
             //MuteValueChanged += value => User?.SetMicrophoneStatus(!value);
             LocalMuteValueChanged += value =>
@@ -221,6 +247,21 @@ namespace umi3d.commonScreen.Displayer
             Add(Mute);
             Mute.Add(Mute_Background);
             Mute_Background.Add(Mute_Icon);
+
+            Mute.style.minWidth = 100;
+
+           // Add(Menu);
+            Menu.Add(Menu_Background);
+            Menu_Background.Add(Menu_Icon);
+
+            Menu.style.minWidth = 100;
+
+            buttons = new();
+        }
+
+        private void Menu_clicked()
+        {
+            throw new System.NotImplementedException();
         }
 
         protected override void SetProperties()
@@ -229,6 +270,51 @@ namespace umi3d.commonScreen.Displayer
             UserName = null;
             IsMute = false;
             Volume = 100f;
+        }
+
+
+        List<VisualElement> buttons;
+
+        public void ClearButtons()
+        {
+            buttons.ForEach(buttons => buttons.RemoveFromHierarchy());
+            buttons.Clear();
+        }
+
+        public void AddButton(UserAction userAction)
+        {
+            Button_C button = new Button_C { name = userAction.name, tooltip = userAction.description };
+            Visual_C button_Background = new Visual_C { name = $"{userAction.name}-background" };
+            Visual_C button_Icon = new Visual_C { name = $"{userAction.name}-icon" };
+
+            button.AddToClassList(USSCustomClassMute);
+            button_Background.AddToClassList(USSCustomClassMute_Background);
+            
+            button_Icon.AddToClassList(USSCustomClassMute_Icon);
+
+            button.Type = ButtonType.Invisible;
+            button.Shape = ButtonShape.Round;
+            button.clicked += userAction.Call;
+
+            Add(button);
+            button.Add(button_Background);
+            button_Background.Add(button_Icon);
+
+            SetBackground(button_Icon, userAction);
+            //button_Icon.style.backgroundImage = 
+            //button_Background
+
+            button.style.minWidth = 100;
+            //button.style.backgroundColor = UnityEngine.Random.ColorHSV();
+
+            buttons.Add(button);
+        }
+
+        async void SetBackground(Visual_C button_Icon, UserAction userAction)
+        {
+            var texture = await userAction.GetTexture();
+            if(texture != null)
+                button_Icon.style.backgroundImage = Background.FromTexture2D(texture);
         }
 
         #region Implementation

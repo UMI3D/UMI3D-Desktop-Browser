@@ -72,9 +72,14 @@
 }
 
 .user__mute-icon__on {
-	background-image: var(--background-image-mic-off);
+	background-image: var(--background-image-sound-off);
 }
 
 .user__mute-icon__off {
-	background-image: var(--background-image-mic-on);
+	background-image: var(--background-image-sound-on);
+}
+
+.user__menu-icon {
+	background-image: var(--background-image-menu);
+	width : 100%;
 }

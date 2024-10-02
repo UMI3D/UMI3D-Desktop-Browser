@@ -89,6 +89,7 @@ namespace umi3d.baseBrowser.connection
             UMI3DUser.OnUserAvatarStatusUpdated.AddListener(Game.NotifAndUserArea.UserList.UpdateUser);
             UMI3DUser.OnUserAttentionStatusUpdated.AddListener(Game.NotifAndUserArea.UserList.UpdateUser);
             UMI3DUser.OnRemoveUser.AddListener(Game.NotifAndUserArea.UserList.RemoveUser);
+            UMI3DUser.OnUserActionsUpdated.AddListener(Game.NotifAndUserArea.UserList.UpdateUser);
         }
 
         protected virtual void InitGame_Notification()
