@@ -17,6 +17,7 @@ using inetum.unityUtils;
 using umi3d.browserRuntime.notificationKeys;
 using umi3d.browserRuntime.pc;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// This class is reponsible for connecting users to environments. It implies asking for login/password or parameters if 
@@ -59,6 +60,12 @@ public class GamePanelController : umi3d.baseBrowser.connection.BaseGamePanelCon
 #if !UNITY_EDITOR && UNITY_STANDALONE
         WindowsManager.Update();
 #endif
+
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            document.rootVisualElement.style.display = document.rootVisualElement.style.display == DisplayStyle.Flex ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
     }
 
     void _ApplicationIsQuitting(Notification notification)

@@ -21,6 +21,8 @@ namespace inetum.unityUtils
 {
     public interface INotificationHub
     {
+        #region Subscribe
+
         /// <summary>
         /// Add an entry to notify the <paramref name="subscriber"/> by calling the 
         /// <paramref name="action"/> when the publisher send a notification.
@@ -124,6 +126,10 @@ namespace inetum.unityUtils
             Object subscriber,
             Action action
         );
+
+        #endregion
+
+        #region Unsubscibe
 
         /// <summary>
         /// Remove all entries concerning a specific <paramref name="subscriber"/>.
@@ -143,6 +149,10 @@ namespace inetum.unityUtils
         /// </summary>
         /// <param name="subscriber">The object waiting for notification. Must not be null. If subscriber is static then user typeof().FullName.</param>
         public void Unsubscribe<T>(Object subscriber);
+
+        #endregion
+
+        #region Notify
 
         /// <summary>
         /// Send a notification to all the concerning subscribers. Return the number of observers that have been notified.
@@ -196,6 +206,10 @@ namespace inetum.unityUtils
             Dictionary<string, Object> info = null
         );
 
+        #endregion
+
+        #region GetNotifier
+
         /// <summary>
         /// Get a <see cref="Notifier"/>. Use that to optimize notification sending.
         /// </summary>
@@ -223,5 +237,7 @@ namespace inetum.unityUtils
             INotificationFilter subscribersFilter = null,
             Dictionary<string, Object> info = null
         );
+
+        #endregion
     }
 }
