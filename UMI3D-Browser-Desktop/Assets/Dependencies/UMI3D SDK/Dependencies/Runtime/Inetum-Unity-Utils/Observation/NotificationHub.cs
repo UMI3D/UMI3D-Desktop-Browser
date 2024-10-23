@@ -46,6 +46,7 @@ namespace inetum.unityUtils
         /// </summary>
         Dictionary<Object, HashSet<string>> _subscriberToID = new();
 
+        #region Subscribe
 
         public void Subscribe(
             Object subscriber,
@@ -150,6 +151,10 @@ namespace inetum.unityUtils
             Subscribe(subscriber, typeof(T).FullName, action);
         }
 
+        #endregion
+
+        #region Unsubscribe
+
         public void Unsubscribe(Object subscriber)
         {
             string subscriberName = subscriber is string
@@ -244,6 +249,10 @@ namespace inetum.unityUtils
             Unsubscribe(subscriber, typeof(T).FullName);
         }
 
+        #endregion
+
+        #region Notify
+
         public int Notify(
             Object publisher,
             string id,
@@ -317,6 +326,10 @@ namespace inetum.unityUtils
             return Notify(publisher, typeof(T).FullName, info);
         }
 
+        #endregion
+
+        #region GetNotifier
+
         public Notifier GetNotifier(
             Object publisher,
             string id,
@@ -342,10 +355,12 @@ namespace inetum.unityUtils
             return GetNotifier(publisher, typeof(T).FullName, subscribersFilter, info);
         }
 
+        #endregion
+
         /// <summary>
         /// Class representing a subscription to a notification.
         /// </summary>
-        private class Subscription
+        class Subscription
         {
             /// <summary>
             /// The object that wait for a notification. If subscriber is static then user typeof().FullName.
